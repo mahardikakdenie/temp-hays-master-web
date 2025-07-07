@@ -9,10 +9,10 @@ import GoogleIcon from '@/components/icons/Google';
 import GithubIcon from '@/components/icons/Github';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
-import useLogin from './login.hook';
+import useLogin from './hooks/useLogin.hook';
 
 const LoginView: React.FC = () => {
-  const { form, showPassword, handleShow, onSubmit } = useLogin();
+  const { form, showPassword, onShow, onSubmit } = useLogin();
 
   const {
     register,
@@ -23,10 +23,10 @@ const LoginView: React.FC = () => {
   return (
     <div className="flex flex-col flex-1 w-full">
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
-        <div className="mb-5 sm:mb-8">
-          <h1 className="text-2xl font-bold mb-1">Log in</h1>
+        <div className="flex flex-col items-center gap-2 mb-5 sm:mb-8">
+          <h1 className="text-2xl text-center font-bold mb-1">Welcome Back to Web Application!</h1>
           <span className="text-sm text-gray-400">
-            Enter your username and password to connect!
+            Enter your credentials to access your account.
           </span>
         </div>
         <div>
@@ -36,9 +36,9 @@ const LoginView: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-4 py-3 sm:py-5">
-          <div className="h-px flex-1 bg-gray-600" />
+          <div className="h-px flex-1 bg-secondary/[16%]" />
           <span className="text-sm py-2">Or</span>
-          <div className="h-px flex-1 bg-gray-600" />
+          <div className="h-px flex-1 bg-secondary/[16%]" />
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-6">
@@ -61,7 +61,7 @@ const LoginView: React.FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Enter your password"
                 icon={
-                  <div className="cursor-pointer" onClick={handleShow}>
+                  <div className="cursor-pointer" onClick={onShow}>
                     {showPassword ? (
                       <EyeIcon className="h-5 w-5" />
                     ) : (
@@ -77,7 +77,7 @@ const LoginView: React.FC = () => {
             </div>
 
             <div className="flex justify-end">
-              <Link href="/forgot-password" className="text-sm">
+              <Link href="/forgot-password" className="text-sm text-primary">
                 Forgot password?
               </Link>
             </div>
@@ -87,7 +87,9 @@ const LoginView: React.FC = () => {
             </ButtonPrimary>
 
             <div>
-              <p className="text-center text-sm">&copy; 2025 Web Application. All Right Reserved</p>
+              <p className="text-center text-sm text-gray-400">
+                &copy; 2025 Web Application. All Right Reserved
+              </p>
             </div>
           </div>
         </form>

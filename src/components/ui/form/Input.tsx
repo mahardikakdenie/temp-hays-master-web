@@ -12,7 +12,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 const Input: React.FC<InputProps> = ({
   id,
   label,
-  className = '',
+  className,
   error,
   required,
   inputMode,
@@ -21,7 +21,7 @@ const Input: React.FC<InputProps> = ({
   iconPosition = 'left',
   ...restProps
 }) => {
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (inputMode !== 'numeric') return;
 
     const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
@@ -32,10 +32,11 @@ const Input: React.FC<InputProps> = ({
     }
   };
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+  const onPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     if (inputMode !== 'numeric') return;
 
     const paste = e.clipboardData.getData('text');
+
     if (!/^\d+$/.test(paste)) {
       e.preventDefault();
     }
@@ -51,7 +52,6 @@ const Input: React.FC<InputProps> = ({
             {required && <span className="text-red-500 ml-1">*</span>}
           </Label>
         )}
-
         {/* INPUT */}
         <div className="relative">
           <HeadlessInput
@@ -66,15 +66,15 @@ const Input: React.FC<InputProps> = ({
             aria-invalid={!!error}
             aria-describedby={error ? `${id}-error` : undefined}
             pattern={inputMode === 'numeric' ? '[0-9]*' : undefined}
-            onKeyDown={handleKeyDown}
-            onPaste={handlePaste}
+            onKeyDown={onKeyDown}
+            onPaste={onPaste}
             disabled={disabled}
             {...restProps}
           />
           {icon && (
             <span
               className={cn(
-                'absolute top-1/2 -translate-y-1/2',
+                'absolute top-1/2 -translate-y-1/2 text-gray-400',
                 iconPosition === 'left' ? 'left-4' : 'right-4',
               )}
             >
@@ -83,7 +83,6 @@ const Input: React.FC<InputProps> = ({
           )}
         </div>
       </Field>
-
       {/* ERROR */}
       {error && (
         <p id={`${id}-error`} className="input-error-text mt-1.5">

@@ -1,13 +1,14 @@
 import type React from 'react';
 import type { Metadata } from 'next';
+import AccessView from '@/views/setting/access';
 
 export const metadata: Metadata = {
-  title: 'Access - Web Application',
-  description: 'Access page of Web Application',
+  title: 'Setup Access - Web Application',
+  description: 'Setup Access page of Web Application',
 };
 
 const AccessPage: React.FC = () => {
-  return <></>;
+  return <AccessView />;
 };
 
 export default AccessPage;

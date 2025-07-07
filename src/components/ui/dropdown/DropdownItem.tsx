@@ -1,5 +1,6 @@
 import type React from 'react';
 import Link from 'next/link';
+import { cn } from '@/libs/utils/cn.utils'; // asumsi kamu pakai cn helper
 
 type DropdownItemProps = {
   tag?: 'a' | 'button';
@@ -13,33 +14,33 @@ type DropdownItemProps = {
 
 const DropdownItem: React.FC<DropdownItemProps> = ({
   tag = 'button',
-  href,
+  href = '#',
   onClick,
   onItemClick,
-  baseClassName = 'block w-full text-left px-3 py-2.5 text-sm rounded-lg hover:text-white/90',
-  className = '',
+  baseClassName = 'block w-full text-left px-3 py-2.5 text-sm rounded-lg hover:text-primary',
+  className,
   children,
 }) => {
-  const combinedClasses = `${baseClassName} ${className}`.trim();
-
-  const handleClick = (event: React.MouseEvent) => {
-    if (tag === 'button') {
-      event.preventDefault();
-    }
-    if (onClick) onClick();
-    if (onItemClick) onItemClick();
+  const handleClick = (e: React.MouseEvent) => {
+    if (tag === 'button') e.preventDefault();
+    onClick?.();
+    onItemClick?.();
   };
 
+  const classes = cn(baseClassName, className);
+
+  // HREF
   if (tag === 'a' && href) {
     return (
-      <Link href={href} className={combinedClasses} onClick={handleClick}>
+      <Link href={href} className={classes} onClick={handleClick}>
         {children}
       </Link>
     );
   }
 
+  // BUTTON
   return (
-    <button onClick={handleClick} className={combinedClasses}>
+    <button type="button" onClick={handleClick} className={classes}>
       {children}
     </button>
   );

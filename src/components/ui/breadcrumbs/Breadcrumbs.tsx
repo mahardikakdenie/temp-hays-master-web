@@ -16,6 +16,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
   return (
     <nav className="flex" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-2">
+        {/* HOME */}
         <li className="inline-flex items-center">
           <Link
             href="/dashboard"
@@ -25,6 +26,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
             Home
           </Link>
         </li>
+        {/* ITEMS */}
         {items.map((item, index) => (
           <li key={item.title}>
             <div className="flex items-center">

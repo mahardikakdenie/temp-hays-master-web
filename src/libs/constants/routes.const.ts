@@ -19,4 +19,6 @@ export class Routes {
   // BANNER
   static BANNER = Routes.API_BANNER;
   static BANNER_LIST = Routes.API_BANNER + '/list';
+  static USER_ACCESS = Routes.API_USER + '/access';
+  static USER_ACCESS_OPTIONS = Routes.USER_ACCESS + '/options';
 }

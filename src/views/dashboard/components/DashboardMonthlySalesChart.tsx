@@ -1,8 +1,8 @@
 import type React from 'react';
-import AreaChart from '@/components/ui/charts/Area';
+import BarChart from '@/components/ui/charts/Bar';
 import EllipsisVerticalIcon from '@/components/icons/EllipsisVertical';
 
-const Statistic: React.FC = () => {
+const DashboardMonthlySalesChart: React.FC = () => {
   const categories = [
     'Jan',
     'Feb',
@@ -24,19 +24,14 @@ const Statistic: React.FC = () => {
         name: 'Sales',
         data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 500)),
       },
-      {
-        name: 'Sales',
-        data: Array.from({ length: 12 }, () => Math.floor(Math.random() * 500)),
-      },
     ],
   };
 
   return (
-    <div className="widget-dark px-5 pt-5 sm:px-6 sm:pt-6">
-      <div className="flex justify-between mb-4">
+    <div className="overflow-hidden widget-dark px-5 pt-5 sm:px-6 sm:pt-6">
+      <div className="flex justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Statistic</h3>
-          <p className="mt-0.5 text-gray-400 text-xs">Target you’ve set for each month</p>
+          <h3 className="text-lg font-semibold">Monthly Sales</h3>
         </div>
 
         <div className="relative inline-block">
@@ -47,10 +42,10 @@ const Statistic: React.FC = () => {
       </div>
 
       <div className="max-w-full overflow-x-auto custom-scrollbar">
-        <div className="min-w-[1000px] xl:min-w-full">
-          <AreaChart
-            height={310}
-            colors={['#60A5FA', '#9CB9FF']}
+        <div className="min-w-[650px] xl:min-w-full">
+          <BarChart
+            height={180}
+            colors={['#60A5FA']}
             categories={data.categories}
             series={data.series}
           />
@@ -60,4 +55,4 @@ const Statistic: React.FC = () => {
   );
 };
 
-export default Statistic;
+export default DashboardMonthlySalesChart;

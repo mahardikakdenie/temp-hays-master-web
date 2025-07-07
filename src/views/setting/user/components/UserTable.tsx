@@ -1,26 +1,41 @@
 import type React from 'react';
-import { cn } from '@/libs/utils/cn.utils';
+import type { UserList } from '@/types/user.types';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table/Table';
+import { useGlobal } from '@/contexts/global.context';
 import SearchIcon from '@/components/icons/Search';
-import EllipsisHorizontalIcon from '@/components/icons/EllipsisHorizontal';
+import PencilSquareIcon from '@/components/icons/PencilSquare';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
+import Badge from '@/components/ui/badge/Badge';
 import Pagination from '@/components/ui/table/Pagination';
-import useUser from '../user.hook';
+import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
+import { Routes } from '@/libs/constants/routes.const';
+import { Filter } from '@/types/commons.types';
 
-const UserTable: React.FC = () => {
+type UserTableProps = {
+  appliedFilter: Filter;
+};
+
+const UserTable: React.FC<UserTableProps> = ({ appliedFilter }) => {
+  const { onOpenModal } = useGlobal();
+
   const {
     isLoading,
     isFetching,
     data: user,
+    meta: userMeta,
     error,
+    search,
     sort,
-    meta,
-    setMeta,
     onSearch,
     onSort,
+    onMeta,
     onRetry,
-  } = useUser();
+  } = usePaginatedFetch<UserList>({
+    key: 'user',
+    endpoint: Routes.USER_LIST,
+    extraQuery: appliedFilter,
+  });
 
   const tableStatus =
     isLoading || (error && isFetching) ? (
@@ -40,19 +55,22 @@ const UserTable: React.FC = () => {
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
         <div className="hidden md:block">
-          <span className="text-lg font-semibold">List Data User</span>
+          <span className="text-lg font-semibold">Data User</span>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-4">
           <div className="w-full sm:min-w-[300px]">
             <Input
               className="bg-ui-800 py-3 border-none"
-              placeholder="Search..."
+              placeholder="Search user..."
               icon={<SearchIcon className="w-5 h-5" />}
               iconPosition="left"
               onChange={onSearch}
+              value={search}
             />
           </div>
-          <ButtonSecondary className="w-full lg:w-40">Filter</ButtonSecondary>
+          <ButtonSecondary className="w-full lg:w-40" onClick={() => onOpenModal('filter')}>
+            Filter
+          </ButtonSecondary>
         </div>
       </div>
 
@@ -133,17 +151,14 @@ const UserTable: React.FC = () => {
                 <TableCell className="text-start">{list.access_name}</TableCell>
                 <TableCell className="text-start">{list.email}</TableCell>
                 <TableCell className="text-start">{list.phone}</TableCell>
-                <TableCell
-                  className={cn(
-                    'text-center',
-                    list.status === 1 ? 'text-green-500' : 'text-red-500',
-                  )}
-                >
-                  {list.status_text}
+                <TableCell className="text-center">
+                  <Badge variant="light" color={list.status === 1 ? 'success' : 'error'}>
+                    {list.status_text}
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex justify-center cursor-pointer">
-                    <EllipsisHorizontalIcon className="w-5 h-5" />
+                    <PencilSquareIcon className="w-5 h-5 text-primary" />
                   </div>
                 </TableCell>
               </TableRow>
@@ -151,7 +166,7 @@ const UserTable: React.FC = () => {
           )}
         </TableBody>
       </Table>
-      <Pagination meta={meta} onPageChange={(page) => setMeta((prev) => ({ ...prev, page }))} />
+      <Pagination meta={userMeta} context="users" onPageChange={(page) => onMeta({ page })} />
     </div>
   );
 };

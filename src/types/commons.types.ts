@@ -51,6 +51,10 @@ export type Options = {
   name: string;
 };
 
+export type Filter = {
+  [key: string]: string;
+};
+
 export type Sort = {
   column: string;
   order: '' | 'ASC' | 'DESC';

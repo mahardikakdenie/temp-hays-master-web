@@ -1,20 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import type { Meta, Sort } from '@/types/commons.types';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
-import { Meta, Sort } from '@/types/commons.types';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { useInternal } from './useInternal';
 
 type UsePaginateFetchProps = {
   key: string;
   endpoint: string;
-  extraQuery?: Record<string, string | number>;
+  extraQuery?: Record<string, string>;
 };
 
-export const usePaginatedFetch = <T>(props: UsePaginateFetchProps) => {
-  const { key, endpoint, extraQuery } = props;
+type FetchResponse<T> = { items: T[]; meta: Meta };
 
-  const internalAPI = useInternal();
+export const usePaginatedFetch = <T>(props: UsePaginateFetchProps) => {
+  const { key, endpoint, extraQuery = {} } = props;
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -26,77 +26,107 @@ export const usePaginatedFetch = <T>(props: UsePaginateFetchProps) => {
     totalPage: 0,
   });
 
+  const internalAPI = useInternal();
+
+  const queryKey = [
+    key,
+    {
+      page: meta.page,
+      limit: meta.limit,
+      search: debouncedSearch,
+      orderBy: sort.column,
+      sort: sort.order,
+      ...extraQuery,
+    },
+  ];
+
+  const fetchData = async (): Promise<FetchResponse<T>> => {
+    const query = {
+      page: meta.page,
+      limit: meta.limit,
+      search: debouncedSearch || undefined,
+      orderBy: sort.column || undefined,
+      sort: sort.order || undefined,
+      ...extraQuery,
+    };
+
+    const res = await internalAPI(endpoint, query);
+
+    if (res.status !== HttpStatus.OK) throw new Error('Failed to fetch data.');
+
+    const { data } = await res.json();
+
+    const itemsPagination = data.items;
+    const metaPagination = {
+      page: data.meta.page,
+      limit: data.meta.totalPerPage,
+      totalData: data.meta.totalData,
+      totalPage: data.meta.totalPage,
+    };
+
+    return {
+      items: itemsPagination,
+      meta: metaPagination,
+    };
+  };
+
+  const { data, error, isLoading, isFetching, isSuccess, isError, refetch } = useQuery({
+    queryKey,
+    queryFn: fetchData,
+    placeholderData: keepPreviousData,
+  });
+
   const debouncedSetSearch = useMemo(
     () =>
       debounce((val: string) => {
         setDebouncedSearch(val);
         setMeta((prev) => ({ ...prev, page: 1 }));
-      }, 500),
+      }, 400),
     [],
   );
 
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    debouncedSetSearch(e.target.value);
-  };
+  const onSearch = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch(e.target.value);
+      debouncedSetSearch(e.target.value);
+    },
+    [debouncedSetSearch],
+  );
 
-  const onSort = (column: string) => {
+  const onSort = useCallback((column: string) => {
     setSort((prev) => ({
       column,
       order: prev.column === column && prev.order === 'ASC' ? 'DESC' : 'ASC',
     }));
-  };
+  }, []);
 
-  const queryKey = [
-    key,
-    meta.page,
-    meta.limit,
-    debouncedSearch,
-    sort.column,
-    sort.order,
-    ...(extraQuery ? Object.values(extraQuery) : []),
-  ];
+  const onMeta = useCallback((meta: Partial<Meta>) => {
+    setMeta((prev) => ({ ...prev, ...meta }));
+  }, []);
 
-  const { data, error, isLoading, isFetching, refetch } = useQuery({
-    queryKey,
-    queryFn: async () => {
-      const query = {
-        page: meta.page,
-        limit: meta.limit,
-        search: debouncedSearch || undefined,
-        orderBy: sort.column || undefined,
-        sort: sort.order || undefined,
-        ...extraQuery,
-      };
+  const onRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
-      const res = await internalAPI(endpoint, query);
-      const json = await res.json();
-
-      if (res.status !== HttpStatus.OK) throw new Error('Failed to fetch data.');
-
-      setMeta({
-        page: json.data.meta.page,
-        limit: json.data.meta.totalPerPage,
-        totalData: json.data.meta.totalData,
-        totalPage: json.data.meta.totalPage,
-      });
-
-      return json.data.items as T[];
-    },
-    placeholderData: (prev) => prev,
-  });
+  useEffect(() => {
+    return () => {
+      debouncedSetSearch.cancel();
+    };
+  }, [debouncedSetSearch]);
 
   return {
     isLoading,
     isFetching,
-    data: data ?? [],
+    isSuccess,
+    isError,
+    data: data?.items ?? [],
+    meta: data?.meta ?? meta,
     error: error?.message ?? '',
     search,
     sort,
-    meta,
-    setMeta,
     onSearch,
     onSort,
-    onRetry: () => refetch(),
+    onMeta,
+    onRetry,
   };
 };
