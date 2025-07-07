@@ -1,7 +1,9 @@
+import BannerView from '@/views/master-setup/banner';
+
 const ArticlePage = () => {
   return (
     <div>
-      <h1>Article Page</h1>
+      <BannerView />
     </div>
   );
 };
