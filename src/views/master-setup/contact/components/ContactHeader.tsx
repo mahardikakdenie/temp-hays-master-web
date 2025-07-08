@@ -6,7 +6,7 @@ const ContactHeader: React.FC = () => {
   return (
     <div className="flex justify-between items-end">
       <div>
-        <span className="text-xl font-semibold block mb-2">Article</span>
+        <span className="text-xl font-semibold block mb-2">Contact</span>
         <Breadcrumbs
           items={[
             { title: 'Master Setup', href: '#' },

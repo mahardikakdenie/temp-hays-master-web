@@ -1,4 +1,8 @@
+'use client';
+
+import type React from 'react';
 import ContactHeader from './components/ContactHeader';
+import ContactTable from './components/ContactTable';
 
 const ContactViews: React.FC = () => {
   return (
@@ -6,7 +10,9 @@ const ContactViews: React.FC = () => {
       <div className="col-span-12">
         <ContactHeader />
       </div>
-      <div className="col-span-12"></div>
+      <div className="col-span-12">
+        <ContactTable />
+      </div>
     </div>
   );
 };

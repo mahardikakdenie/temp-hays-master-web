@@ -9,7 +9,7 @@ import Select from '@/components/ui/form/Select';
 import useAddUser from '../hooks/useAddUser.hook';
 
 type ModalAddUserProps = {
-  accessOptions: Options[];
+  accessOptions?: Options[];
 };
 
 const ModalAddUser: React.FC<ModalAddUserProps> = ({ accessOptions }) => {

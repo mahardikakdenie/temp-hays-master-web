@@ -11,7 +11,7 @@ const ModalAddUser = dynamic(() => import('./components/ModalAddUser'), { ssr: f
 const ModalFilterUser = dynamic(() => import('./components/ModalFilterUser'), { ssr: false });
 
 type UserViewProps = {
-  accessOptions: Options[];
+  accessOptions?: Options[];
 };
 
 const UserView: React.FC<UserViewProps> = ({ accessOptions }) => {

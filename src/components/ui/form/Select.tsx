@@ -9,7 +9,7 @@ type SelectProps = {
   id?: string;
   label?: string;
   placeholder?: string;
-  options: Options[];
+  options?: Options[];
   className?: string;
   value: string | number | null;
   error?: string;
@@ -30,7 +30,7 @@ const Select: React.FC<SelectProps> = ({
   disabled,
   onChange,
 }) => {
-  const selected = options.find((opt) => opt.id === value) || null;
+  const selected = options?.find((opt) => opt.id === value) || null;
 
   return (
     <div>
@@ -80,8 +80,8 @@ const Select: React.FC<SelectProps> = ({
                 'z-50',
               )}
             >
-              {options.length > 0 ? (
-                options.map((opt) => (
+              {options && options?.length > 0 ? (
+                options?.map((opt) => (
                   <ListboxOption
                     key={opt.name}
                     value={opt}

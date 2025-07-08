@@ -5,7 +5,7 @@ import EllipsisHorizontalIcon from '@/components/icons/EllipsisHorizontal';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
 import { cn } from '@/libs/utils/cn.utils';
-import useBanner from '../contact.hook';
+import useContact from '../contact.hook';
 
 const ContactTable: React.FC = () => {
   const {
@@ -19,7 +19,7 @@ const ContactTable: React.FC = () => {
     // onSearch,
     // onSort,
     onRetry,
-  } = useBanner();
+  } = useContact();
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('Search:', event.target.value);
   };
