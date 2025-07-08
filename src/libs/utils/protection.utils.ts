@@ -9,7 +9,7 @@ export const withProtection = (
     const origin = req.headers.get('origin') || '';
     const referer = req.headers.get('referer') || '';
 
-    const allowedOrigins = [App.APP_BASE_URL];
+    const allowedOrigins = [App.APP_BASE_URL, 'https://cms-gallery.ensiklotari.id'];
 
     const isAllowed = (value: string) => {
       return allowedOrigins.some((allowed) => value.startsWith(allowed));
