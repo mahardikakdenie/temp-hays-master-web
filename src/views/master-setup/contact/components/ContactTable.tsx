@@ -5,13 +5,13 @@ import EllipsisHorizontalIcon from '@/components/icons/EllipsisHorizontal';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
 import { cn } from '@/libs/utils/cn.utils';
-import useArticle from '../article.hook';
+import useBanner from '../contact.hook';
 
-const ArticleTable: React.FC = () => {
+const ContactTable: React.FC = () => {
   const {
     isLoading,
     isFetching,
-    data: article,
+    data: contacts,
     error,
     // sort,
     // meta,
@@ -19,7 +19,7 @@ const ArticleTable: React.FC = () => {
     // onSearch,
     // onSort,
     onRetry,
-  } = useArticle();
+  } = useBanner();
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('Search:', event.target.value);
   };
@@ -34,11 +34,20 @@ const ArticleTable: React.FC = () => {
           Try again
         </button>
       </div>
-    ) : article.length === 0 ? (
-      'No Article found.'
+    ) : contacts.length === 0 ? (
+      'No Contact found.'
     ) : null;
 
-  const headers = ['Title', 'Image', 'Content', 'Status', 'Actions'];
+  const headers = [
+    'Title',
+    'Sub Title',
+    'Type',
+    'Place Text X',
+    'Place Text Y',
+    'Sort',
+    'Status',
+    'Actions',
+  ];
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
@@ -83,7 +92,7 @@ const ArticleTable: React.FC = () => {
                 {tableStatus}
               </TableCell>
             ) : (
-              article.map((data, index) => (
+              contacts.map((data, index) => (
                 <React.Fragment key={index}>
                   <TableCell className="text-center">{data.title}</TableCell>
                   <TableCell
@@ -107,4 +116,4 @@ const ArticleTable: React.FC = () => {
   );
 };
 
-export default ArticleTable;
+export default ContactTable;
