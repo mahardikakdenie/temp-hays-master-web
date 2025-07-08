@@ -38,7 +38,7 @@ const BannerTable: React.FC = () => {
       'No Banner found.'
     ) : null;
 
-  const roleHeaders = [
+  const headers = [
     'Title',
     'Sub Title',
     'Type',
@@ -71,7 +71,7 @@ const BannerTable: React.FC = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            {roleHeaders.map((header, index) => (
+            {headers.map((header, index) => (
               <TableCell
                 key={index}
                 isHeader

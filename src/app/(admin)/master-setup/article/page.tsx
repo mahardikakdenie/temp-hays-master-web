@@ -1,9 +1,9 @@
-import BannerView from '@/views/master-setup/banner';
+import ArticleViews from '@/views/master-setup/article';
 
 const ArticlePage = () => {
   return (
     <div>
-      <BannerView />
+      <ArticleViews />
     </div>
   );
 };
