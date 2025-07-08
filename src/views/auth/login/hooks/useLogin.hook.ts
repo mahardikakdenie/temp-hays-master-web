@@ -1,11 +1,11 @@
 import * as yup from 'yup';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginApi } from '@/actions/auth';
 import { useGlobal } from '@/contexts/global.context';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
-import type { LoginForm, LoginRequest } from '@/types/login.types';
+import type { LoginForm } from '@/types/login.types';
 
 const loginSchema = yup.object({
   user: yup.string().required('Username is required'),
@@ -13,7 +13,7 @@ const loginSchema = yup.object({
 });
 
 const useLogin = () => {
-  const { device, openFeedbackModal } = useGlobal();
+  const { device, onOpenFeedbackModal } = useGlobal();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -21,12 +21,12 @@ const useLogin = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const handleShow = () => {
-    setShowPassword(!showPassword);
-  };
+  const onShow = useCallback(() => {
+    setShowPassword((prev) => !prev);
+  }, []);
 
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
-    const request: LoginRequest = {
+    const request = {
       user: data.user,
       password: data.password,
       device: {
@@ -39,7 +39,7 @@ const useLogin = () => {
         device_vendor: device.deviceVendor,
         device_os: device.osName,
         device_os_version: device.osVersion,
-        device_platform: 'Web',
+        device_platform: 'Web' as const,
         user_agent: device.userAgent,
         app_version: '1.0.0',
       },
@@ -48,17 +48,18 @@ const useLogin = () => {
     const response = await LoginApi(request);
 
     if (response.status >= HttpStatus.BAD_REQUEST) {
-      openFeedbackModal({
+      onOpenFeedbackModal({
         type: 'error',
         message: response.message,
       });
+      return;
     }
   };
 
   return {
     form,
     showPassword,
-    handleShow,
+    onShow,
     onSubmit,
   };
 };

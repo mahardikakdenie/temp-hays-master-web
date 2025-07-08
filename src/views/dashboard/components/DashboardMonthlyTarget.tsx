@@ -5,7 +5,7 @@ import RadialBarChart from '@/components/ui/charts/RadialBar';
 import ChevronDownIcon from '@/components/icons/ChevronDown';
 import EllipsisVerticalIcon from '@/components/icons/EllipsisVertical';
 
-const MonthlyTarget: React.FC = () => {
+const DashboardMonthlyTarget: React.FC = () => {
   const labels = ['Progress'];
   const data = {
     labels,
@@ -81,4 +81,4 @@ const MonthlyTarget: React.FC = () => {
   );
 };
 
-export default MonthlyTarget;
+export default DashboardMonthlyTarget;

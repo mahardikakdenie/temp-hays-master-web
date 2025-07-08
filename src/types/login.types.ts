@@ -1,8 +1,3 @@
-export type LoginForm = {
-  user: string;
-  password: string;
-};
-
 export type LoginDevice = {
   firebase_id: string;
   device_browser: string;
@@ -18,6 +13,8 @@ export type LoginDevice = {
   app_version: string;
 };
 
-export type LoginRequest = LoginForm & {
-  device: LoginDevice;
+export type LoginForm = {
+  user: string;
+  password: string;
+  device?: LoginDevice;
 };

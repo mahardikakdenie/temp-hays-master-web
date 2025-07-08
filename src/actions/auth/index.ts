@@ -7,9 +7,9 @@ import { catchServerRoute } from '@/libs/utils/catch.utils';
 import { App } from '@/libs/constants/app.const';
 import { Routes } from '@/libs/constants/routes.const';
 import { externalAPI } from '@/libs/interceptors/api-ext.interceptor';
-import type { LoginRequest } from '@/types/login.types';
+import type { LoginForm } from '@/types/login.types';
 
-export const LoginApi = async (data: LoginRequest) => {
+export const LoginApi = async (data: LoginForm) => {
   try {
     const response = await externalAPI.post(Routes.AUTH_LOGIN, data);
     await Promise.all([

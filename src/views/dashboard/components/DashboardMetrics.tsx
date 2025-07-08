@@ -4,7 +4,7 @@ import SparklineChart from '@/components/ui/charts/Sprarkline';
 import CountUp from 'react-countup';
 import BankNotesIcon from '@/components/icons/BankNotes';
 
-const Metrics: React.FC = () => {
+const DashboardMetrics: React.FC = () => {
   const categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
   const data = {
     categories,
@@ -82,4 +82,4 @@ const Metrics: React.FC = () => {
   );
 };
 
-export default Metrics;
+export default DashboardMetrics;

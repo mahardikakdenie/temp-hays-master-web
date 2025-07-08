@@ -22,6 +22,7 @@ type TableBodyProps = {
   children: React.ReactNode;
   className?: string;
 };
+
 type TableCellProps = {
   children: React.ReactNode;
   isHeader?: boolean;
@@ -83,22 +84,22 @@ const TableCell: React.FC<TableCellProps> = ({
     right: 'justify-end',
   } as const;
 
-  const handleJustify = (className?: string): string => {
+  const onJustify = (className?: string): string => {
     const alignment = className?.match(/text-(left|center|right)/)?.[1] as keyof typeof justifyMap;
     return justifyMap[alignment] ?? 'justify-start';
   };
 
-  const handleClick = () => {
+  const onClick = () => {
     if (sortable && sortKey && onSort) onSort(sortKey);
   };
 
-  const justifyClass = handleJustify(className);
+  const justifyClass = onJustify(className);
 
   return (
     <Element
       className={cn('whitespace-nowrap px-6 py-5', sortable && 'cursor-pointer', className)}
       colSpan={colSpan}
-      onClick={handleClick}
+      onClick={onClick}
     >
       <div className={cn('flex items-center gap-2', justifyClass)}>
         {children}

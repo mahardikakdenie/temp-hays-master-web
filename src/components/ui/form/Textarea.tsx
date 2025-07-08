@@ -10,7 +10,7 @@ type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
 const Textarea: React.FC<TextareaProps> = ({
   id,
   label,
-  className = '',
+  className,
   error,
   required,
   disabled,
@@ -26,7 +26,6 @@ const Textarea: React.FC<TextareaProps> = ({
             {required && <span className="text-red-500 ml-1">*</span>}
           </Label>
         )}
-
         {/* TEXTAREA */}
         <HeadlessTextarea
           id={id}
@@ -43,7 +42,6 @@ const Textarea: React.FC<TextareaProps> = ({
           {...restProps}
         />
       </Field>
-
       {/* ERROR */}
       {error && (
         <p id={`${id}-error`} className="input-error-text">

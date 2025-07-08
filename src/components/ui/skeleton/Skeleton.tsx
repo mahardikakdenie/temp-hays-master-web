@@ -6,7 +6,7 @@ type SkeletonProps = {
 };
 
 const Skeleton: React.FC<SkeletonProps> = ({ className }) => {
-  return <div className={`${cn('animate-pulse', className)}`} />;
+  return <div className={cn('animate-pulse', className)} />;
 };
 
 export default Skeleton;

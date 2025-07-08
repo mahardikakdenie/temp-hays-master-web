@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
-import { UserList } from '@/types/user.types';
+import { bannerList } from '@/types/banner.types';
 
-const useUser = () => {
+const useArticle = () => {
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
@@ -22,14 +22,14 @@ const useUser = () => {
     setFilters((prev) => ({ ...prev, status: value }));
   }, []);
 
-  const fetchUser = usePaginatedFetch<UserList>({
-    key: 'user',
-    endpoint: Routes.USER_LIST,
+  const fetchArticle = usePaginatedFetch<bannerList>({
+    key: 'articles',
+    endpoint: Routes.ARTICLE_LIST,
     extraQuery: filters,
   });
 
   return {
-    ...fetchUser,
+    ...fetchArticle,
     ...filters,
     onChangeStartDate,
     onChangeEndDate,
@@ -37,4 +37,4 @@ const useUser = () => {
   };
 };
 
-export default useUser;
+export default useArticle;

@@ -2,7 +2,11 @@
 
 import type React from 'react';
 
-const AppDefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+type AppDefaultLayoutProps = {
+  children: React.ReactNode;
+};
+
+const AppDefaultLayout: React.FC<AppDefaultLayoutProps> = ({ children }) => {
   return (
     <div className="p-6 sm:p-0">
       {/* AREA CONTENT */}

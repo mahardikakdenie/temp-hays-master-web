@@ -1,22 +1,26 @@
 'use client';
 
-import Metrics from './components/Metrics';
-import MonthlySalesChart from './components/MonthlySalesChart';
-import MonthlyTarget from './components/MonthlyTarget';
-import Statistic from './components/Statistic';
+import DashboardHeader from './components/DashboardHeader';
+import DashboardMetrics from './components/DashboardMetrics';
+import DashboardMonthlySalesChart from './components/DashboardMonthlySalesChart';
+import DashboardMonthlyTarget from './components/DashboardMonthlyTarget';
+import DashboardStatistic from './components/DashboardStatistic';
 
 const DashboardView = () => {
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
+      <div className="col-span-12">
+        <DashboardHeader />
+      </div>
       <div className="col-span-12 space-y-6 xl:col-span-7">
-        <Metrics />
-        <MonthlySalesChart />
+        <DashboardMetrics />
+        <DashboardMonthlySalesChart />
       </div>
       <div className="col-span-12 xl:col-span-5">
-        <MonthlyTarget />
+        <DashboardMonthlyTarget />
       </div>
       <div className="col-span-12">
-        <Statistic />
+        <DashboardStatistic />
       </div>
     </div>
   );

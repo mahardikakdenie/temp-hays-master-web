@@ -7,18 +7,13 @@ import LoadingIcon from '@/components/icons/Loading';
 const ButtonSecondary: React.FC<ButtonProps> = ({
   children,
   type,
-  className = '',
-  fullWidth = true,
+  className,
   isLoading = false,
   icon,
   disabled,
   ...restProps
 }) => {
-  const baseClasses = cn(
-    `text-white/90 border border-secondary/[16%]`,
-    fullWidth && 'w-full',
-    className,
-  );
+  const baseClasses = cn(`text-white/90 border border-secondary/[16%] w-full`, className);
 
   const isDisabled = disabled || isLoading;
 
@@ -26,14 +21,16 @@ const ButtonSecondary: React.FC<ButtonProps> = ({
     <HeadlessButton
       type={type}
       disabled={isDisabled}
-      className={`flex items-center justify-center gap-3 text-sm font-semibold py-2.75 px-4 rounded-lg ${baseClasses}`}
+      className={`flex items-center justify-center gap-2 text-sm font-semibold py-2.75 px-3.75 rounded-lg ${baseClasses}`}
       {...restProps}
     >
       {isLoading ? (
         <LoadingIcon className="w-5 h-5 text-white/90" />
       ) : (
         <>
+          {/* ICON */}
           {icon && <span>{icon}</span>}
+          {/* CHILDREN */}
           {children}
         </>
       )}

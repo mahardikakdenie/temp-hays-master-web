@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { cleanQuery } from '@/libs/utils/cleanQuery';
 import { internalAPI } from '@/libs/interceptors/api-int.interceptor';
@@ -6,8 +6,8 @@ import { internalAPI } from '@/libs/interceptors/api-int.interceptor';
 export const useInternal = () => {
   const router = useRouter();
 
-  return useMemo(() => {
-    return (url: string, params = {}, options: RequestInit = {}) => {
+  return useCallback(
+    (url: string, params = {}, options: RequestInit = {}) => {
       const query = cleanQuery(params);
       const searchParams = new URLSearchParams(query).toString();
       const target = searchParams ? `${url}?${searchParams}` : url;
@@ -17,6 +17,7 @@ export const useInternal = () => {
         onUnauthorized: () => router.replace('/login'),
         onForbidden: () => router.replace('/forbidden'),
       });
-    };
-  }, [router]);
+    },
+    [router],
+  );
 };

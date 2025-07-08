@@ -2,22 +2,24 @@
 
 import type React from 'react';
 import type { Nullable } from '@/types/commons.types';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { createSafeContext } from '@/libs/utils/createSafeContext';
 
 type SidebarContextProps = Nullable<{
   isExpanded: boolean;
+  isMobile: boolean;
   isMobileOpen: boolean;
   activeItem: string | null;
   openSubmenu: string | null;
-  toggleSidebar: () => void;
-  toggleMobileSidebar: () => void;
+  onToggleSidebar: () => void;
+  onToggleMobileSidebar: () => void;
+  onToggleSubmenu: (item: string) => void;
   setActiveItem: (item: string | null) => void;
-  toggleSubmenu: (item: string) => void;
 }>;
 
-const SidebarContext = createContext<SidebarContextProps>(undefined);
+const [SidebarContext, useSidebar] = createSafeContext<SidebarContextProps>('Sidebar');
 
-export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -41,29 +43,30 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
   }, []);
 
-  const toggleSidebar = () => {
+  const onToggleSidebar = useCallback(() => {
     setIsExpanded((prev) => !prev);
-  };
+  }, []);
 
-  const toggleMobileSidebar = () => {
+  const onToggleMobileSidebar = useCallback(() => {
     setIsMobileOpen((prev) => !prev);
-  };
+  }, []);
 
-  const toggleSubmenu = (item: string) => {
+  const onToggleSubmenu = useCallback((item: string) => {
     setOpenSubmenu((prev) => (prev === item ? null : item));
-  };
+  }, []);
 
   return (
     <SidebarContext.Provider
       value={{
         isExpanded: isMobile ? false : isExpanded,
+        isMobile,
         isMobileOpen,
         activeItem,
         openSubmenu,
-        toggleSidebar,
-        toggleMobileSidebar,
+        onToggleSidebar,
+        onToggleMobileSidebar,
+        onToggleSubmenu,
         setActiveItem,
-        toggleSubmenu,
       }}
     >
       {children}
@@ -71,10 +74,4 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   );
 };
 
-export const useSidebar = () => {
-  const context = useContext(SidebarContext);
-  if (!context) {
-    throw new Error('useSidebar must be used within a SidebarProvider');
-  }
-  return context;
-};
+export { useSidebar, SidebarProvider };

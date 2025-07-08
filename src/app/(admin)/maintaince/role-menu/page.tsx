@@ -6,8 +6,8 @@ export const metadata: Metadata = {
   description: 'Access page of Web Application',
 };
 
-const AccessPage: React.FC = () => {
+const RoleMenuPage: React.FC = () => {
   return <></>;
 };
 
-export default AccessPage;
+export default RoleMenuPage;
