@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
-import { bannerList } from '@/types/banner.types';
+import { ArticleList } from '@/types/article.types';
 
 const useArticle = () => {
   const [filters, setFilters] = useState({
@@ -22,7 +22,7 @@ const useArticle = () => {
     setFilters((prev) => ({ ...prev, status: value }));
   }, []);
 
-  const fetchArticle = usePaginatedFetch<bannerList>({
+  const fetchArticle = usePaginatedFetch<ArticleList>({
     key: 'articles',
     endpoint: Routes.ARTICLE_LIST,
     extraQuery: filters,
