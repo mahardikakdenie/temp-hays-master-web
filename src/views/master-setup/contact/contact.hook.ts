@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
-import { bannerList } from '@/types/banner.types';
+import { Contact } from '@/types/contact.types';
 
 const useContact = () => {
   const [filters, setFilters] = useState({
@@ -22,7 +22,7 @@ const useContact = () => {
     setFilters((prev) => ({ ...prev, status: value }));
   }, []);
 
-  const fetchContact = usePaginatedFetch<bannerList>({
+  const fetchContact = usePaginatedFetch<Contact>({
     key: 'contacts',
     endpoint: Routes.CONTACT_LIST,
     extraQuery: filters,
