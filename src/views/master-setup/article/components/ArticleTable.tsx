@@ -5,6 +5,9 @@ import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
 import { cn } from '@/libs/utils/cn.utils';
 import useArticle from '../article.hook';
+import dayjs from 'dayjs';
+import PencilSquareIcon from '@/components/icons/PencilSquare';
+import Pagination from '@/components/ui/table/Pagination';
 
 const ArticleTable: React.FC = () => {
   const {
@@ -13,12 +16,13 @@ const ArticleTable: React.FC = () => {
     data: article,
     error,
     // sort,
-    // meta,
+    meta,
     // setMeta,
     // onSearch,
     // onSort,
+    onMeta,
     onRetry,
-  } = useArticle();
+  } = useArticle({ key: 'article', extraQuery: {} });
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('Search:', event.target.value);
   };
@@ -37,7 +41,7 @@ const ArticleTable: React.FC = () => {
       'No Article found.'
     ) : null;
 
-  const headers = ['Title', 'Status', 'Actions'];
+  const headers = ['Title', 'Created At', 'Updated At', 'Status', 'Actions'];
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
@@ -85,6 +89,12 @@ const ArticleTable: React.FC = () => {
               article.map((data, index) => (
                 <React.Fragment key={index}>
                   <TableCell className="text-center">{data.title}</TableCell>
+                  <TableCell className="text-center">
+                    {dayjs(data.created_at).format('dddd, MMMM DD YYYY, HH:mm')}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {dayjs(data.updated_at).format('dddd, MMMM DD YYYY, HH:mm')}
+                  </TableCell>
                   <TableCell
                     className={cn(
                       'text-center',
@@ -95,23 +105,7 @@ const ArticleTable: React.FC = () => {
                   </TableCell>
                   <TableCell className="text-center">
                     <div className="flex justify-center items-center gap-2">
-                      <button className="text-blue-500 hover:text-blue-700">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="size-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                          />
-                        </svg>
-                      </button>
-
+                      <PencilSquareIcon className="size-5 text-blue-500 hover:text-blue-700 cursor-pointer" />
                       <button className="text-red-500 hover:text-red-700">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -136,6 +130,7 @@ const ArticleTable: React.FC = () => {
           </TableRow>
         </TableBody>
       </Table>
+      <Pagination meta={meta} context="article" onPageChange={(page) => onMeta({ page })} />
     </div>
   );
 };

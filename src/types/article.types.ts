@@ -3,6 +3,6 @@ export type ArticleList = {
   title: string;
   status: number;
   status_text: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 };

@@ -4,8 +4,6 @@ export type bannerList = {
   sub_title: string;
   image: string;
   type: string;
-  placement_text_x: number;
-  placement_text_y: string;
-  sort: number;
+  status_text: string;
   status: number;
 };
