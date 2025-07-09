@@ -6,6 +6,7 @@ import Input from '@/components/ui/form/Input';
 import { cn } from '@/libs/utils/cn.utils';
 import useContact from '../contact.hook';
 import PencilSquareIcon from '@/components/icons/PencilSquare';
+import Pagination from '@/components/ui/table/Pagination';
 
 const ContactTable: React.FC = () => {
   const {
@@ -14,7 +15,8 @@ const ContactTable: React.FC = () => {
     data: contacts,
     error,
     // sort,
-    // meta,
+    meta,
+    onMeta,
     // setMeta,
     // onSearch,
     // onSort,
@@ -124,6 +126,7 @@ const ContactTable: React.FC = () => {
           </TableRow>
         </TableBody>
       </Table>
+      <Pagination meta={meta} context="contacts" onPageChange={(page) => onMeta({ page })} />
     </div>
   );
 };

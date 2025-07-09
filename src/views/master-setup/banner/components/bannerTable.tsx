@@ -6,23 +6,19 @@ import Input from '@/components/ui/form/Input';
 import { cn } from '@/libs/utils/cn.utils';
 import useBanner from '../banner.hook';
 import PencilSquareIcon from '@/components/icons/PencilSquare';
+import Pagination from '@/components/ui/table/Pagination';
 
 const BannerTable: React.FC = () => {
   const {
     isLoading,
     isFetching,
-    data: banner,
+    data: banners,
     error,
-    // sort,
-    // meta,
-    // setMeta,
-    // onSearch,
-    // onSort,
+    meta,
+    onSearch,
     onRetry,
+    onMeta,
   } = useBanner();
-  const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Search:', event.target.value);
-  };
 
   const tableStatus =
     isLoading || (error && isFetching) ? (
@@ -34,7 +30,7 @@ const BannerTable: React.FC = () => {
           Try again
         </button>
       </div>
-    ) : banner.length === 0 ? (
+    ) : banners.length === 0 ? (
       'No Banner found.'
     ) : null;
 
@@ -83,7 +79,7 @@ const BannerTable: React.FC = () => {
                 {tableStatus}
               </TableCell>
             ) : (
-              banner.map((data, index) => (
+              banners.map((data, index) => (
                 <React.Fragment key={index}>
                   <TableCell className="text-center">{data.title}</TableCell>
                   <TableCell className="text-center">{data.sub_title}</TableCell>
@@ -123,6 +119,7 @@ const BannerTable: React.FC = () => {
           </TableRow>
         </TableBody>
       </Table>
+      <Pagination meta={meta} context="banners" onPageChange={(page) => onMeta({ page })} />
     </div>
   );
 };

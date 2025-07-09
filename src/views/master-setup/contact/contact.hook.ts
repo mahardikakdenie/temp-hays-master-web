@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
 import { Contact } from '@/types/contact.types';
+import { Meta } from '@/types/commons.types';
 
 const useContact = () => {
   const [filters, setFilters] = useState({
@@ -9,6 +10,20 @@ const useContact = () => {
     endDate: '',
     status: '',
   });
+
+  const [meta, setMeta] = useState<Meta>({
+    page: 1,
+    limit: 10,
+    totalData: 0,
+    totalPage: 0,
+  });
+  // const [search, setSearch] = useState('');
+  // const [debouncedSearch, setDebouncedSearch] = useState('');
+  // const [sort, setSort] = useState<Sort>({ column: '', order: '' });
+
+  const onMeta = (meta: Partial<{ page: number }>) => {
+    setMeta((prev) => ({ ...prev, ...meta }));
+  };
 
   const onChangeStartDate = useCallback((value: string) => {
     setFilters((prev) => ({ ...prev, startDate: value }));
@@ -30,6 +45,8 @@ const useContact = () => {
 
   return {
     ...fetchContact,
+    meta: fetchContact.meta || meta,
+    onMeta,
     ...filters,
     onChangeStartDate,
     onChangeEndDate,
