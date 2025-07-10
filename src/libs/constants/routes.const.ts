@@ -31,4 +31,8 @@ export class Routes {
   // CONTACT
   static CONTACT = Routes.API_CONTACT;
   static CONTACT_LIST = Routes.API_CONTACT + '/list';
+
+  // Category
+  static CATEGORY = '/category';
+  static CATEGORY_LIST = Routes.CATEGORY + '/list';
 }

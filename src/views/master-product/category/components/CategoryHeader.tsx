@@ -3,7 +3,7 @@ import Breadcrumbs from '@/components/ui/breadcrumbs/Breadcrumbs';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import { useGlobal } from '@/contexts/global.context';
 
-const BannerHeader: React.FC = () => {
+const CategoryHeader: React.FC = () => {
   const { onOpenModal } = useGlobal();
   return (
     <div className="flex justify-between items-end">
@@ -11,7 +11,7 @@ const BannerHeader: React.FC = () => {
         <span className="text-xl font-semibold block mb-2">Category</span>
         <Breadcrumbs
           items={[
-            { title: 'Master product', href: '#' },
+            { title: 'Master Product', href: '#' },
             { title: 'Category', href: '/master-setup/category' },
           ]}
         />
@@ -19,11 +19,11 @@ const BannerHeader: React.FC = () => {
 
       <div>
         <ButtonPrimary className="w-full" onClick={() => onOpenModal('add')}>
-          Add New Banner
+          Add New Category
         </ButtonPrimary>
       </div>
     </div>
   );
 };
 
-export default BannerHeader;
+export default CategoryHeader;

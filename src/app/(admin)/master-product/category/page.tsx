@@ -1,8 +1,9 @@
+import CategoryViews from '@/views/master-product/category';
+
 const categoryPage = () => {
   return (
-    <div>
-      <h1>Category Page</h1>
-      <p>This is the category page content.</p>
+    <div className="">
+      <CategoryViews />
     </div>
   );
 };
