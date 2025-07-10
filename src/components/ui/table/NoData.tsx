@@ -3,7 +3,7 @@ interface TableNoDataProps {
   error: string;
   isFetching: boolean;
   onRetry: () => void;
-  banners: unknown[];
+  datas: unknown[];
 }
 
 const TableNoData: React.FC<TableNoDataProps> = ({
@@ -11,7 +11,7 @@ const TableNoData: React.FC<TableNoDataProps> = ({
   error,
   isFetching,
   onRetry,
-  banners,
+  datas,
 }) => {
   return isLoading || (error && isFetching) ? (
     'Loading...'
@@ -22,8 +22,8 @@ const TableNoData: React.FC<TableNoDataProps> = ({
         Try again
       </button>
     </div>
-  ) : banners.length === 0 ? (
-    'No Banner found.'
+  ) : datas.length === 0 ? (
+    'No data found.'
   ) : null;
 };
 
