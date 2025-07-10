@@ -35,4 +35,8 @@ export class Routes {
   // Category
   static CATEGORY = '/category';
   static CATEGORY_LIST = Routes.CATEGORY + '/list';
+
+  // Sub-Category
+  static SUB_CATEGORY = '/sub-category';
+  static SUB_CATEGORY_LIST = Routes.SUB_CATEGORY + '/list';
 }
