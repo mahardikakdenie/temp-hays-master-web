@@ -1,8 +1,9 @@
+import ThemeViews from '@/views/master-product/theme';
+
 const themePage = () => {
   return (
     <div>
-      <h1>Theme Page</h1>
-      <p>This is the theme page content.</p>
+      <ThemeViews />
     </div>
   );
 };

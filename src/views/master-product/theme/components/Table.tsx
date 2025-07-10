@@ -1,52 +1,38 @@
 import SearchIcon from '@/components/icons/Search';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
-import { Table } from '@/components/ui/table/Table';
 import { Input } from '@headlessui/react';
-import useSubCategory from '../hooks/useSubCategory.hook';
-import React from 'react';
+import useThemeHook from '../hooks/useTheme.hook';
+import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
-import { SubCategoryList } from '@/types/sub-category.types';
-import Pagination from '@/components/ui/table/Pagination';
 
-const SubCategoryTable: React.FC = () => {
-  const {
-    data: subCategories,
-    isLoading,
-    onSearch,
-    isFetching,
-    error,
-    onRetry,
-    onSort,
-    sort,
-    onMeta,
-    meta,
-  } = useSubCategory();
+const ThemeTable: React.FC = () => {
+  const { onSearch, onSort, sort, data, isLoading, isFetching, onRetry, error } = useThemeHook();
 
   const headers = [
     {
-      name: 'Name',
       key: 'name',
+      name: 'Name',
     },
     {
-      name: 'Description',
       key: 'desc',
+      name: 'description',
     },
     {
-      name: 'Created At',
       key: 'created_at',
+      name: 'Created at',
     },
     {
-      name: 'Updated At',
       key: 'updated_at',
+      name: 'Updated At',
     },
     {
-      name: 'Status',
       key: 'status',
+      name: 'Status',
     },
     {
-      name: 'Actions',
       key: 'actions',
+      name: 'Actions',
     },
   ];
   return (
@@ -75,28 +61,22 @@ const SubCategoryTable: React.FC = () => {
       <Table>
         <HeaderDataUI
           headers={headers}
+          headerWithSorts={['name', 'status']}
           onSort={onSort}
           sort={sort}
-          headerWithSorts={['name', 'status']}
         />
 
-        <TableDataUI<SubCategoryList>
+        <TableDataUI
+          headers={headers}
+          data={data}
           isLoading={isLoading}
           isFetching={isFetching}
-          data={subCategories}
-          headers={headers}
           onRetry={onRetry}
           error={error}
         />
       </Table>
-
-      <Pagination
-        meta={meta}
-        context="sub-categories"
-        onPageChange={(page: number) => onMeta({ page })}
-      />
     </div>
   );
 };
 
-export default SubCategoryTable;
+export default ThemeTable;

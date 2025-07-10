@@ -39,4 +39,8 @@ export class Routes {
   // Sub-Category
   static SUB_CATEGORY = '/sub-category';
   static SUB_CATEGORY_LIST = Routes.SUB_CATEGORY + '/list';
+
+  // Theme
+  static THEME = '/theme';
+  static THEME_LIST = Routes.THEME + '/list';
 }
