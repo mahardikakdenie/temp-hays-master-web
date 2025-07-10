@@ -43,4 +43,8 @@ export class Routes {
   // Theme
   static THEME = '/theme';
   static THEME_LIST = Routes.THEME + '/list';
+
+  // Field Category
+  static FIELD_CATEGORY = '/field-category';
+  static FIELD_CATEGORY_LIST = Routes.FIELD_CATEGORY + '/field-category';
 }
