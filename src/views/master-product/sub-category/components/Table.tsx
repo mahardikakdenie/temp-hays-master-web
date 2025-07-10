@@ -1,14 +1,18 @@
 import SearchIcon from '@/components/icons/Search';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
-import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table/Table';
+import { Table } from '@/components/ui/table/Table';
 import { Input } from '@headlessui/react';
 import useSubCategory from '../hooks/useSubCategory';
-import TableNoData from '@/components/ui/table/NoData';
+// import TableNoData from '@/components/ui/table/NoData';
 import React from 'react';
-import dayjs from 'dayjs';
-import PencilSquareIcon from '@/components/icons/PencilSquare';
-import TableLoadingSkeleton from '@/components/ui/table/Loading';
-import TrashIcon from '@/components/icons/Trash';
+// import dayjs from 'dayjs';
+// import PencilSquareIcon from '@/components/icons/PencilSquare';
+// import TableLoadingSkeleton from '@/components/ui/table/Loading';
+// import TrashIcon from '@/components/icons/Trash';
+import HeaderDataUI from '@/components/ui/table/HeaderData';
+import TableDataUI from '@/components/ui/table/TableData';
+import { SubCategoryList } from '@/types/sub-category.types';
+import Pagination from '@/components/ui/table/Pagination';
 
 const SubCategoryTable: React.FC = () => {
   const {
@@ -20,8 +24,8 @@ const SubCategoryTable: React.FC = () => {
     onRetry,
     onSort,
     sort,
-    // onMeta,
-    // meta,
+    onMeta,
+    meta,
   } = useSubCategory();
 
   const headers = [
@@ -54,7 +58,7 @@ const SubCategoryTable: React.FC = () => {
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
         <div className="hidden md:block">
-          <span className="text-lg font-semibold">List Data Banner</span>
+          <span className="text-lg font-semibold">List Data Sub Categories</span>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-4">
           <div className="w-full sm:min-w-[300px]">
@@ -74,98 +78,28 @@ const SubCategoryTable: React.FC = () => {
       </div>
 
       <Table>
-        <TableHeader>
-          <TableRow>
-            {headers.map((header) => {
-              const isSortable = ['name', 'status'].includes(header.key);
-              return (
-                <TableCell
-                  key={header.key}
-                  isHeader
-                  className="text-center font-semibold capitalize"
-                  sortable={isSortable}
-                  sortKey={isSortable ? header.key : undefined} // opsional
-                  onSort={isSortable ? onSort : undefined}
-                  currentSortColumn={sort.column}
-                  currentSortOrder={sort.order}
-                >
-                  {header.name}
-                </TableCell>
-              );
-            })}
-          </TableRow>
-        </TableHeader>
+        <HeaderDataUI
+          headers={headers}
+          onSort={onSort}
+          sort={sort}
+          headerWithSorts={['name', 'status']}
+        />
 
-        <TableBody>
-          {isLoading || isFetching ? <TableLoadingSkeleton columns={headers.length} /> : null}
-          {!isLoading && !isFetching && (!subCategories || subCategories.length === 0) ? (
-            <TableRow>
-              <TableCell isHeader colSpan={headers.length} className="text-center">
-                <TableNoData
-                  datas={subCategories}
-                  isFetching={isFetching}
-                  isLoading={isLoading}
-                  onRetry={onRetry}
-                  error={error}
-                />
-              </TableCell>
-            </TableRow>
-          ) : null}
-
-          {/* Data Rows */}
-          {!isLoading && !isFetching && subCategories && subCategories.length > 0
-            ? subCategories.map((subCategory, index) => (
-                <TableRow key={index}>
-                  {headers.map((header) => {
-                    const value = subCategory[header.key as keyof typeof subCategory];
-
-                    if (header.key === 'created_at' || header.key === 'updated_at') {
-                      return (
-                        <TableCell key={header.key} className="text-center">
-                          {dayjs(value).format('dddd, MMMM DD YYYY, HH:mm')}
-                        </TableCell>
-                      );
-                    }
-
-                    if (header.key === 'status') {
-                      return (
-                        <TableCell
-                          key={header.key}
-                          className={`text-center ${
-                            subCategory.status === 1 ? 'text-green-500' : 'text-red-500'
-                          }`}
-                        >
-                          {subCategory.status_text}
-                        </TableCell>
-                      );
-                    }
-
-                    if (header.key === 'actions') {
-                      return (
-                        <TableCell key={header.key} className="text-center">
-                          <div className="flex justify-center items-center gap-2">
-                            <PencilSquareIcon className="size-5 text-blue-500 hover:text-blue-700 cursor-pointer" />
-                            <TrashIcon className="size-5 text-red-500 hover:text-red-700 cursor-pointer" />
-                          </div>
-                        </TableCell>
-                      );
-                    }
-
-                    return (
-                      <TableCell key={header.key} className="text-center">
-                        {value instanceof Date
-                          ? value.toLocaleString()
-                          : value?.toString?.()
-                            ? value.toString()
-                            : ''}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              ))
-            : null}
-        </TableBody>
+        <TableDataUI<SubCategoryList>
+          isLoading={isLoading}
+          isFetching={isFetching}
+          data={subCategories}
+          headers={headers}
+          onRetry={onRetry}
+          error={error}
+        />
       </Table>
+
+      <Pagination
+        meta={meta}
+        context="sub-categories"
+        onPageChange={(page: number) => onMeta({ page })}
+      />
     </div>
   );
 };
