@@ -47,4 +47,8 @@ export class Routes {
   // Field Category
   static FIELD_CATEGORY = '/field-category';
   static FIELD_CATEGORY_LIST = Routes.FIELD_CATEGORY + '/field-category';
+
+  // Products
+  static PRODUCT = '/product';
+  static PRODUCT_LISY = Routes.PRODUCT + '/list';
 }

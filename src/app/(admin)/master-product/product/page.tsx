@@ -1,8 +1,9 @@
+import ProductViews from '@/views/master-product/product';
+
 const productPage = () => {
   return (
     <div>
-      <h1>Product Page</h1>
-      <p>This is the product page content.</p>
+      <ProductViews />
     </div>
   );
 };
