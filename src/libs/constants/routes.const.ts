@@ -51,4 +51,8 @@ export class Routes {
   // Products
   static PRODUCT = '/product';
   static PRODUCT_LISY = Routes.PRODUCT + '/list';
+
+  // TRANSACTIONS
+  static TRANSACTION = '/transaction';
+  static TRASACTION_LIST = Routes.TRANSACTION + '/list';
 }
