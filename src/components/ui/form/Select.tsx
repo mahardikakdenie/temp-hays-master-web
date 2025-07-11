@@ -52,7 +52,7 @@ const Select: React.FC<SelectProps> = ({
             <ListboxButton
               id={id}
               className={cn(
-                'relative block w-full input text-left',
+                'relative block w-full input text-left bg-gray-700',
                 selected ? 'text-white/90' : 'text-gray-400',
                 error && 'input-error',
                 disabled && 'input-disabled',

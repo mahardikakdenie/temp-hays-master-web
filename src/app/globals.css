@@ -115,10 +115,64 @@
 }
 
 /* app/globals.css */
-.quill-editor {
-  height: 300px;
+/* app/globals.css */
+
+.ql-toolbar.ql-snow {
+  border: 0 !important;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  @apply shadow-md border-0 bg-slate-500;
 }
 
-.ql-editor {
-  min-height: 200px;
+.ql-container.ql-snow {
+  border: 0px !important;
+}
+
+.ql-snow .ql-picker-label:before {
+  @apply text-white;
+}
+
+.quill .ql-toolbar .ql-picker,
+.quill .ql-toolbar button {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+  transition: background-color 0.2s ease;
+}
+
+.quill .ql-toolbar .ql-picker:hover,
+.quill .ql-toolbar button:hover {
+  background-color: #374151 !important; /* Hover abu-abu gelap */
+  border-radius: 6px;
+}
+
+.quill .ql-toolbar .ql-picker-label,
+.quill .ql-toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.quill .ql-toolbar .ql-picker-options {
+  background-color: #1f2937 !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.quill .ql-toolbar .ql-picker-item {
+  padding: 0.5rem 1rem !important;
+  color: white !important;
+  background-color: #1f2937 !important;
+}
+
+.quill .ql-toolbar .ql-picker-item:hover {
+  background-color: #374151 !important;
+}
+
+.quill .ql-toolbar .ql-active,
+.quill .ql-toolbar .ql-selected {
+  background-color: #3b82f6 !important; /* Biru cerah saat aktif */
+  border-radius: 6px;
 }

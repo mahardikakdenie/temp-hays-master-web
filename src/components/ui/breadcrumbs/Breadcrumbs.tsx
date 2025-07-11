@@ -17,7 +17,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
     <nav className="flex" aria-label="Breadcrumb">
       <ol className="inline-flex items-center space-x-1 md:space-x-2">
         {/* HOME */}
-        <li className="inline-flex items-center">
+        <li className="inline-flex items-center hover:text-primary">
           <Link
             href="/dashboard"
             className="inline-flex items-center text-sm font-medium text-primary"
@@ -33,7 +33,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
               <ChevronRightIcon className="w-4 h-4 text-gray-400" />
               <div className="ms-1 text-sm font-medium md:ms-2">
                 {index < items.length - 1 ? (
-                  <Link href={item.href}>{item.title}</Link>
+                  <Link href={item.href} className="hover:text-primary">
+                    {item.title}
+                  </Link>
                 ) : (
                   <span>{item.title}</span>
                 )}

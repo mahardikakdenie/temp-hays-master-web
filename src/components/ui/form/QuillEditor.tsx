@@ -44,7 +44,12 @@ const QuillNoSSRWrapper = ({ value, onChange }: QuillEditorProps) => {
     }
   }, [onChange, value]);
 
-  return <div ref={containerRef} className="quill-editor" />;
+  return (
+    <div
+      ref={containerRef}
+      className="quill-editor w-full px-4 py-2 bg-gray-700 border-0 rounded-t-none rounded-b-md text-white placeholder-gray-400 focus:outline-none focus:ring-2"
+    />
+  );
 };
 
 export default function QuillEditor({ value, onChange }: QuillEditorProps) {
