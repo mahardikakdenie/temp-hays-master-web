@@ -4,6 +4,7 @@ import { Input } from '@headlessui/react';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
+import { Table } from '@/components/ui/table/Table';
 
 const OrderListTable: React.FC = () => {
   const { onSearch, sort, onSort, data, isFetching, isLoading, onRetry, error } =
@@ -58,23 +59,25 @@ const OrderListTable: React.FC = () => {
         </div>
       </div>
 
-      <HeaderDataUI
-        headers={headers}
-        headerWithSorts={headers
-          .filter((header) => header.key === 'actions')
-          .map((header) => header.key)}
-        sort={sort}
-        onSort={onSort}
-      />
+      <Table>
+        <HeaderDataUI
+          headers={headers}
+          headerWithSorts={headers
+            .filter((header) => header.key === 'actions')
+            .map((header) => header.key)}
+          sort={sort}
+          onSort={onSort}
+        />
 
-      <TableDataUI
-        headers={headers}
-        data={data}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        onRetry={onRetry}
-        error={error}
-      />
+        <TableDataUI
+          headers={headers}
+          data={data}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          onRetry={onRetry}
+          error={error}
+        />
+      </Table>
     </div>
   );
 };
