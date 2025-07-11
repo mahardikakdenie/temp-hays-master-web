@@ -9,8 +9,11 @@ const useAddBanner = () => {
     onCloseModal();
   }, [onCloseModal]);
 
+  const onSubmit = () => {};
+
   return {
     onCancel,
+    onSubmit,
   };
 };
 
