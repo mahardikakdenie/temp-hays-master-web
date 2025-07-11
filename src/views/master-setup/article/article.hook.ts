@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
 import { ArticleList } from '@/types/article.types';
-import { Meta, Sort } from '@/types/commons.types';
+import { Meta } from '@/types/commons.types';
 import debounce from 'lodash.debounce';
 
 // type FetchResponse<T> = { items: T[]; meta: Meta };
@@ -23,7 +23,6 @@ const useArticle = (props: { key: string; extraQuery?: Record<string, string> })
   });
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [sort, setSort] = useState<Sort>({ column: '', order: '' });
 
   const queryKey = [
     key,
@@ -31,8 +30,6 @@ const useArticle = (props: { key: string; extraQuery?: Record<string, string> })
       page: meta.page,
       limit: meta.limit,
       search: debouncedSearch,
-      orderBy: sort.column,
-      sort: sort.order,
       ...extraQuery,
     },
   ];
@@ -76,13 +73,6 @@ const useArticle = (props: { key: string; extraQuery?: Record<string, string> })
     [debouncedSetSearch],
   );
 
-  const onSort = useCallback((column: string) => {
-    setSort((prev) => ({
-      column,
-      order: prev.column === column && prev.order === 'ASC' ? 'DESC' : 'ASC',
-    }));
-  }, []);
-
   return {
     ...fetchArticle,
     items: fetchArticle.data,
@@ -95,7 +85,7 @@ const useArticle = (props: { key: string; extraQuery?: Record<string, string> })
     onMeta,
     search,
     queryKey,
-    onSort,
+    onSort: fetchArticle.onSort,
   };
 };
 
