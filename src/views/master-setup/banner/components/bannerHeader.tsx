@@ -1,28 +1,20 @@
 import type React from 'react';
-import Breadcrumbs from '@/components/ui/breadcrumbs/Breadcrumbs';
-import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import { useGlobal } from '@/contexts/global.context';
+import PageHeader from '@/components/ui/page/Header';
 
 const BannerHeader: React.FC = () => {
   const { onOpenModal } = useGlobal();
   return (
-    <div className="flex justify-between items-end">
-      <div>
-        <span className="text-xl font-semibold block mb-2">Category</span>
-        <Breadcrumbs
-          items={[
-            { title: 'Master product', href: '#' },
-            { title: 'Category', href: '/master-setup/category' },
-          ]}
-        />
-      </div>
-
-      <div>
-        <ButtonPrimary className="w-full" onClick={() => onOpenModal('add')}>
-          Add New Banner
-        </ButtonPrimary>
-      </div>
-    </div>
+    <PageHeader
+      items={[
+        { title: 'Master Setup', href: '#' },
+        { title: 'Banner', href: '/master-setup/banner' },
+      ]}
+      onClick={() => onOpenModal('add')}
+      isShowBtn
+      title="Banner"
+      titleButton="Add new banner"
+    />
   );
 };
 

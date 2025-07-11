@@ -20,7 +20,7 @@ const PageHeader: React.FC<{
 
       <div>
         {isShowBtn && (
-          <ButtonPrimary className="w-full" onClick={() => onClick}>
+          <ButtonPrimary className="w-full" onClick={onClick}>
             {titleButton}
           </ButtonPrimary>
         )}

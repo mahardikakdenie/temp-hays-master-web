@@ -113,3 +113,12 @@
 .apexcharts-gridline {
   @apply !stroke-white/10;
 }
+
+/* app/globals.css */
+.quill-editor {
+  height: 300px;
+}
+
+.ql-editor {
+  min-height: 200px;
+}
