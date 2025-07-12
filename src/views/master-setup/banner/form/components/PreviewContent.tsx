@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css'; // atau quill.bubble.css jika pakai theme bubble
 
-import 'quill/dist/quill.snow.css'; // ← TEMA SNOW
 interface PreviewContentProps {
   placeX: string | number | null | 'left' | 'right' | 'center';
   placeY?: string | number | null | 'top' | 'center' | 'bottom';
@@ -54,8 +55,8 @@ const PreviewContent: React.FC<PreviewContentProps> = ({
       </div>
 
       <div className={getPositionClasses()}>
-        <div className="prose ql-editor" dangerouslySetInnerHTML={{ __html: title }} />
-        <div className="prose ql-editor" dangerouslySetInnerHTML={{ __html: subTitle }} />
+        <div className="ql-editor" dangerouslySetInnerHTML={{ __html: title }} />
+        <div className="ql-editor" dangerouslySetInnerHTML={{ __html: subTitle }} />
       </div>
     </div>
   );

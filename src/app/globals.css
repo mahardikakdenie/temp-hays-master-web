@@ -1,5 +1,15 @@
 @import 'tailwindcss';
 
+h1 {
+  @apply text-2xl;
+}
+h2 {
+  @apply text-xl;
+}
+h3 {
+  @apply text-lg;
+}
+
 @theme {
   --color-ui-500: #5a5b63;
   --color-ui-600: #43444b;

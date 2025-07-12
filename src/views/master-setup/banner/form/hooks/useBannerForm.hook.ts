@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import { BannerForm } from '@/types/banner.types';
 import { createBannerApi } from '@/actions/banner';
+import { useState } from 'react';
 
 const addUserSchema = yup.object({
   title: yup.string().required('Title is required'),
@@ -39,6 +40,34 @@ const addUserSchema = yup.object({
 });
 
 const useBannerFormHook = () => {
+  const [placeX, setPlaceX] = useState<string | number | null | 'left' | 'right' | 'center'>('');
+  const [placeY, setPlaceY] = useState<string | number | null | 'top' | 'center' | 'bottom'>('');
+  const [file, setFile] = useState<File | string>('');
+  const [title, setTitle] = useState<string>('');
+  const [subTitle, setSubTitle] = useState<string>('');
+  const [selectedSection, setSelectedSection] = useState<string>('form-create-banner');
+  const items = [
+    { title: 'Master Setup', href: '#' },
+    { title: 'Banner', href: '/master-setup/banner' },
+    { title: 'Create Banner', href: '/master-setup/banner' },
+  ];
+
+  const handleImageUpload = (file: File | null) => {
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const base64Image = e.target?.result as string; // ini adalah data:image/...
+        console.log('Base64 Image:', base64Image);
+
+        setFile(base64Image);
+      };
+
+      reader.readAsDataURL(file); // baca file sebagai Data URL (base64)
+    }
+  };
+
+  const headers = ['form-create-banner', 'preview'];
   const form = useForm<BannerForm>({
     resolver: yupResolver(addUserSchema),
   });
@@ -55,6 +84,21 @@ const useBannerFormHook = () => {
   };
 
   return {
+    title,
+    setTitle,
+    subTitle,
+    setSubTitle,
+    placeX,
+    placeY,
+    setPlaceX,
+    setPlaceY,
+    file,
+    selectedSection,
+    setSelectedSection,
+    items,
+    headers,
+    handleImageUpload,
+    setFile,
     onSubmit,
     form,
   };

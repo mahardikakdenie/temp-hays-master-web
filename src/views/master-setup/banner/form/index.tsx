@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import QuillEditor from '@/components/ui/form/QuillEditor';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
@@ -9,52 +9,40 @@ import MediaInput from '@/components/ui/form/MediaInput';
 import { cn } from '@/libs/utils/cn.utils';
 import PreviewContent from './components/PreviewContent';
 import useBannerFormHook from './hooks/useBannerForm.hook';
-// import FileInput from '@/components/ui/form/';
 
 const BannerFormViews: React.FC = () => {
-  const { form, onSubmit } = useBannerFormHook();
+  const {
+    form,
+    onSubmit,
+    title,
+    setTitle,
+    subTitle,
+    setSubTitle,
+    placeX,
+    placeY,
+    setPlaceX,
+    setPlaceY,
+    file,
+    selectedSection,
+    setSelectedSection,
+    items,
+    headers,
+    handleImageUpload,
+  } = useBannerFormHook();
 
   const {
-    // register,
+    register,
     // control,
     handleSubmit,
     // formState: { errors, isSubmitting },
   } = form;
-  const [placeX, setPlaceX] = useState<string | number | null | 'left' | 'right' | 'center'>('');
-  const [placeY, setPlaceY] = useState<string | number | null | 'top' | 'center' | 'bottom'>('');
-  const [file, setFile] = useState<File | string>('');
-  const [title, setTitle] = useState<string>('');
-  const [subTitle, setSubTitle] = useState<string>('');
-  const [selectedSection, setSelectedSection] = useState<string>('form-create-banner');
-  const items = [
-    { title: 'Master Setup', href: '#' },
-    { title: 'Banner', href: '/master-setup/banner' },
-    { title: 'Create Banner', href: '/master-setup/banner' },
-  ];
-
-  const handleImageUpload = (file: File | null) => {
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const base64Image = e.target?.result as string; // ini adalah data:image/...
-        console.log('Base64 Image:', base64Image);
-
-        setFile(base64Image); // simpan sebagai base64 string
-      };
-
-      reader.readAsDataURL(file); // baca file sebagai Data URL (base64)
-    }
-  };
-
-  const headers = ['form-create-banner', 'preview'];
   return (
     <>
       <PageHeader
         items={items}
         title="Create New Banner"
         isShowBtn={false}
-        titleButton="haha"
+        titleButton="title"
         onClick={() => {}}
       />
       <div className="mt-6 mx-auto px-10 py-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
@@ -97,6 +85,7 @@ const BannerFormViews: React.FC = () => {
               </label>
               <QuillEditor
                 value={title}
+                {...register('title')}
                 onChange={(content) => {
                   setTitle(content);
                 }}
@@ -108,6 +97,7 @@ const BannerFormViews: React.FC = () => {
               <label className="block text-sm font-medium text-gray-300 mb-2">Sub Title</label>
               <QuillEditor
                 value={subTitle}
+                {...register('subTitle')}
                 onChange={(content) => {
                   setSubTitle(content);
                 }}
@@ -124,6 +114,7 @@ const BannerFormViews: React.FC = () => {
                   { id: 'right', name: 'Right' },
                   { id: 'center', name: 'Center' },
                 ]}
+                {...register('placement_text_x')}
                 onChange={(value) => setPlaceX(value ?? '')}
               />
               <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
@@ -139,6 +130,7 @@ const BannerFormViews: React.FC = () => {
                   { id: 'bottom', name: 'Bottom' },
                   { id: 'center', name: 'Center' },
                 ]}
+                {...register('placement_text_y')}
                 onChange={(value) => setPlaceY(value ?? '')}
               />
               <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
@@ -147,6 +139,7 @@ const BannerFormViews: React.FC = () => {
             <div>
               <MediaInput
                 label="Banner Image"
+                {...register('image')}
                 onChange={handleImageUpload}
                 initialPreview={file instanceof File ? URL.createObjectURL(file) : file}
               />
