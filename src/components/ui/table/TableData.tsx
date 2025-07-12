@@ -30,6 +30,11 @@ const TableDataUI = <T extends Record<string, any>>({
   onRetry,
   error,
 }: TableDataUIProps<T>) => {
+  const stripHtml = (html: string) => {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  };
   return (
     <TableBody>
       {/* Loading State */}
@@ -75,6 +80,14 @@ const TableDataUI = <T extends Record<string, any>>({
                 return (
                   <TableCell key={header.key} className="text-center">
                     {value ? dayjs(value).format('dddd, MMMM DD YYYY, HH:mm') : '-'}
+                  </TableCell>
+                );
+              }
+
+              if (header.key === 'title' || header.key === 'sub_title') {
+                return (
+                  <TableCell className="text-center" key={header.key}>
+                    {stripHtml(item[header.key])}
                   </TableCell>
                 );
               }

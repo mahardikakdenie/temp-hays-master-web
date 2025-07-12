@@ -1,6 +1,6 @@
 export type BannerForm = {
   title: string;
-  subTitle: string;
+  sub_title: string;
   type: string;
   placement_text_x: 'left' | 'center' | 'right';
   placement_text_y: 'top' | 'center' | 'bottom';

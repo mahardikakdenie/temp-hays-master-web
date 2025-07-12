@@ -7,7 +7,7 @@ interface PreviewContentProps {
   placeY?: string | number | null | 'top' | 'center' | 'bottom';
   title: string;
   subTitle: string;
-  file: File | string;
+  file: File | string | null;
 }
 
 const PreviewContent: React.FC<PreviewContentProps> = ({

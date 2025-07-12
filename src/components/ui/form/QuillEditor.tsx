@@ -20,7 +20,7 @@ const QuillNoSSRWrapper = ({ value, onChange }: QuillEditorProps) => {
             theme: 'snow',
             modules: {
               toolbar: [
-                [{ header: [1, 2, false] }],
+                [{ header: [1, 2, 3, 4, false] }],
                 ['bold', 'italic', 'underline'],
                 [{ list: 'ordered' }, { list: 'bullet' }],
                 ['link', 'image'],

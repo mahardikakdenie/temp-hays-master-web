@@ -12,6 +12,7 @@ import useBannerFormHook from './hooks/useBannerForm.hook';
 
 const BannerFormViews: React.FC = () => {
   const {
+    data,
     form,
     onSubmit,
     title,
@@ -28,6 +29,8 @@ const BannerFormViews: React.FC = () => {
     items,
     headers,
     handleImageUpload,
+    type,
+    setType,
   } = useBannerFormHook();
 
   const {
@@ -69,14 +72,17 @@ const BannerFormViews: React.FC = () => {
             placeX={placeX}
             placeY={placeY}
             title={title}
-            file={file}
+            file={file ?? null}
             subTitle={subTitle}
           />
         ) : (
           <form
             id="add-banner-form"
             className="space-y-8 text-white"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(onSubmit)();
+            }}
           >
             {/* Title */}
             <div>
@@ -97,7 +103,7 @@ const BannerFormViews: React.FC = () => {
               <label className="block text-sm font-medium text-gray-300 mb-2">Sub Title</label>
               <QuillEditor
                 value={subTitle}
-                {...register('subTitle')}
+                {...register('sub_title')}
                 onChange={(content) => {
                   setSubTitle(content);
                 }}
@@ -120,6 +126,16 @@ const BannerFormViews: React.FC = () => {
               <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
             </div>
             <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Type</label>
+              <Select
+                value={type}
+                options={data}
+                {...register('type')}
+                onChange={(value) => setType(value ?? '')}
+              />
+              <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
+            </div>
+            <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Text Vertical Alignment
               </label>
@@ -131,7 +147,7 @@ const BannerFormViews: React.FC = () => {
                   { id: 'center', name: 'Center' },
                 ]}
                 {...register('placement_text_y')}
-                onChange={(value) => setPlaceY(value ?? '')}
+                onChange={(value) => setPlaceY(value?.toString().toLowerCase() ?? '')}
               />
               <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
             </div>
@@ -148,7 +164,21 @@ const BannerFormViews: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-4">
               <ButtonSecondary type="button">Cancel</ButtonSecondary>
-              <ButtonPrimary type="submit" disabled>
+              <ButtonPrimary
+                type="submit"
+                form="add-banner-form"
+                // onClick={() =>
+                //   onSubmit({
+                //     title,
+                //     sub_title: subTitle,
+                //     type: (typeof type === 'string' ? type?.toLowerCase() : type) as string,
+                //     placement_text_x: placeX as 'left' | 'right' | 'center',
+                //     placement_text_y: placeY as 'center' | 'top' | 'bottom',
+                //     sort: 2,
+                //     image: file as File,
+                //   })
+                // }
+              >
                 Save Banner
               </ButtonPrimary>
             </div>
