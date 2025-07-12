@@ -1,3 +1,4 @@
+'use client';
 import BannerFormViews from '@/views/master-setup/banner/form';
 
 const BannerCreatePage: React.FC = () => {

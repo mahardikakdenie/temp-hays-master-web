@@ -1,4 +1,3 @@
-// components/banner/BannerFormViews.tsx
 'use client';
 import React, { useState } from 'react';
 import QuillEditor from '@/components/ui/form/QuillEditor';
@@ -9,9 +8,18 @@ import PageHeader from '@/components/ui/page/Header';
 import MediaInput from '@/components/ui/form/MediaInput';
 import { cn } from '@/libs/utils/cn.utils';
 import PreviewContent from './components/PreviewContent';
+import useBannerFormHook from './hooks/useBannerForm.hook';
 // import FileInput from '@/components/ui/form/';
 
 const BannerFormViews: React.FC = () => {
+  const { form, onSubmit } = useBannerFormHook();
+
+  const {
+    // register,
+    // control,
+    handleSubmit,
+    // formState: { errors, isSubmitting },
+  } = form;
   const [placeX, setPlaceX] = useState<string | number | null | 'left' | 'right' | 'center'>('');
   const [placeY, setPlaceY] = useState<string | number | null | 'top' | 'center' | 'bottom'>('');
   const [file, setFile] = useState<File | string>('');
@@ -26,8 +34,16 @@ const BannerFormViews: React.FC = () => {
 
   const handleImageUpload = (file: File | null) => {
     if (file) {
-      console.log('Uploaded file:', file);
-      setFile(file);
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const base64Image = e.target?.result as string; // ini adalah data:image/...
+        console.log('Base64 Image:', base64Image);
+
+        setFile(base64Image); // simpan sebagai base64 string
+      };
+
+      reader.readAsDataURL(file); // baca file sebagai Data URL (base64)
     }
   };
 
@@ -69,7 +85,11 @@ const BannerFormViews: React.FC = () => {
             subTitle={subTitle}
           />
         ) : (
-          <form action="#" className="space-y-8 text-white">
+          <form
+            id="add-banner-form"
+            className="space-y-8 text-white"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             {/* Title */}
             <div>
               <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
@@ -125,13 +145,19 @@ const BannerFormViews: React.FC = () => {
             </div>
 
             <div>
-              <MediaInput label="Banner Image" onChange={handleImageUpload} />
+              <MediaInput
+                label="Banner Image"
+                onChange={handleImageUpload}
+                initialPreview={file instanceof File ? URL.createObjectURL(file) : file}
+              />
             </div>
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-4">
               <ButtonSecondary type="button">Cancel</ButtonSecondary>
-              <ButtonPrimary type="submit">Save Banner</ButtonPrimary>
+              <ButtonPrimary type="submit" disabled>
+                Save Banner
+              </ButtonPrimary>
             </div>
           </form>
         )}
