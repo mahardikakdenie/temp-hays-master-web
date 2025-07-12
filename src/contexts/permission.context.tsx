@@ -26,7 +26,19 @@ const usePermission = () => {
   const permissions = usePermissionCtx();
   const pathname = usePathname();
 
-  const currentPermission = useMemo(() => permissions[pathname], [permissions, pathname]);
+  const currentPermission = useMemo(() => {
+    const paths = pathname?.split('/');
+    let currentPathName = '';
+
+    // Checking this route have permission or not
+    if (!permissions[pathname] && (paths.includes('create') || paths.includes('update'))) {
+      currentPathName = paths.slice(0, -1).join('/');
+    } else {
+      currentPathName = pathname;
+    }
+
+    return permissions[currentPathName];
+  }, [permissions, pathname]);
 
   const hasPermission = useCallback(
     (action: keyof PermissionProps[string]) => currentPermission?.[action] ?? false,
