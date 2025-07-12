@@ -8,10 +8,15 @@ import Select from '@/components/ui/form/Select';
 import PageHeader from '@/components/ui/page/Header';
 import MediaInput from '@/components/ui/form/MediaInput';
 import { cn } from '@/libs/utils/cn.utils';
+import PreviewContent from './components/PreviewContent';
 // import FileInput from '@/components/ui/form/';
 
 const BannerFormViews: React.FC = () => {
-  const [placeX, setPlaceX] = useState<string | number | null>('');
+  const [placeX, setPlaceX] = useState<string | number | null | 'left' | 'right' | 'center'>('');
+  const [placeY, setPlaceY] = useState<string | number | null | 'top' | 'center' | 'bottom'>('');
+  const [file, setFile] = useState<File | string>('');
+  const [title, setTitle] = useState<string>('');
+  const [subTitle, setSubTitle] = useState<string>('');
   const [selectedSection, setSelectedSection] = useState<string>('form-create-banner');
   const items = [
     { title: 'Master Setup', href: '#' },
@@ -22,6 +27,7 @@ const BannerFormViews: React.FC = () => {
   const handleImageUpload = (file: File | null) => {
     if (file) {
       console.log('Uploaded file:', file);
+      setFile(file);
     }
   };
 
@@ -55,27 +61,13 @@ const BannerFormViews: React.FC = () => {
         </div>
         <hr className="my-4 border-slate-700" />
         {selectedSection === 'preview' ? (
-          <div className="relative w-full h-[400px] bg-gray-700 rounded-lg overflow-hidden border border-gray-600">
-            {/* Placeholder untuk banner image */}
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: 'url("https://via.placeholder.com/1200x400 ")' }}
-            >
-              {/* Overlay gelap agar teks terbaca */}
-              <div className="absolute inset-0 bg-black/40"></div>
-            </div>
-
-            {/* Text Content - Sesuaikan dengan placement */}
-            <div
-              className={`
-      absolute p-6 text-white transition-all duration-300
-      ${placeX === 'left' ? 'left-6 top-6' : placeX === 'right' ? 'right-6 top-6' : 'left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2'}
-    `}
-            >
-              <h2 className="text-3xl font-bold">Judul Banner</h2>
-              <p className="mt-2 text-lg">Subjudul atau deskripsi singkat</p>
-            </div>
-          </div>
+          <PreviewContent
+            placeX={placeX}
+            placeY={placeY}
+            title={title}
+            file={file}
+            subTitle={subTitle}
+          />
         ) : (
           <form action="#" className="space-y-8 text-white">
             {/* Title */}
@@ -83,13 +75,23 @@ const BannerFormViews: React.FC = () => {
               <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
                 Title
               </label>
-              <QuillEditor value="" onChange={() => {}} />
+              <QuillEditor
+                value={title}
+                onChange={(content) => {
+                  setTitle(content);
+                }}
+              />
             </div>
 
             {/* Subtitle */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Sub Title</label>
-              <QuillEditor value="" onChange={() => {}} />
+              <QuillEditor
+                value={subTitle}
+                onChange={(content) => {
+                  setSubTitle(content);
+                }}
+              />
             </div>
 
             {/* Position Selection */}
@@ -111,13 +113,13 @@ const BannerFormViews: React.FC = () => {
                 Text Vertical Alignment
               </label>
               <Select
-                value={placeX}
+                value={placeY}
                 options={[
-                  { id: 'left', name: 'Left' },
-                  { id: 'right', name: 'Right' },
+                  { id: 'top', name: 'Top' },
+                  { id: 'bottom', name: 'Bottom' },
                   { id: 'center', name: 'Center' },
                 ]}
-                onChange={(value) => setPlaceX(value ?? '')}
+                onChange={(value) => setPlaceY(value ?? '')}
               />
               <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
             </div>
