@@ -2,9 +2,9 @@
 import * as yup from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 
-import { BannerForm } from '@/types/banner.types';
+import { BannerDetail, BannerForm } from '@/types/banner.types';
 import { createBannerApi } from '@/actions/banner';
 import { useInternal } from '@/hooks/useInternal';
 import { Routes } from '@/libs/constants/routes.const';
@@ -12,7 +12,8 @@ import { Options } from '@/types/commons.types';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { useEffect, useState } from 'react';
 import Notification from '@/components/ui/notification/Notification';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams, usePathname } from 'next/navigation';
+import { ParamValue } from 'next/dist/server/request/params';
 
 const addUserSchema = yup.object({
   title: yup.string().required('Title is required'),
@@ -47,11 +48,12 @@ const useBannerFormHook = () => {
   const [placeY, setPlaceY] = useState<string | number | null | 'top' | 'center' | 'bottom'>(
     'center',
   );
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<File | string>();
   const [title, setTitle] = useState<string>('');
   const [subTitle, setSubTitle] = useState<string>('');
   const [selectedSection, setSelectedSection] = useState<string>('form-create-banner');
   const [type, setType] = useState<string | number | null>('');
+  const [bannerId, setBannerId] = useState<ParamValue | null>(null);
   const items = [
     { title: 'Master Setup', href: '#' },
     { title: 'Banner', href: '/master-setup/banner' },
@@ -61,6 +63,48 @@ const useBannerFormHook = () => {
   const headers = ['form-create-banner', 'preview'];
 
   const router = useRouter();
+  const params = useParams();
+  const pathName = usePathname();
+
+  useEffect(() => {
+    if (pathName.includes('update')) {
+      console.log('params :', params.id);
+      setBannerId(params?.id);
+    }
+  }, [pathName, params]);
+
+  const { data: detailData, isLoading: isDetailLoading } = useQuery<BannerDetail, Error>({
+    queryKey: ['detail-data'],
+    queryFn: async () => {
+      const res = await internalAPI(Routes.BANNER + '/detail/' + bannerId);
+      if (res.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch banner types');
+      }
+      const { data } = await res.json();
+      console.log('🚀 ~ queryFn: ~ data:', data.title);
+      form.setValue('title', data.title);
+      setTitle(data.title);
+      return data;
+    },
+    staleTime: 1000 * 60 * 5,
+    retry: 2,
+  });
+
+  useState(() => {
+    if (detailData) {
+      setTitle(detailData.title);
+      setSubTitle(detailData.sub_title);
+      setPlaceX(detailData.placement_text_x);
+      setPlaceY(detailData.placement_text_y);
+      setType(toCapitalize(detailData.type));
+      setFile(detailData.image);
+    }
+  });
+
+  function toCapitalize(str: string | null | undefined): string {
+    if (!str) return '';
+    return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
+  }
 
   const {
     data: typeOptions = [],
@@ -75,10 +119,12 @@ const useBannerFormHook = () => {
         throw new Error('Failed to fetch banner types');
       }
       const { data } = await res.json();
+      setTitle(data.title);
       return data;
     },
     staleTime: 1000 * 60 * 5,
     retry: 2,
+    placeholderData: keepPreviousData,
   });
 
   const form = useForm<BannerForm>({
@@ -214,6 +260,8 @@ const useBannerFormHook = () => {
     isTypeLoading,
     isTypeError,
     refetchTypeOptions,
+    detailData,
+    isDetailLoading,
   };
 };
 

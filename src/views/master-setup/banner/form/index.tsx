@@ -87,7 +87,7 @@ const BannerFormViews: React.FC = () => {
             {/* Title */}
             <div>
               <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
-                Title
+                Title - {title}
               </label>
               <QuillEditor
                 value={title}

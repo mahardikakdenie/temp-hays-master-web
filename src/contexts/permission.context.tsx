@@ -33,10 +33,14 @@ const usePermission = () => {
     // Checking this route have permission or not
     if (!permissions[pathname] && (paths.includes('create') || paths.includes('update'))) {
       currentPathName = paths.slice(0, -1).join('/');
+      if (paths.includes('update')) {
+        currentPathName = paths.slice(0, -2).join('/');
+      }
     } else {
       currentPathName = pathname;
     }
 
+    console.log('🚀 ~ currentPermission ~ currentPathName:', currentPathName);
     return permissions[currentPathName];
   }, [permissions, pathname]);
 
