@@ -68,7 +68,6 @@ const useBannerFormHook = () => {
 
   useEffect(() => {
     if (pathName.includes('update')) {
-      console.log('params :', params.id);
       setBannerId(params?.id);
     }
   }, [pathName, params]);
@@ -81,7 +80,6 @@ const useBannerFormHook = () => {
         throw new Error('Failed to fetch banner types');
       }
       const { data } = await res.json();
-      console.log('🚀 ~ queryFn: ~ data:', data.title);
       form.setValue('title', data.title);
       setTitle(data.title);
       return data;
@@ -187,7 +185,6 @@ const useBannerFormHook = () => {
   const onSubmit: SubmitHandler<BannerForm> = async (data) => {
     try {
       const response = await createBannerMutation.mutateAsync(data);
-      console.log('🚀 API Response:', response); // ini adalah hasil dari `createBannerApi(formData)`
 
       // Kalau `createBannerApi` sudah return JSON, kamu bisa langsung gunakan
       // Tidak perlu tambahan `.json()`
