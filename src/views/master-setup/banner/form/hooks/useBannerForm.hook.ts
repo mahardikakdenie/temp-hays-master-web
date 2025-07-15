@@ -120,7 +120,7 @@ const useBannerFormHook = () => {
 
       setTitle(title);
       setSubTitle(sub_title);
-      setType(type);
+      setType(toCapitalize(type));
       setPlaceX(placement_text_x as 'left' | 'center' | 'right');
       setPlaceY(placement_text_y as 'top' | 'center' | 'bottom');
       setFile(image);
@@ -128,19 +128,19 @@ const useBannerFormHook = () => {
       form.reset({
         title,
         sub_title,
-        type,
+        type: toCapitalize(type),
         placement_text_x,
         placement_text_y,
         sort: detailData.sort || 2,
-        image: image instanceof File ? image : undefined,
+        image: image as File,
       });
     }
   }, [detailData, form]);
 
-  // function toCapitalize(str: string | null | undefined): string {
-  //   if (!str) return '';
-  //   return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
-  // }
+  function toCapitalize(str: string | null | undefined): string {
+    if (!str) return '';
+    return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
+  }
 
   const {
     data: typeOptions = [],
@@ -207,12 +207,30 @@ const useBannerFormHook = () => {
     },
   });
 
+  const updateBannerMutation = useMutation({
+    mutationFn: async (data: BannerForm) => {
+      const formData = new FormData();
+      formData.append('title', data.title);
+      formData.append('sub_title', data.sub_title);
+      formData.append('type', data.type.toString().toLowerCase());
+      formData.append('placement_text_x', data.placement_text_x);
+      formData.append('placement_text_y', data.placement_text_y);
+      formData.set('sort', data.sort.toString());
+
+      if (file instanceof File) {
+        formData.append('image', file);
+      }
+
+      const response = await createBannerApi(formData);
+
+      // ✅ Pastikan createBannerApi mengembalikan respons API
+      return response; // ini akan tersedia di `onSuccess` atau `mutateAsync`
+    },
+  });
+
   const onSubmit: SubmitHandler<BannerForm> = async (data) => {
     try {
       const response = await createBannerMutation.mutateAsync(data);
-
-      // Kalau `createBannerApi` sudah return JSON, kamu bisa langsung gunakan
-      // Tidak perlu tambahan `.json()`
 
       if (response.status >= HttpStatus.BAD_REQUEST) {
         Notification({
@@ -235,6 +253,27 @@ const useBannerFormHook = () => {
     } catch (error) {
       console.error('❌ Upload failed:', error);
     }
+
+    if (typeForm === 'update') {
+      const response = await updateBannerMutation.mutateAsync(data);
+      if (response.status >= HttpStatus.BAD_REQUEST) {
+        Notification({
+          type: 'error',
+          message: 'Failed to add user',
+          description: response.errors[0]?.message ?? response.message,
+          position: 'bottom-right',
+        });
+        return;
+      }
+
+      Notification({
+        type: 'success',
+        message: 'Success',
+        description: response.message,
+        position: 'bottom-right',
+      });
+    } else {
+    }
   };
 
   const handleImageUpload = (uploadedFile: File | null) => {
@@ -245,7 +284,7 @@ const useBannerFormHook = () => {
         return;
       }
 
-      // Validasi ukuran < 5MB
+      // Validasi  ukuran < 5MB
       const maxSizeInBytes = 5 * 1024 * 1024;
       if (uploadedFile.size > maxSizeInBytes) {
         alert('Image size must be less than 5MB');

@@ -10,7 +10,7 @@ export const GET = async (req: NextRequest, context: Context<{ filename: string[
   const { filename } = await params;
 
   const path = filename.join('/');
-  const target = `${Api.API_BASE_URL}/${Routes.API_MEDIA}/${path}`;
+  const target = `${Api.API_MEDIA_URL}${Routes.API_MEDIA}/${path}`;
   const response = await fetch(target);
 
   const headers = new Headers(response.headers);

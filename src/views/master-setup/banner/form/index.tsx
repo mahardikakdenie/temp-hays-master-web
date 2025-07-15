@@ -32,6 +32,7 @@ const BannerFormViews: React.FC = () => {
     type,
     setType,
     typeForm,
+    isDetailLoading,
   } = useBannerFormHook();
 
   const {
@@ -44,7 +45,7 @@ const BannerFormViews: React.FC = () => {
     <>
       <PageHeader
         items={items}
-        title="Create New Banner"
+        title={typeForm === 'update' ? 'Update Banner Data' : 'Create New Banner'}
         isShowBtn={false}
         titleButton="title"
         onClick={() => {}}
@@ -76,6 +77,10 @@ const BannerFormViews: React.FC = () => {
             file={file ?? null}
             subTitle={subTitle}
           />
+        ) : isDetailLoading ? (
+          <div className="flex items-center justify-center bg-gray-900">
+            <div className="w-8 h-8 p-5 border-4 border-t-blue-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+          </div>
         ) : (
           <form
             id="add-banner-form"
@@ -154,32 +159,33 @@ const BannerFormViews: React.FC = () => {
             </div>
 
             <div>
-              <MediaInput
-                label="Banner Image"
-                {...register('image')}
-                onChange={handleImageUpload}
-                initialPreview={file instanceof File ? URL.createObjectURL(file) : file}
-              />
+              {typeForm === 'update' ? (
+                file && (
+                  <MediaInput
+                    label="Banner Image"
+                    {...register('image')}
+                    onChange={handleImageUpload}
+                    initialPreview={
+                      file instanceof File ? URL.createObjectURL(file) : (file as string)
+                    }
+                  />
+                )
+              ) : (
+                <MediaInput
+                  label="Banner Image"
+                  {...register('image')}
+                  onChange={handleImageUpload}
+                  initialPreview={
+                    file instanceof File ? URL.createObjectURL(file) : (file as string)
+                  }
+                />
+              )}
             </div>
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-4">
               <ButtonSecondary type="button">Cancel</ButtonSecondary>
-              <ButtonPrimary
-                type="submit"
-                form="add-banner-form"
-                // onClick={() =>
-                //   onSubmit({
-                //     title,
-                //     sub_title: subTitle,
-                //     type: (typeof type === 'string' ? type?.toLowerCase() : type) as string,
-                //     placement_text_x: placeX as 'left' | 'right' | 'center',
-                //     placement_text_y: placeY as 'center' | 'top' | 'bottom',
-                //     sort: 2,
-                //     image: file as File,
-                //   })
-                // }
-              >
+              <ButtonPrimary type="submit" form="add-banner-form">
                 Save Banner
               </ButtonPrimary>
             </div>
