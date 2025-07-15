@@ -49,7 +49,7 @@ const useBannerFormHook = () => {
     'center',
   );
   const [file, setFile] = useState<File | string>();
-  const [typeForm, setTypeForm] = useState<string>('');
+  const [typeForm, setTypeForm] = useState<string>('create');
   const [title, setTitle] = useState<string>('');
   const [subTitle, setSubTitle] = useState<string>('');
   const [selectedSection, setSelectedSection] = useState<string>('form-create-banner');
@@ -84,7 +84,7 @@ const useBannerFormHook = () => {
       setBannerId(params?.id);
       setTypeForm('update');
     } else {
-      setTypeForm('update');
+      setTypeForm('create');
     }
   }, [pathName, params]);
 
