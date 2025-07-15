@@ -49,6 +49,7 @@ const useBannerFormHook = () => {
     'center',
   );
   const [file, setFile] = useState<File | string>();
+  const [typeForm, setTypeForm] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [subTitle, setSubTitle] = useState<string>('');
   const [selectedSection, setSelectedSection] = useState<string>('form-create-banner');
@@ -66,43 +67,80 @@ const useBannerFormHook = () => {
   const params = useParams();
   const pathName = usePathname();
 
+  const form = useForm<BannerForm>({
+    resolver: yupResolver(addUserSchema),
+    defaultValues: {
+      title: '',
+      sub_title: '',
+      type: '',
+      placement_text_x: 'center',
+      placement_text_y: 'center',
+      sort: 2,
+    },
+  });
+
   useEffect(() => {
     if (pathName.includes('update')) {
       setBannerId(params?.id);
+      setTypeForm('update');
+    } else {
+      setTypeForm('update');
     }
   }, [pathName, params]);
 
   const { data: detailData, isLoading: isDetailLoading } = useQuery<BannerDetail, Error>({
-    queryKey: ['detail-data'],
+    queryKey: ['detail-data', bannerId], // tambahkan bannerId sebagai dependency
     queryFn: async () => {
       const res = await internalAPI(Routes.BANNER + '/detail/' + bannerId);
       if (res.status !== HttpStatus.OK) {
-        throw new Error('Failed to fetch banner types');
+        throw new Error('Failed to fetch banner detail');
       }
       const { data } = await res.json();
-      form.setValue('title', data.title);
-      setTitle(data.title);
       return data;
     },
     staleTime: 1000 * 60 * 5,
     retry: 2,
+    placeholderData: keepPreviousData,
+    enabled: !!bannerId, // aktif hanya jika bannerId ada
+    // onSuccess: (data) => {
+    //   // Set form & state hanya di sini
+    //   form.setValue('title', data.title);
+    //   setTitle(data.title);
+    //   setSubTitle(data.sub_title);
+    //   setPlaceX(data.placement_text_x);
+    //   setPlaceY(data.placement_text_y);
+    //   setType(toCapitalize(data.type));
+    //   setFile(data.image);
+    // },
   });
 
-  useState(() => {
+  useEffect(() => {
     if (detailData) {
-      setTitle(detailData.title);
-      setSubTitle(detailData.sub_title);
-      setPlaceX(detailData.placement_text_x);
-      setPlaceY(detailData.placement_text_y);
-      setType(toCapitalize(detailData.type));
-      setFile(detailData.image);
-    }
-  });
+      const { title, sub_title, type, placement_text_x, placement_text_y, image } = detailData;
 
-  function toCapitalize(str: string | null | undefined): string {
-    if (!str) return '';
-    return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
-  }
+      setTitle(title);
+      setSubTitle(sub_title);
+      setType(type);
+      setPlaceX(placement_text_x as 'left' | 'center' | 'right');
+      setPlaceY(placement_text_y as 'top' | 'center' | 'bottom');
+      setFile(image);
+
+      form.reset({
+        title,
+        sub_title,
+        type,
+        placement_text_x,
+        placement_text_y,
+        sort: detailData.sort || 2,
+        image: image instanceof File ? image : undefined,
+      });
+    }
+  }, [detailData, form]);
+
+  // function toCapitalize(str: string | null | undefined): string {
+  //   if (!str) return '';
+  //   return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
+  // }
 
   const {
     data: typeOptions = [],
@@ -117,24 +155,11 @@ const useBannerFormHook = () => {
         throw new Error('Failed to fetch banner types');
       }
       const { data } = await res.json();
-      setTitle(data.title);
       return data;
     },
     staleTime: 1000 * 60 * 5,
     retry: 2,
     placeholderData: keepPreviousData,
-  });
-
-  const form = useForm<BannerForm>({
-    resolver: yupResolver(addUserSchema),
-    defaultValues: {
-      title: '',
-      sub_title: '',
-      type: '',
-      placement_text_x: 'center',
-      placement_text_y: 'center',
-      sort: 2,
-    },
   });
 
   useEffect(() => {
@@ -259,6 +284,8 @@ const useBannerFormHook = () => {
     refetchTypeOptions,
     detailData,
     isDetailLoading,
+    bannerId,
+    typeForm,
   };
 };
 

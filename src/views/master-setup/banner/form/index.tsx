@@ -31,6 +31,7 @@ const BannerFormViews: React.FC = () => {
     handleImageUpload,
     type,
     setType,
+    typeForm,
   } = useBannerFormHook();
 
   const {
@@ -89,25 +90,25 @@ const BannerFormViews: React.FC = () => {
               <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
                 Title
               </label>
-              <QuillEditor
-                value={title}
-                {...register('title')}
-                onChange={(content) => {
-                  setTitle(content);
-                }}
-              />
+              {typeForm === 'update' ? (
+                title !== '' && (
+                  <QuillEditor value={title} {...register('title')} onChange={setTitle} />
+                )
+              ) : (
+                <QuillEditor value={title} {...register('title')} onChange={setTitle} />
+              )}
             </div>
 
             {/* Subtitle */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Sub Title</label>
-              <QuillEditor
-                value={subTitle}
-                {...register('sub_title')}
-                onChange={(content) => {
-                  setSubTitle(content);
-                }}
-              />
+              {typeForm === 'update' ? (
+                subTitle !== '' && (
+                  <QuillEditor value={subTitle} {...register('sub_title')} onChange={setSubTitle} />
+                )
+              ) : (
+                <QuillEditor value={subTitle} {...register('sub_title')} onChange={setSubTitle} />
+              )}
             </div>
 
             {/* Position Selection */}
