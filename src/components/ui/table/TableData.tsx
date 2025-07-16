@@ -7,6 +7,7 @@ import { TableBody, TableCell, TableRow } from './Table';
 import PencilSquareIcon from '@/components/icons/PencilSquare';
 import TrashIcon from '@/components/icons/Trash';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/libs/utils/cn.utils';
 
 // types.ts
 export type Header = {
@@ -105,11 +106,20 @@ const TableDataUI = <T extends Record<string, any>>({
                 return (
                   <TableCell
                     key={header.key}
-                    className={`text-center ${
-                      item.status === 1 ? 'text-green-500' : 'text-red-500'
-                    }`}
+                    className={cn(
+                      'text-center',
+                      item.status === 1 ? 'text-green-500' : 'text-red-500',
+                    )}
                   >
                     {item.status_text}
+                  </TableCell>
+                );
+              }
+
+              if (header.key === 'type') {
+                return (
+                  <TableCell key={header.key} className={cn('text-center capitalize')}>
+                    {item.type}
                   </TableCell>
                 );
               }

@@ -9,7 +9,6 @@ type QuillEditorProps = {
 };
 
 const QuillNoSSRWrapper = ({ value, onChange }: QuillEditorProps) => {
-  console.log('🚀 ~ QuillNoSSRWrapper ~ value:', value);
   const quillRef = useRef<unknown>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 

@@ -9,6 +9,7 @@ import MediaInput from '@/components/ui/form/MediaInput';
 import { cn } from '@/libs/utils/cn.utils';
 import PreviewContent from './components/PreviewContent';
 import useBannerFormHook from './hooks/useBannerForm.hook';
+import Input from '@/components/ui/form/Input';
 
 const BannerFormViews: React.FC = () => {
   const {
@@ -33,14 +34,24 @@ const BannerFormViews: React.FC = () => {
     setType,
     typeForm,
     isDetailLoading,
+    sort,
+    setSort,
+    status,
+    setStatus,
   } = useBannerFormHook();
 
   const {
     register,
     // control,
     handleSubmit,
-    // formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting },
   } = form;
+
+  console.log(errors);
+
+  const TextLabel: React.FC<{ label: string }> = ({ label }) => {
+    return <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>;
+  };
   return (
     <>
       <PageHeader
@@ -87,7 +98,7 @@ const BannerFormViews: React.FC = () => {
             className="space-y-8 text-white"
             onSubmit={(e) => {
               e.preventDefault();
-              handleSubmit(onSubmit)();
+              handleSubmit(onSubmit)(e);
             }}
           >
             {/* Title */}
@@ -159,6 +170,49 @@ const BannerFormViews: React.FC = () => {
             </div>
 
             <div>
+              <TextLabel label="Text Vertical Alignment" />
+              <Select
+                value={placeY}
+                options={[
+                  { id: 'top', name: 'Top' },
+                  { id: 'bottom', name: 'Bottom' },
+                  { id: 'center', name: 'Center' },
+                ]}
+                onChange={(value) => setPlaceY(value?.toString().toLowerCase() ?? '')}
+              />
+              <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
+            </div>
+
+            <div>
+              <TextLabel label="Sort" />
+              <Input
+                placeholder="Sort"
+                value={sort || ''}
+                type="number"
+                className="bg-gray-700"
+                min={0}
+                {...register('sort')}
+                onChange={(e) => setSort(Number(e.target.value))}
+              />
+            </div>
+
+            {typeForm === 'update' && (
+              <div>
+                <TextLabel label="Status" />
+                <Select
+                  value={status}
+                  options={[
+                    { id: 1, name: 'Active' },
+                    { id: 0, name: 'Non Active' },
+                  ]}
+                  {...register('status')}
+                  onChange={(value) => setStatus(value as number)}
+                />
+                <p className="mt-1 text-xs text-gray-400">Choose Status for Banner</p>
+              </div>
+            )}
+
+            <div>
               {typeForm === 'update' ? (
                 file && (
                   <MediaInput
@@ -185,7 +239,7 @@ const BannerFormViews: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex justify-end gap-3 pt-4">
               <ButtonSecondary type="button">Cancel</ButtonSecondary>
-              <ButtonPrimary type="submit" form="add-banner-form">
+              <ButtonPrimary type="submit" isLoading={isSubmitting} form="add-banner-form">
                 Save Banner
               </ButtonPrimary>
             </div>

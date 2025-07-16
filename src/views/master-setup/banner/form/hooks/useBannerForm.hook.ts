@@ -5,17 +5,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 
 import { BannerDetail, BannerForm } from '@/types/banner.types';
-import { createBannerApi } from '@/actions/banner';
+import { createBannerApi, updateBannerApi } from '@/actions/banner';
 import { useInternal } from '@/hooks/useInternal';
 import { Routes } from '@/libs/constants/routes.const';
 import { Options } from '@/types/commons.types';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Notification from '@/components/ui/notification/Notification';
 import { useRouter, useParams, usePathname } from 'next/navigation';
 import { ParamValue } from 'next/dist/server/request/params';
 
-const addUserSchema = yup.object({
+const addBannerSchema = yup.object({
   title: yup.string().required('Title is required'),
   sub_title: yup.string().required('SubTitle is required'),
   type: yup.string().required('Type is required'),
@@ -33,10 +33,8 @@ const addUserSchema = yup.object({
     .integer('Must be an integer')
     .min(0)
     .required('Sort is required'),
-  image: yup
-    .mixed<File>()
-    .test('fileType', 'Only images are allowed', (value) => value?.type.startsWith('image/'))
-    .required('Image is required'),
+  status: yup.number().required('update is required'),
+  image: yup.mixed<File>().required('Image is required'),
 });
 
 const useBannerFormHook = () => {
@@ -54,11 +52,19 @@ const useBannerFormHook = () => {
   const [subTitle, setSubTitle] = useState<string>('');
   const [selectedSection, setSelectedSection] = useState<string>('form-create-banner');
   const [type, setType] = useState<string | number | null>('');
+  const [sort, setSort] = useState<number>();
+  const [status, setStatus] = useState<number>(0);
+  const [isUpdateImage, setIsUpdateImage] = useState<boolean>(false);
   const [bannerId, setBannerId] = useState<ParamValue | null>(null);
+
+  const isUpdatePage = useMemo(() => typeForm === 'update', [typeForm]);
   const items = [
     { title: 'Master Setup', href: '#' },
     { title: 'Banner', href: '/master-setup/banner' },
-    { title: 'Create Banner', href: '/master-setup/banner' },
+    {
+      title: isUpdatePage ? 'Update Banner' : 'Create Banner',
+      href: '/master-setup/banner',
+    },
   ];
 
   const headers = ['form-create-banner', 'preview'];
@@ -68,7 +74,7 @@ const useBannerFormHook = () => {
   const pathName = usePathname();
 
   const form = useForm<BannerForm>({
-    resolver: yupResolver(addUserSchema),
+    resolver: yupResolver(addBannerSchema),
     defaultValues: {
       title: '',
       sub_title: '',
@@ -76,6 +82,7 @@ const useBannerFormHook = () => {
       placement_text_x: 'center',
       placement_text_y: 'center',
       sort: 2,
+      status: 0,
     },
   });
 
@@ -88,7 +95,7 @@ const useBannerFormHook = () => {
     }
   }, [pathName, params]);
 
-  const { data: detailData, isLoading: isDetailLoading } = useQuery<BannerDetail, Error>({
+  const { data: detailData, isLoading: isDetailLoading = true } = useQuery<BannerDetail, Error>({
     queryKey: ['detail-data', bannerId], // tambahkan bannerId sebagai dependency
     queryFn: async () => {
       const res = await internalAPI(Routes.BANNER + '/detail/' + bannerId);
@@ -102,21 +109,20 @@ const useBannerFormHook = () => {
     retry: 2,
     placeholderData: keepPreviousData,
     enabled: !!bannerId, // aktif hanya jika bannerId ada
-    // onSuccess: (data) => {
-    //   // Set form & state hanya di sini
-    //   form.setValue('title', data.title);
-    //   setTitle(data.title);
-    //   setSubTitle(data.sub_title);
-    //   setPlaceX(data.placement_text_x);
-    //   setPlaceY(data.placement_text_y);
-    //   setType(toCapitalize(data.type));
-    //   setFile(data.image);
-    // },
   });
 
   useEffect(() => {
+    if (file && bannerId && detailData?.image !== file) {
+      setIsUpdateImage(true);
+    } else {
+      setIsUpdateImage(false);
+    }
+  }, [file, bannerId, detailData]);
+
+  useEffect(() => {
     if (detailData) {
-      const { title, sub_title, type, placement_text_x, placement_text_y, image } = detailData;
+      const { title, sub_title, type, placement_text_x, placement_text_y, sort, image, status } =
+        detailData;
 
       setTitle(title);
       setSubTitle(sub_title);
@@ -124,6 +130,8 @@ const useBannerFormHook = () => {
       setPlaceX(placement_text_x as 'left' | 'center' | 'right');
       setPlaceY(placement_text_y as 'top' | 'center' | 'bottom');
       setFile(image);
+      setSort(sort);
+      setStatus(status);
 
       form.reset({
         title,
@@ -131,8 +139,9 @@ const useBannerFormHook = () => {
         type: toCapitalize(type),
         placement_text_x,
         placement_text_y,
-        sort: detailData.sort || 2,
+        sort,
         image: image as File,
+        status: status,
       });
     }
   }, [detailData, form]);
@@ -186,6 +195,14 @@ const useBannerFormHook = () => {
     form.setValue('image', file as File);
   }, [file, form]);
 
+  useEffect(() => {
+    form.setValue('sort', sort || 0);
+  }, [sort, form]);
+
+  useEffect(() => {
+    form.setValue('status', status);
+  }, [status, form]);
+
   const createBannerMutation = useMutation({
     mutationFn: async (data: BannerForm) => {
       const formData = new FormData();
@@ -202,8 +219,7 @@ const useBannerFormHook = () => {
 
       const response = await createBannerApi(formData);
 
-      // ✅ Pastikan createBannerApi mengembalikan respons API
-      return response; // ini akan tersedia di `onSuccess` atau `mutateAsync`
+      return response;
     },
   });
 
@@ -215,23 +231,36 @@ const useBannerFormHook = () => {
       formData.append('type', data.type.toString().toLowerCase());
       formData.append('placement_text_x', data.placement_text_x);
       formData.append('placement_text_y', data.placement_text_y);
-      formData.set('sort', data.sort.toString());
+
+      if (data.sort !== undefined) {
+        formData.set('sort', data.sort.toString());
+      }
+
+      if (data.status !== undefined) {
+        formData.set('status', data.status.toString());
+      }
+
+      if (bannerId) {
+        formData.set('id', bannerId.toString());
+        formData.set('is_update_image', isUpdateImage.toString());
+      }
+      console.log('🚀 ~ mutationFn: ~ isUpdateImage:', isUpdateImage);
 
       if (file instanceof File) {
         formData.append('image', file);
       }
 
-      const response = await createBannerApi(formData);
-
-      // ✅ Pastikan createBannerApi mengembalikan respons API
-      return response; // ini akan tersedia di `onSuccess` atau `mutateAsync`
+      const response = await updateBannerApi(formData);
+      return response;
     },
   });
 
   const onSubmit: SubmitHandler<BannerForm> = async (data) => {
-    try {
-      const response = await createBannerMutation.mutateAsync(data);
+    console.log('🚀 ~ constonSubmit:SubmitHandler<BannerForm>= ~ isUpdatePage:', isUpdatePage);
+    if (isUpdatePage) {
+      console.log('data : ', data);
 
+      const response = await updateBannerMutation.mutateAsync(data);
       if (response.status >= HttpStatus.BAD_REQUEST) {
         Notification({
           type: 'error',
@@ -250,29 +279,31 @@ const useBannerFormHook = () => {
       });
 
       router.push('/master-setup/banner');
-    } catch (error) {
-      console.error('❌ Upload failed:', error);
-    }
+    } else {
+      try {
+        const response = await createBannerMutation.mutateAsync(data);
 
-    if (typeForm === 'update') {
-      const response = await updateBannerMutation.mutateAsync(data);
-      if (response.status >= HttpStatus.BAD_REQUEST) {
+        if (response.status >= HttpStatus.BAD_REQUEST) {
+          Notification({
+            type: 'error',
+            message: 'Failed to add user',
+            description: response.errors[0]?.message ?? response.message,
+            position: 'bottom-right',
+          });
+          return;
+        }
+
         Notification({
-          type: 'error',
-          message: 'Failed to add user',
-          description: response.errors[0]?.message ?? response.message,
+          type: 'success',
+          message: 'Success',
+          description: response.message,
           position: 'bottom-right',
         });
-        return;
-      }
 
-      Notification({
-        type: 'success',
-        message: 'Success',
-        description: response.message,
-        position: 'bottom-right',
-      });
-    } else {
+        router.push('/master-setup/banner');
+      } catch (error) {
+        console.error('❌ Upload failed:', error);
+      }
     }
   };
 
@@ -292,6 +323,10 @@ const useBannerFormHook = () => {
       }
 
       setFile(uploadedFile);
+
+      if (isUpdatePage) {
+        setIsUpdateImage(true);
+      }
     } else {
       setFile(undefined);
     }
@@ -325,6 +360,11 @@ const useBannerFormHook = () => {
     isDetailLoading,
     bannerId,
     typeForm,
+    sort,
+    setSort,
+    status,
+    setStatus,
+    isUpdatePage,
   };
 };
 

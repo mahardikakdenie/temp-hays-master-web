@@ -15,10 +15,13 @@ export const createBannerApi = async (data: FormData) => {
     .catch((error) => catchServerRoute(error));
 };
 
-export const updteBannerApi = async (data: FormData) => {
-  return await externalAPI.patch(Routes.BANNER, data, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+export const updateBannerApi = async (data: FormData) => {
+  return await externalAPI
+    .patch(Routes.BANNER, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((response) => responseServerRoute(response))
+    .catch((error) => catchServerRoute(error));
 };

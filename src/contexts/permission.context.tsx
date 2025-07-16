@@ -39,8 +39,6 @@ const usePermission = () => {
     } else {
       currentPathName = pathname;
     }
-
-    console.log('🚀 ~ currentPermission ~ currentPathName:', currentPathName);
     return permissions[currentPathName];
   }, [permissions, pathname]);
 

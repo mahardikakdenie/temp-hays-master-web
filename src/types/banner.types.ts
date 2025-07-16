@@ -5,6 +5,18 @@ export type BannerForm = {
   placement_text_x: 'left' | 'center' | 'right';
   placement_text_y: 'top' | 'center' | 'bottom';
   sort: number;
+  status: number;
+  image: File;
+};
+
+export type BannerFormUpdate = {
+  title: string;
+  sub_title: string;
+  type: string;
+  placement_text_x: 'left' | 'center' | 'right';
+  placement_text_y: 'top' | 'center' | 'bottom';
+  sort: number;
+  status: number;
   image: File;
 };
 
@@ -26,5 +38,6 @@ export type BannerDetail = {
   placement_text_x: 'left' | 'center' | 'right';
   placement_text_y: 'top' | 'center' | 'bottom';
   sort: number;
+  status: number;
   image: File | string;
 };
