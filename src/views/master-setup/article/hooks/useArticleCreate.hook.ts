@@ -1,7 +1,11 @@
 'use client';
+import { createArticleApi } from '@/actions/article';
+import Notification from '@/components/ui/notification/Notification';
+import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { ArticleCreateForm } from '@/types/article.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -15,6 +19,7 @@ const useArticleCreateHook = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | null>();
+  const router = useRouter();
   const form = useForm<ArticleCreateForm>({
     resolver: yupResolver(createArticleSchema),
     defaultValues: {
@@ -40,13 +45,40 @@ const useArticleCreateHook = () => {
       formData.append('title', data.title);
       formData.append('content', data.content);
       formData.append('image', data.image);
+
+      const resp = await createArticleApi(formData);
+
+      return resp;
     },
   });
 
   const onSubmit: SubmitHandler<ArticleCreateForm> = async (data) => {
-    const responses = await createArticleMutation.mutateAsync(data);
-    console.log(responses);
+    try {
+      const response = await createArticleMutation.mutateAsync(data);
+
+      if (response.status >= HttpStatus.BAD_REQUEST) {
+        Notification({
+          type: 'error',
+          message: 'Failed to add user',
+          description: response.message,
+          position: 'bottom-right',
+        });
+        return;
+      }
+
+      Notification({
+        type: 'success',
+        message: 'Success',
+        description: response.message,
+        position: 'bottom-right',
+      });
+
+      router.push('/master-setup/article');
+    } catch (error) {
+      console.error('❌ Upload failed:', error);
+    }
   };
+
   return {
     form,
     onSubmit,
