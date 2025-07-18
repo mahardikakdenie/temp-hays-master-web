@@ -35,7 +35,7 @@ const AppAdminLayout: React.FC<AppAdminLayoutProps> = ({ menus, user, children }
     data: permission,
     isLoading: isPermissionLoading,
     isFetching: isPermissionFetching,
-    refetch,
+    // refetch,
   } = useQuery({
     queryKey: ['permission', pathname],
     queryFn: async () => {
@@ -49,13 +49,14 @@ const AppAdminLayout: React.FC<AppAdminLayoutProps> = ({ menus, user, children }
       const { data } = await res.json();
       return data;
     },
+    enabled: !!pathname,
   });
 
-  useEffect(() => {
-    if (pathname) {
-      refetch();
-    }
-  }, [pathname, refetch]);
+  // useEffect(() => {
+  //   if (pathname) {
+  //     refetch();
+  //   }
+  // }, [pathname, refetch]);
 
   useEffect(() => {
     if (!isPermissionLoading && !isPermissionFetching && permission) {

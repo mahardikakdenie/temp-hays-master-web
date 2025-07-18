@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { createSafeContext } from '@/libs/utils/createSafeContext';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 export type PermissionData = {
@@ -49,10 +49,6 @@ const PermissionProvider: React.FC<{
     if (!permission) return false;
     return hasPermission(allowedAction as keyof PermissionData['actions']);
   }, [permission, allowedAction, hasPermission]);
-
-  useEffect(() => {
-    console.log('see permission : ', permission);
-  }, [permission]);
 
   return (
     <PermissionContext.Provider
