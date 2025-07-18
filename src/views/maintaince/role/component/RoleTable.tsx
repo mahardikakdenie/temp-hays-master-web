@@ -1,18 +1,40 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table/Table';
+import { Table } from '@/components/ui/table/Table';
 import SearchIcon from '@/components/icons/Search';
-import EllipsisHorizontalIcon from '@/components/icons/EllipsisHorizontal';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
-import { cn } from '@/libs/utils/cn.utils';
+import TableDataUI from '@/components/ui/table/TableData';
+import HeaderDataUI from '@/components/ui/table/HeaderData';
+import useRole from '../role.hook';
 
 const RoleTable: React.FC = () => {
   const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('Search:', event.target.value);
   };
 
-  const roleHeaders = ['Name', 'Status', 'Actions'];
-  const datas = [{ name: 'Admin', status: 'active' }];
+  const {
+    isLoading,
+    isFetching,
+    data,
+    error,
+    // meta,
+    onRetry,
+    // onMeta,
+    sort,
+    onSort,
+  } = useRole();
+
+  const roleHeaders = [
+    {
+      name: 'Name',
+      key: 'name',
+    },
+    {
+      name: 'Status',
+      key: 'status',
+    },
+    { name: 'Actions', key: 'actions' },
+  ];
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
@@ -34,42 +56,16 @@ const RoleTable: React.FC = () => {
       </div>
 
       <Table>
-        <TableHeader>
-          <TableRow>
-            {roleHeaders.map((header, index) => (
-              <TableCell
-                key={index}
-                isHeader
-                className="text-center font-semibold"
-                sortable={true}
-                sortKey={header.toLowerCase()}
-              >
-                {header}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHeader>
+        <HeaderDataUI headers={roleHeaders} headerWithSorts={[]} onSort={onSort} sort={sort} />
 
-        <TableBody>
-          <TableRow>
-            {datas.map((data, index) => (
-              <React.Fragment key={index}>
-                <TableCell className="text-center">{data.name}</TableCell>
-                <TableCell
-                  className={cn(
-                    'text-center',
-                    data.status === 'active' ? 'text-green-500' : 'text-red-500',
-                  )}
-                >
-                  {data.status}
-                </TableCell>
-                <TableCell className="text-center">
-                  <EllipsisHorizontalIcon className="w-5 h-5 text-gray-400 cursor-pointer" />
-                </TableCell>
-              </React.Fragment>
-            ))}
-          </TableRow>
-        </TableBody>
+        <TableDataUI
+          headers={roleHeaders}
+          data={data}
+          onRetry={onRetry}
+          error={error}
+          isFetching={isFetching}
+          isLoading={isLoading}
+        />
       </Table>
     </div>
   );

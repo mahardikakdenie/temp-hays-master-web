@@ -8,6 +8,7 @@ import PencilSquareIcon from '@/components/icons/PencilSquare';
 import TrashIcon from '@/components/icons/Trash';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/libs/utils/cn.utils';
+import { usePermission } from '@/contexts/permission.context';
 
 // types.ts
 export type Header = {
@@ -40,6 +41,7 @@ const TableDataUI = <T extends Record<string, any>>({
   };
 
   const router = useRouter();
+  const { hasPermission } = usePermission();
   return (
     <TableBody>
       {/* Loading State */}
@@ -72,13 +74,18 @@ const TableDataUI = <T extends Record<string, any>>({
                 return (
                   <TableCell key="actions" className="text-center">
                     <div className="flex justify-center items-center gap-2">
-                      <PencilSquareIcon
-                        className="size-5 text-blue-500 hover:text-blue-700 cursor-pointer"
-                        onClick={() => {
-                          router.push(`/master-setup/banner/${item.id}/update`);
-                        }}
-                      />
-                      <TrashIcon className="size-5 text-red-500 hover:text-red-700 cursor-pointer" />
+                      {hasPermission('update') && (
+                        <PencilSquareIcon
+                          className="size-5 text-blue-500 hover:text-blue-700 cursor-pointer"
+                          onClick={() => {
+                            router.push(`/master-setup/banner/${item.id}/update`);
+                          }}
+                        />
+                      )}
+
+                      {hasPermission('delete') && (
+                        <TrashIcon className="size-5 text-red-500 hover:text-red-700 cursor-pointer" />
+                      )}
                     </div>
                   </TableCell>
                 );

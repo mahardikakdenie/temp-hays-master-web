@@ -17,6 +17,7 @@ export class Routes {
   // USER
   static USER = Routes.API_USER;
   static USER_LIST = Routes.API_USER + '/list';
+  static USER_ACCESS_LIST = Routes.API_USER + '/access/list';
 
   // BANNER
   static BANNER = Routes.API_BANNER;

@@ -3,7 +3,7 @@
 import type React from 'react';
 import type { Menu, User } from '@/types/commons.types';
 import { useEffect, useMemo } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useSidebar } from '@/contexts/sidebar.context';
 import { useNetwork } from '@/contexts/network.context';
 import { usePermission } from '@/contexts/permission.context';
@@ -29,7 +29,6 @@ const AppAdminLayout: React.FC<AppAdminLayoutProps> = ({ menus, user, children }
   const { hasAllowed, setPermission } = usePermission();
   const internalApi = useInternal();
   const pathname = usePathname();
-  const router = useRouter();
 
   const {
     data: permission,
@@ -69,11 +68,11 @@ const AppAdminLayout: React.FC<AppAdminLayoutProps> = ({ menus, user, children }
     return isExpanded ? 'lg:ml-[240px]' : 'lg:ml-[90px]';
   }, [isExpanded, isMobileOpen]);
 
-  useEffect(() => {
-    if (!hasAllowed && !isPermissionLoading && !isPermissionFetching) {
-      router.replace('/forbidden');
-    }
-  }, [hasAllowed, isPermissionLoading, isPermissionFetching, router]);
+  // useEffect(() => {
+  //   if (!hasAllowed && !isPermissionLoading && !isPermissionFetching) {
+  //     // router.replace('/forbidden');
+  //   }
+  // }, [hasAllowed, isPermissionLoading, isPermissionFetching, router]);
 
   useEffect(() => {
     const wasOnline = connectionRef.current;
