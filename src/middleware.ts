@@ -7,27 +7,32 @@ import { App } from './libs/constants/app.const';
 const publicRoutes = ['/login', '/forbidden'];
 
 export default async function middleware(req: NextRequest) {
-  // 2. Check if the current route is protected or public
-  const path = req.nextUrl.pathname;
+  const path = req.nextUrl.pathname || '/dashboard';
   const isPublicRoute = publicRoutes.includes(path);
-
-  // 3. Get the session from the cookie
   const session = await getSession();
 
-  // 4. Redirect to /login if the user is not authenticated
   if (!isPublicRoute && !session.isLogin) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl));
+    const response = NextResponse.redirect(new URL('/login', req.nextUrl));
+    response.cookies.set('current-path', path || '/dashboard');
+    // if (path !== '/dashboard') {
+    // }
+    return response;
   }
 
-  // 5. Redirect to /dashboard if the user is authenticated
   if (isPublicRoute && session.isLogin) {
     const redirect = (await getCookie(App.REDIRECT_NAME)) || '/dashboard';
-    return NextResponse.redirect(new URL(redirect, req.nextUrl));
+    const response = NextResponse.redirect(new URL(redirect, req.nextUrl));
+    response.cookies.delete('current-path'); // opsional: hapus jika tidak diperlukan
+    return response;
   }
 
-  return NextResponse.next();
+  // Untuk route public atau protected yang sudah lolos validasi
+  const response = NextResponse.next();
+  if (!isPublicRoute && path !== '/dashboard') {
+    response.cookies.set('current-path', path);
+  }
+  return response;
 }
-
 // Routes Middleware should not run on
 export const config = {
   matcher: ['/((?!api|v1|media|_next/static|_next/image|.*\\.(?:png|jpg|jpeg|svg|ico|webp)$).*)'],

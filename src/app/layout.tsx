@@ -1,3 +1,5 @@
+'use clint';
+
 import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
@@ -7,6 +9,7 @@ import { NetworkProvider } from '@/contexts/network.context';
 import { SidebarProvider } from '@/contexts/sidebar.context';
 import { GlobalProvider } from '@/contexts/global.context';
 import './globals.css';
+import { PermissionProvider } from '@/contexts/permission.context';
 
 const FeedbackModal = dynamic(() => import('@/components/ui/modal/FeedbackModal'));
 
@@ -31,11 +34,13 @@ const RootLayout = ({
         <QueryProvider>
           <GlobalProvider>
             <NetworkProvider>
-              <SidebarProvider>
-                <FeedbackModal />
-                <Toaster />
-                {children}
-              </SidebarProvider>
+              <PermissionProvider>
+                <SidebarProvider>
+                  <FeedbackModal />
+                  <Toaster />
+                  {children}
+                </SidebarProvider>
+              </PermissionProvider>
             </NetworkProvider>
           </GlobalProvider>
         </QueryProvider>

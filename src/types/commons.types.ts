@@ -32,9 +32,12 @@ export type Device = {
 export type Permission = {
   id: number;
   path: string;
-  m_created: number;
-  m_updated: number;
-  m_deleted: number;
+  actions: {
+    view: number;
+    create: number;
+    update: number;
+    delete: number;
+  };
 };
 
 export type Menu = {

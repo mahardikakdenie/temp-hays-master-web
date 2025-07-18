@@ -1,59 +1,83 @@
 'use client';
 
 import type React from 'react';
-import { useCallback, useMemo } from 'react';
-import { usePathname } from 'next/navigation';
 import { createSafeContext } from '@/libs/utils/createSafeContext';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
-export type PermissionProps = {
-  [path: string]: {
-    create: boolean;
-    update: boolean;
-    delete: boolean;
+export type PermissionData = {
+  id: number;
+  actions: {
+    view: number;
+    update: number;
+    create: number;
+    delete: number;
   };
+  path: string;
 };
 
-const [PermissionContext, usePermissionCtx] = createSafeContext<PermissionProps>('Permission');
+export type PermissionCtxProps = {
+  permission: PermissionData | undefined;
+  allowedAction: string | null;
+  hasAllowed: boolean;
+  setPermission: React.Dispatch<React.SetStateAction<PermissionData | undefined>>;
+  hasPermission: (action: keyof PermissionData['actions']) => boolean;
+};
+
+const [PermissionContext, usePermissionCtx] = createSafeContext<PermissionCtxProps>('Permission');
 
 const PermissionProvider: React.FC<{
-  value: PermissionProps;
   children: React.ReactNode;
-}> = ({ value, children }) => {
-  return <PermissionContext.Provider value={value}>{children}</PermissionContext.Provider>;
-};
-
-const usePermission = () => {
-  const permissions = usePermissionCtx();
+}> = ({ children }) => {
   const pathname = usePathname();
+  const [permission, setPermission] = useState<PermissionData | undefined>();
 
-  const currentPermission = useMemo(() => {
-    const paths = pathname?.split('/');
-    let currentPathName = '';
-
-    // Checking this route have permission or not
-    if (!permissions[pathname] && (paths.includes('create') || paths.includes('update'))) {
-      currentPathName = paths.slice(0, -1).join('/');
-      if (paths.includes('update')) {
-        currentPathName = paths.slice(0, -2).join('/');
-      }
-    } else {
-      currentPathName = pathname;
-    }
-    return permissions[currentPathName];
-  }, [permissions, pathname]);
+  const allowedAction = useMemo(() => {
+    if (pathname.includes('create')) return 'create';
+    if (pathname.includes('update')) return 'update';
+    return 'view';
+  }, [pathname]);
 
   const hasPermission = useCallback(
-    (action: keyof PermissionProps[string]) => currentPermission?.[action] ?? false,
-    [currentPermission],
+    (action: keyof PermissionData['actions']) => {
+      return !!permission?.actions[action];
+    },
+    [permission],
   );
 
-  const hasAllowed = useMemo(() => !!currentPermission, [currentPermission]);
+  const hasAllowed = useMemo(() => {
+    if (!permission) return false;
+    return hasPermission(allowedAction as keyof PermissionData['actions']);
+  }, [permission, allowedAction, hasPermission]);
+
+  useEffect(() => {
+    console.log('see permission : ', permission);
+  }, [permission]);
+
+  return (
+    <PermissionContext.Provider
+      value={{
+        permission,
+        allowedAction,
+        hasAllowed,
+        setPermission,
+        hasPermission,
+      }}
+    >
+      {children}
+    </PermissionContext.Provider>
+  );
+};
+
+// Custom hook untuk pakai permission
+const usePermission = () => {
+  const context = usePermissionCtx();
 
   return {
-    allPermissions: permissions,
-    currentPermission,
-    hasAllowed,
-    hasPermission,
+    ...context,
+    hasPermission: context.hasPermission,
+    hasAllowed: context.hasAllowed,
+    allowedAction: context.allowedAction,
   };
 };
 

@@ -3,7 +3,7 @@
 import type React from 'react';
 import type { Menu, User } from '@/types/commons.types';
 import { useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useSidebar } from '@/contexts/sidebar.context';
 import { useNetwork } from '@/contexts/network.context';
 import { usePermission } from '@/contexts/permission.context';
@@ -12,7 +12,10 @@ import AppHeader from './AppHeader';
 import AppSidebar from './AppSidebar';
 import AppBackdrop from './AppBackdrop';
 import Notification from '../ui/notification/Notification';
-import LoadingIcon from '../icons/Loading';
+import { useQuery } from '@tanstack/react-query';
+import { useInternal } from '@/hooks/useInternal';
+import { Routes } from '@/libs/constants/routes.const';
+import { HttpStatus } from '@/libs/constants/httpStatus.const';
 
 type AppAdminLayoutProps = {
   menus: Menu[];
@@ -23,9 +26,42 @@ type AppAdminLayoutProps = {
 const AppAdminLayout: React.FC<AppAdminLayoutProps> = ({ menus, user, children }) => {
   const { isOnline, connectionRef } = useNetwork();
   const { isExpanded, isMobileOpen } = useSidebar();
-  const { hasAllowed } = usePermission();
-
+  const { hasAllowed, setPermission } = usePermission();
+  const internalApi = useInternal();
+  const pathname = usePathname();
   const router = useRouter();
+
+  const {
+    data: permission,
+    isLoading: isPermissionLoading,
+    isFetching: isPermissionFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ['permission', pathname],
+    queryFn: async () => {
+      const res = await internalApi(Routes.AUTH_PERMISSION, {
+        path: pathname,
+      });
+
+      if (res.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch banner detail');
+      }
+      const { data } = await res.json();
+      return data;
+    },
+  });
+
+  useEffect(() => {
+    if (pathname) {
+      refetch();
+    }
+  }, [pathname, refetch]);
+
+  useEffect(() => {
+    if (!isPermissionLoading && !isPermissionFetching && permission) {
+      setPermission(permission);
+    }
+  }, [isPermissionLoading, isPermissionFetching, permission, setPermission]);
 
   const mainContentMargin = useMemo(() => {
     if (isMobileOpen) return 'ml-0';
@@ -33,10 +69,10 @@ const AppAdminLayout: React.FC<AppAdminLayoutProps> = ({ menus, user, children }
   }, [isExpanded, isMobileOpen]);
 
   useEffect(() => {
-    if (!hasAllowed) {
+    if (!hasAllowed && !isPermissionLoading && !isPermissionFetching) {
       router.replace('/forbidden');
     }
-  }, [hasAllowed, router]);
+  }, [hasAllowed, isPermissionLoading, isPermissionFetching, router]);
 
   useEffect(() => {
     const wasOnline = connectionRef.current;
@@ -65,12 +101,22 @@ const AppAdminLayout: React.FC<AppAdminLayoutProps> = ({ menus, user, children }
         <AppHeader user={user} />
         {/* PAGE CONTENT */}
         <div className="p-4 md:p-6 mx-auto max-w-(--breakpoint-2xl)">
-          {hasAllowed ? (
+          {isPermissionLoading || isPermissionFetching ? (
+            <div className="flex flex-col items-center justify-center gap-4 py-10 px-4">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              <div className="text-center">
+                <h3 className="text-xl md:text-2xl font-semibold text-gray-200">Loading Page</h3>
+                <p className="text-sm md:text-base text-gray-400 mt-1">
+                  Please wait while we prepare the content for you...
+                </p>
+              </div>
+            </div>
+          ) : hasAllowed ? (
             children
           ) : (
             <div className="flex flex-col items-center justify-center gap-2">
-              <LoadingIcon className="w-6 h-6" />
-              <p className="text-xl">Checking Permission...</p>
+              <p className="text-xl">Forbidden</p>
+              <p>You don&apos;t have permission to access this page.</p>
             </div>
           )}
         </div>
