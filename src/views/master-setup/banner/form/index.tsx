@@ -111,6 +111,9 @@ const BannerFormViews: React.FC = () => {
               ) : (
                 <QuillEditor value={title} {...register('title')} onChange={setTitle} />
               )}
+              <div>
+                <span className="text-sm text-red-300">{errors.title?.message}</span>
+              </div>
             </div>
 
             {/* Subtitle */}
@@ -123,6 +126,9 @@ const BannerFormViews: React.FC = () => {
               ) : (
                 <QuillEditor value={subTitle} {...register('sub_title')} onChange={setSubTitle} />
               )}
+              <div>
+                <span className="text-sm text-red-300">{errors.sub_title?.message}</span>
+              </div>
             </div>
 
             {/* Position Selection */}
@@ -130,6 +136,7 @@ const BannerFormViews: React.FC = () => {
               <label className="block text-sm font-medium text-gray-300 mb-2">Text Alignment</label>
               <Select
                 value={placeX}
+                error={errors.placement_text_x?.message}
                 options={[
                   { id: 'left', name: 'Left' },
                   { id: 'right', name: 'Right' },
@@ -140,22 +147,14 @@ const BannerFormViews: React.FC = () => {
               />
               <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Type</label>
-              <Select
-                value={type}
-                options={data}
-                {...register('type')}
-                onChange={(value) => setType(value ?? '')}
-              />
-              <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
-            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Text Vertical Alignment
               </label>
               <Select
                 value={placeY}
+                error={errors.placement_text_y?.message}
                 options={[
                   { id: 'top', name: 'Top' },
                   { id: 'bottom', name: 'Bottom' },
@@ -168,17 +167,15 @@ const BannerFormViews: React.FC = () => {
             </div>
 
             <div>
-              <TextLabel label="Text Vertical Alignment" />
+              <label className="block text-sm font-medium text-gray-300 mb-2">Type</label>
               <Select
-                value={placeY}
-                options={[
-                  { id: 'top', name: 'Top' },
-                  { id: 'bottom', name: 'Bottom' },
-                  { id: 'center', name: 'Center' },
-                ]}
-                onChange={(value) => setPlaceY(value?.toString().toLowerCase() ?? '')}
+                value={type}
+                options={data}
+                error={errors.type?.message}
+                {...register('type')}
+                onChange={(value) => setType(value ?? '')}
               />
-              <p className="mt-1 text-xs text-gray-400">Choose alignment for the banner text.</p>
+              <p className="mt-1 text-xs text-gray-400">Choose Status for the banner feature.</p>
             </div>
 
             <div>
@@ -199,6 +196,7 @@ const BannerFormViews: React.FC = () => {
               <div>
                 <TextLabel label="Status" />
                 <Select
+                  error={errors.status?.message}
                   value={status}
                   options={[
                     { id: 1, name: 'Active' },
@@ -233,6 +231,10 @@ const BannerFormViews: React.FC = () => {
                   }
                 />
               )}
+
+              <div>
+                <span className="text-sm text-red-400">{errors.image?.message}</span>
+              </div>
             </div>
 
             {/* Action Buttons */}

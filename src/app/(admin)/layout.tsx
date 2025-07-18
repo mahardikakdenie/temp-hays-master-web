@@ -15,8 +15,8 @@ const AdminLayoutPage: React.FC<{ children: React.ReactNode }> = async ({ childr
     // Jalankan semua request secara paralel
     const [menuRes, userRes] = await Promise.all([fetchMenu, fetchUser]);
     // Ambil data
-    const dataMenu: Menu[] = menuRes.data.data;
-    const dataUser: User = userRes.data.data;
+    const dataMenu: Menu[] = menuRes?.data?.data ?? [];
+    const dataUser: User = userRes?.data?.data ?? null;
 
     return (
       <AdminLayout menus={dataMenu} user={dataUser}>
