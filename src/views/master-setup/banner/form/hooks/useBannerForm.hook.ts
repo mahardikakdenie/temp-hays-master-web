@@ -13,7 +13,6 @@ import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { useEffect, useMemo, useState } from 'react';
 import Notification from '@/components/ui/notification/Notification';
 import { useRouter, useParams, usePathname } from 'next/navigation';
-import { ParamValue } from 'next/dist/server/request/params';
 
 const addBannerSchema = yup.object({
   title: yup.string().required('Title is required'),
@@ -55,9 +54,23 @@ const useBannerFormHook = () => {
   const [sort, setSort] = useState<number>();
   const [status, setStatus] = useState<number>(0);
   const [isUpdateImage, setIsUpdateImage] = useState<boolean>(false);
-  const [bannerId, setBannerId] = useState<ParamValue | null>(null);
+
+  const headers = ['form-create-banner', 'preview'];
+
+  const router = useRouter();
+  const params = useParams();
+  const pathName = usePathname();
+
+  useEffect(() => {
+    if (pathName.includes('update')) {
+      setTypeForm('update');
+    } else {
+      setTypeForm('create');
+    }
+  }, [pathName, params, router]);
 
   const isUpdatePage = useMemo(() => typeForm === 'update', [typeForm]);
+
   const items = [
     { title: 'Master Setup', href: '#' },
     { title: 'Banner', href: '/master-setup/banner' },
@@ -67,11 +80,15 @@ const useBannerFormHook = () => {
     },
   ];
 
-  const headers = ['form-create-banner', 'preview'];
-
-  const router = useRouter();
-  const params = useParams();
-  const pathName = usePathname();
+  const bannerId = useMemo(() => {
+    const rawId = params?.id;
+    if (typeof rawId === 'string') {
+      return rawId;
+    } else if (Array.isArray(rawId)) {
+      return rawId[0]; // Ambil elemen pertama jika array
+    }
+    return null;
+  }, [params]);
 
   const form = useForm<BannerForm>({
     resolver: yupResolver(addBannerSchema),
@@ -86,17 +103,12 @@ const useBannerFormHook = () => {
     },
   });
 
-  useEffect(() => {
-    if (pathName.includes('update')) {
-      setBannerId(params?.id);
-      setTypeForm('update');
-    } else {
-      setTypeForm('create');
-    }
-  }, [pathName, params]);
-
-  const { data: detailData, isLoading: isDetailLoading = true } = useQuery<BannerDetail, Error>({
-    queryKey: ['detail-data', bannerId], // tambahkan bannerId sebagai dependency
+  const {
+    data: detailData,
+    isLoading: isDetailLoading = true,
+    isFetching: isDetailFetching,
+  } = useQuery<BannerDetail, Error>({
+    queryKey: ['detail-data', bannerId],
     queryFn: async () => {
       const res = await internalAPI(Routes.BANNER + '/detail/' + bannerId);
       if (res.status !== HttpStatus.OK) {
@@ -105,10 +117,8 @@ const useBannerFormHook = () => {
       const { data } = await res.json();
       return data;
     },
-    staleTime: 1000 * 60 * 5,
-    retry: 2,
-    placeholderData: keepPreviousData,
-    enabled: !!bannerId, // aktif hanya jika bannerId ada
+    refetchOnMount: true,
+    // staleTime: 0,
   });
 
   useEffect(() => {
@@ -211,7 +221,7 @@ const useBannerFormHook = () => {
       formData.append('type', data.type.toString().toLowerCase());
       formData.append('placement_text_x', data.placement_text_x);
       formData.append('placement_text_y', data.placement_text_y);
-      formData.set('sort', data.sort.toString());
+      formData.append('sort', sort ? sort.toString() : '');
 
       if (file instanceof File) {
         formData.append('image', file);
@@ -244,7 +254,6 @@ const useBannerFormHook = () => {
         formData.set('id', bannerId.toString());
         formData.set('is_update_image', isUpdateImage.toString());
       }
-      console.log('🚀 ~ mutationFn: ~ isUpdateImage:', isUpdateImage);
 
       if (file instanceof File) {
         formData.append('image', file);
@@ -256,7 +265,6 @@ const useBannerFormHook = () => {
   });
 
   const onSubmit: SubmitHandler<BannerForm> = async (data) => {
-    console.log('🚀 ~ constonSubmit:SubmitHandler<BannerForm>= ~ isUpdatePage:', isUpdatePage);
     if (isUpdatePage) {
       console.log('data : ', data);
 
@@ -358,6 +366,7 @@ const useBannerFormHook = () => {
     refetchTypeOptions,
     detailData,
     isDetailLoading,
+    isDetailFetching,
     bannerId,
     typeForm,
     sort,

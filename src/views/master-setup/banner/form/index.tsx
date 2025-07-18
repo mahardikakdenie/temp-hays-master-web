@@ -32,12 +32,13 @@ const BannerFormViews: React.FC = () => {
     handleImageUpload,
     type,
     setType,
-    typeForm,
     isDetailLoading,
+    isDetailFetching,
     sort,
     setSort,
     status,
     setStatus,
+    isUpdatePage,
   } = useBannerFormHook();
 
   const {
@@ -47,8 +48,6 @@ const BannerFormViews: React.FC = () => {
     formState: { errors, isSubmitting },
   } = form;
 
-  console.log(errors);
-
   const TextLabel: React.FC<{ label: string }> = ({ label }) => {
     return <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>;
   };
@@ -56,7 +55,7 @@ const BannerFormViews: React.FC = () => {
     <>
       <PageHeader
         items={items}
-        title={typeForm === 'update' ? 'Update Banner Data' : 'Create New Banner'}
+        title={isUpdatePage ? 'Update Banner Data' : 'Create New Banner'}
         isShowBtn={false}
         titleButton="title"
         onClick={() => {}}
@@ -88,7 +87,7 @@ const BannerFormViews: React.FC = () => {
             file={file ?? null}
             subTitle={subTitle}
           />
-        ) : isDetailLoading ? (
+        ) : isDetailLoading || isDetailFetching ? (
           <div className="flex items-center justify-center bg-gray-900">
             <div className="w-8 h-8 p-5 border-4 border-t-blue-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
           </div>
@@ -103,11 +102,10 @@ const BannerFormViews: React.FC = () => {
           >
             {/* Title */}
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
-                Title
-              </label>
-              {typeForm === 'update' ? (
-                title !== '' && (
+              <TextLabel label="Title" />
+              {isUpdatePage ? (
+                title !== '' &&
+                !isDetailLoading && (
                   <QuillEditor value={title} {...register('title')} onChange={setTitle} />
                 )
               ) : (
@@ -118,7 +116,7 @@ const BannerFormViews: React.FC = () => {
             {/* Subtitle */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Sub Title</label>
-              {typeForm === 'update' ? (
+              {isUpdatePage ? (
                 subTitle !== '' && (
                   <QuillEditor value={subTitle} {...register('sub_title')} onChange={setSubTitle} />
                 )
@@ -191,12 +189,13 @@ const BannerFormViews: React.FC = () => {
                 type="number"
                 className="bg-gray-700"
                 min={0}
+                error={errors.sort?.message}
                 {...register('sort')}
                 onChange={(e) => setSort(Number(e.target.value))}
               />
             </div>
 
-            {typeForm === 'update' && (
+            {isUpdatePage && (
               <div>
                 <TextLabel label="Status" />
                 <Select
@@ -213,7 +212,7 @@ const BannerFormViews: React.FC = () => {
             )}
 
             <div>
-              {typeForm === 'update' ? (
+              {isUpdatePage ? (
                 file && (
                   <MediaInput
                     label="Banner Image"
