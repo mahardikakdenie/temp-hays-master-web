@@ -6,3 +6,9 @@ export type ArticleList = {
   created_at: string;
   updated_at: string;
 };
+
+export type ArticleCreateForm = {
+  title: string;
+  content: string;
+  image: File;
+};
