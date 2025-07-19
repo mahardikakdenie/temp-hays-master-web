@@ -4,7 +4,7 @@ const ProductHeader: React.FC = () => {
   return (
     <div>
       <PageHeader
-        title="Theme"
+        title="Product"
         titleButton="Add new Product"
         onClick={() => {}}
         items={[

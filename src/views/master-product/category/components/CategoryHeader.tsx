@@ -1,28 +1,21 @@
 import type React from 'react';
-import Breadcrumbs from '@/components/ui/breadcrumbs/Breadcrumbs';
-import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
-import { useGlobal } from '@/contexts/global.context';
+import PageHeader from '@/components/ui/page/Header';
+import { useRouter } from 'next/navigation';
 
 const CategoryHeader: React.FC = () => {
-  const { onOpenModal } = useGlobal();
+  const items = [
+    { title: 'Master Product', href: '#' },
+    { title: 'Category', href: '/master-setup/category' },
+  ];
+  const router = useRouter();
   return (
-    <div className="flex justify-between items-end">
-      <div>
-        <span className="text-xl font-semibold block mb-2">Category</span>
-        <Breadcrumbs
-          items={[
-            { title: 'Master Product', href: '#' },
-            { title: 'Category', href: '/master-setup/category' },
-          ]}
-        />
-      </div>
-
-      <div>
-        <ButtonPrimary className="w-full" onClick={() => onOpenModal('add')}>
-          Add New Category
-        </ButtonPrimary>
-      </div>
-    </div>
+    <PageHeader
+      items={items}
+      title="Category"
+      titleButton="Add new Category"
+      isShowBtn
+      onClick={() => router.push('/master-product/category/create')}
+    />
   );
 };
 
