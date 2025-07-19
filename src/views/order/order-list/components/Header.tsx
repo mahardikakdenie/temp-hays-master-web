@@ -8,7 +8,7 @@ const OrderListHeader: React.FC = () => {
         onClick={() => {}}
         title="Order List"
         isShowBtn
-        titleButton="Add new OrderList"
+        titleButton="Add new Order"
       />
     </div>
   );
