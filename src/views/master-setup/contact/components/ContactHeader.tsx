@@ -1,8 +1,10 @@
 import type React from 'react';
 import Breadcrumbs from '@/components/ui/breadcrumbs/Breadcrumbs';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
+import { useGlobal } from '@/contexts/global.context';
 
 const ContactHeader: React.FC = () => {
+  const { onOpenModal } = useGlobal();
   return (
     <div className="flex justify-between items-end">
       <div>
@@ -16,7 +18,9 @@ const ContactHeader: React.FC = () => {
       </div>
 
       <div>
-        <ButtonPrimary className="w-full">Add New Contact</ButtonPrimary>
+        <ButtonPrimary className="w-full" onClick={() => onOpenModal('add')}>
+          Add New Contact
+        </ButtonPrimary>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 import type React from 'react';
 import ContactHeader from './components/ContactHeader';
 import ContactTable from './components/ContactTable';
+import ModalAddContact from './components/ModalAddContact';
 
 const ContactViews: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const ContactViews: React.FC = () => {
       <div className="col-span-12">
         <ContactTable />
       </div>
+      <ModalAddContact />
     </div>
   );
 };

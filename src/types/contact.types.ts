@@ -9,3 +9,13 @@ export interface Contact {
   created_at: string;
   updated_at: string;
 }
+
+export type CreateContactForm = {
+  name: string;
+  email: string;
+  phone: string;
+  wa_phone: string;
+  location: string;
+  lat: string;
+  long: string;
+};
