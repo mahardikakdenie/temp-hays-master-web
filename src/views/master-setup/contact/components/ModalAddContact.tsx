@@ -1,3 +1,4 @@
+'use client';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
@@ -102,8 +103,8 @@ const ModalAddContact: React.FC = () => {
               label="Longitude"
               placeholder="Enter Longitude"
               required
-              error={errors.long?.message}
-              {...register('long')}
+              error={errors.lng?.message}
+              {...register('lng')}
             />
           </div>
         </div>

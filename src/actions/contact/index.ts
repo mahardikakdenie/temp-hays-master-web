@@ -1,3 +1,4 @@
+'use server';
 import { Routes } from '@/libs/constants/routes.const';
 import { externalAPI } from '@/libs/interceptors/api-ext.interceptor';
 import { catchServerComponent } from '@/libs/utils/catch.utils';
@@ -6,11 +7,7 @@ import { CreateContactForm } from '@/types/contact.types';
 
 export const createContactApi = async (data: CreateContactForm) => {
   return await externalAPI
-    .post(Routes.API_CONTACT, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+    .post(Routes.API_CONTACT, data)
     .then((response) => responseServerRoute(response))
-    .then((error) => catchServerComponent(error));
+    .catch((error) => catchServerComponent(error));
 };

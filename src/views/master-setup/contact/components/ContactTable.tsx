@@ -18,13 +18,10 @@ const ContactTable: React.FC = () => {
     meta,
     onMeta,
     // setMeta,
-    // onSearch,
+    onSearch,
     onSort,
     onRetry,
   } = useContact();
-  const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Search:', event.target.value);
-  };
 
   const headers = [
     { name: 'Name', key: 'name' },

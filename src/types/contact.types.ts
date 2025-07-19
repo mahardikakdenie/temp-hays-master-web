@@ -17,5 +17,5 @@ export type CreateContactForm = {
   wa_phone: string;
   location: string;
   lat: string;
-  long: string;
+  lng: string;
 };
