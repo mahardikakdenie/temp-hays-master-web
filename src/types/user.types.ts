@@ -16,3 +16,8 @@ export type UserList = {
   status: number;
   status_text: string;
 };
+
+export type UserAccessOption = {
+  id: string;
+  name: string;
+};

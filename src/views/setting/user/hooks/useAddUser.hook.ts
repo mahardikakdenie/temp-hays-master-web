@@ -1,13 +1,15 @@
 import * as yup from 'yup';
 import { useCallback } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CreateUserApi } from '@/actions/user';
 import { useGlobal } from '@/contexts/global.context';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
-import type { CreateUserForm } from '@/types/user.types';
+import type { CreateUserForm, UserAccessOption } from '@/types/user.types';
 import Notification from '@/components/ui/notification/Notification';
+import { useInternal } from '@/hooks/useInternal';
+import { Routes } from '@/libs/constants/routes.const';
 
 const addUserSchema = yup.object({
   access_id: yup.number().required('Access is required'),
@@ -20,8 +22,19 @@ const addUserSchema = yup.object({
 
 const useAddUser = () => {
   const { onCloseModal } = useGlobal();
+  const internalAPI = useInternal();
 
   const queryClient = useQueryClient();
+
+  const { data: accessOptions } = useQuery<UserAccessOption[]>({
+    queryKey: ['access-list'],
+    queryFn: async () => {
+      const res = await internalAPI(Routes.USER_ACCESS_OPTION);
+      const { data } = await res.json();
+
+      return data;
+    },
+  });
 
   const form = useForm<CreateUserForm>({
     resolver: yupResolver(addUserSchema),
@@ -63,6 +76,7 @@ const useAddUser = () => {
     form,
     onSubmit,
     onCancel,
+    accessOptions,
   };
 };
 

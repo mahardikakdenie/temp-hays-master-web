@@ -51,10 +51,10 @@ const useArticleUpdateHook = () => {
   }, [image, form]);
 
   // getData Article Detail
-  //   const {
-  //     data,
-  //     isLoading,
-  //   } = useQuery
+  // const {
+  //   data,
+  //   isLoading,
+  // } = useQuery
 
   return {
     title,
