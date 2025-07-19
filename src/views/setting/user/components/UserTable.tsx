@@ -92,7 +92,7 @@ const UserTable: React.FC<UserTableProps> = ({ appliedFilter }) => {
           headers={headers}
           sort={sort}
           onSort={onSort}
-          headerWithSorts={['title', 'title', 'sub_title', 'type', 'status']}
+          headerWithSorts={['fullname', 'access_name', 'email', 'status', 'phone']}
         />
         <TableDataUI
           headers={headers}
