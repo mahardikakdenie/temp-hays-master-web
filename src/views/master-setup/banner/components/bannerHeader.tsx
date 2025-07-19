@@ -1,8 +1,10 @@
 'use client';
 import type React from 'react';
 import PageHeader from '@/components/ui/page/Header';
+import { useRouter } from 'next/navigation';
 
 const BannerHeader: React.FC = () => {
+  const router = useRouter();
   return (
     <PageHeader
       items={[
@@ -12,6 +14,7 @@ const BannerHeader: React.FC = () => {
       isShowBtn
       title="Banner"
       titleButton="Add new banner"
+      onClick={() => router.push('/master-setup/banner/create')}
     />
   );
 };
