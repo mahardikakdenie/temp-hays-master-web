@@ -16,7 +16,15 @@ export type ArticleCreateForm = {
 export type ArticleUpdateForm = {
   title: string;
   content: string;
-  // is_update_image: number;
+  is_update_image: boolean;
   status: number;
   image: File;
+};
+
+export type ArticleDetail = {
+  id: number;
+  content: string;
+  image: string;
+  status: number;
+  title: string;
 };

@@ -1,31 +1,45 @@
 import MediaInput from '@/components/ui/form/MediaInput';
 import QuillEditor from '@/components/ui/form/QuillEditor';
-import { ArticleCreateForm } from '@/types/article.types';
-import { useEffect, useState } from 'react';
+import { ArticleCreateForm, ArticleUpdateForm } from '@/types/article.types';
+import Input from '@/components/ui/form/Input';
+import { useEffect, useMemo, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+import Select from '@/components/ui/form/Select';
 
 const ArticleForm: React.FC<{
   titleValue: string;
   contentValue: string;
   imageValue: File | string;
-  onSubmit: (data: ArticleCreateForm) => void;
+  statusValue?: number;
+  onSubmit: (data: ArticleCreateForm | ArticleUpdateForm) => void;
   handleTitle: (title: string) => void;
   handleContent: (content: string) => void;
   handleImage: (image: File | null) => void;
-  form: UseFormReturn<ArticleCreateForm, unknown, ArticleCreateForm>;
+  handleStatus?: (status: string | number | null) => void;
+  form: UseFormReturn<
+    ArticleCreateForm | ArticleUpdateForm,
+    unknown,
+    ArticleCreateForm | ArticleUpdateForm
+  >;
+  type: 'create' | 'update';
 }> = ({
   titleValue,
   contentValue,
   imageValue,
+  statusValue,
   form,
   handleTitle,
+  handleStatus,
   handleContent,
   handleImage,
   onSubmit,
+  type = 'create',
 }) => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | string>();
+  const [status, setStatus] = useState<number | string | null>(null);
+  const isUpdateForm = useMemo(() => type === 'update', [type]);
 
   const {
     register,
@@ -41,6 +55,12 @@ const ArticleForm: React.FC<{
   useEffect(() => {
     setImage(imageValue);
   }, [imageValue]);
+  useEffect(() => {
+    if (isUpdateForm) {
+      setStatus(statusValue || null);
+    }
+  }, [statusValue, isUpdateForm]);
+
   const TextLabel: React.FC<{ label: string }> = ({ label }) => {
     return <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>;
   };
@@ -57,44 +77,90 @@ const ArticleForm: React.FC<{
       >
         <div>
           <TextLabel label="Title" />
-          <QuillEditor
+          <Input
             value={title}
-            {...register('title')}
-            onChange={(title: string) => {
-              setTitle(title);
-              handleTitle(title);
+            className="bg-gray-700"
+            onChange={(value) => {
+              handleTitle(value.target.value);
+              setTitle(value.target.value);
             }}
           />
-          <div>
-            <span className="text-sm text-red-400">{errors.title?.message}</span>
-          </div>
         </div>
+
         <div className="my-4">
-          <TextLabel label="Content" />
-          <QuillEditor
-            value={content}
-            {...register('content')}
-            onChange={(content: string) => {
-              setContent(content);
-              handleContent(content);
-            }}
-          />
+          <div className="mb-2">
+            <TextLabel label={`Content`} />
+          </div>
+          {isUpdateForm ? (
+            content !== '' && (
+              <QuillEditor
+                value={content}
+                {...register('content')}
+                onChange={(content: string) => {
+                  setContent(content);
+                  handleContent(content);
+                }}
+              />
+            )
+          ) : (
+            <QuillEditor
+              value={content}
+              {...register('content')}
+              onChange={(content: string) => {
+                setContent(content);
+                handleContent(content);
+              }}
+            />
+          )}
           <div>
             <span className="text-sm text-red-400">{errors.content?.message}</span>
           </div>
         </div>
+        {isUpdateForm && (
+          <div>
+            <TextLabel label="Status" />
+            <Select
+              value={status}
+              options={[
+                { id: 1, name: 'Active' },
+                { id: 0, name: 'Non Active' },
+              ]}
+              {...register('status')}
+              onChange={(value) => {
+                if (handleStatus) {
+                  handleStatus(value as number);
+                }
+              }}
+            />
+            <p className="mt-1 text-xs text-gray-400">Choose Status for Banner</p>
+          </div>
+        )}
         <div>
-          <MediaInput
-            onChange={(file: File | null) => {
-              handleImage(file);
-            }}
-            initialPreview={image instanceof File ? URL.createObjectURL(image) : (image as string)}
-          />
+          {isUpdateForm ? (
+            image && (
+              <MediaInput
+                onChange={(file: File | null) => {
+                  handleImage(file);
+                }}
+                initialPreview={
+                  image instanceof File ? URL.createObjectURL(image) : (image as string)
+                }
+              />
+            )
+          ) : (
+            <MediaInput
+              onChange={(file: File | null) => {
+                handleImage(file);
+              }}
+              initialPreview={
+                image instanceof File ? URL.createObjectURL(image) : (image as string)
+              }
+            />
+          )}
           <div>
             <span className="text-sm text-red-400">{errors.image?.message}</span>
           </div>
         </div>
-
         <div className="flex justify-end">
           <button
             type="submit"

@@ -5,7 +5,7 @@ import TableLoadingSkeleton from './Loading';
 import TableNoData from './NoData';
 import { TableBody, TableCell, TableRow } from './Table';
 import PencilSquareIcon from '@/components/icons/PencilSquare';
-import TrashIcon from '@/components/icons/Trash';
+// import TrashIcon from '@/components/icons/Trash';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/libs/utils/cn.utils';
 import { usePermission } from '@/contexts/permission.context';
@@ -84,9 +84,9 @@ const TableDataUI = <T extends Record<string, any>>({
                         />
                       )}
 
-                      {hasPermission('delete') && (
+                      {/* {hasPermission('delete') && (
                         <TrashIcon className="size-5 text-red-500 hover:text-red-700 cursor-pointer" />
-                      )}
+                      )} */}
                     </div>
                   </TableCell>
                 );

@@ -1,8 +1,10 @@
 import type React from 'react';
 import Breadcrumbs from '@/components/ui/breadcrumbs/Breadcrumbs';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
+import { useRouter } from 'next/navigation';
 
 const ArticleHeader: React.FC = () => {
+  const router = useRouter();
   return (
     <div className="flex justify-between items-end">
       <div>
@@ -16,7 +18,12 @@ const ArticleHeader: React.FC = () => {
       </div>
 
       <div>
-        <ButtonPrimary className="w-full">Add New Article</ButtonPrimary>
+        <ButtonPrimary
+          className="w-full"
+          onClick={() => router.push(`/master-setup/article/create`)}
+        >
+          Add New Article
+        </ButtonPrimary>
       </div>
     </div>
   );

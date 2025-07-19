@@ -10,9 +10,17 @@ const CreateArticleViews: React.FC = () => {
   const [selection, setSeletion] = useState<string>('form-create-article');
   const { form, onSubmit, title, content, image, setTitle, setContent, setImage } =
     useArticleCreateHook();
+  const items = [
+    { title: 'Master Setup', href: '#' },
+    { title: 'Articles', href: '/master-setup/article' },
+    {
+      title: 'Create Article Form',
+      href: '/master-setup/banner',
+    },
+  ];
   return (
     <div>
-      <PageHeader isShowBtn={false} titleButton="" title="Create Article" items={[]} />
+      <PageHeader isShowBtn={false} titleButton="" title="Create Article" items={items} />
 
       <div className="mt-6 mx-auto px-10 py-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
         <HeaderForm
@@ -31,6 +39,7 @@ const CreateArticleViews: React.FC = () => {
           handleContent={setContent}
           handleTitle={setTitle}
           handleImage={setImage}
+          type="create"
         />
       </div>
     </div>

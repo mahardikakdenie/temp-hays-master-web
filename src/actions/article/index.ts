@@ -15,3 +15,14 @@ export const createArticleApi = async (data: FormData) => {
     .then((response) => responseServerRoute(response))
     .catch((error) => catchServerComponent(error));
 };
+
+export const updateArticleApi = async (data: FormData) => {
+  return await externalAPI
+    .patch(Routes.ARTICLE, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((responses) => responseServerRoute(responses))
+    .catch((error) => catchServerComponent(error));
+};
