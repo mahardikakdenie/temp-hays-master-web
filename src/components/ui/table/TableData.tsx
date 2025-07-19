@@ -6,7 +6,7 @@ import TableNoData from './NoData';
 import { TableBody, TableCell, TableRow } from './Table';
 import PencilSquareIcon from '@/components/icons/PencilSquare';
 import TrashIcon from '@/components/icons/Trash';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/libs/utils/cn.utils';
 import { usePermission } from '@/contexts/permission.context';
 
@@ -41,6 +41,7 @@ const TableDataUI = <T extends Record<string, any>>({
   };
 
   const router = useRouter();
+  const pathname = usePathname();
   const { hasPermission } = usePermission();
   return (
     <TableBody>
@@ -78,7 +79,7 @@ const TableDataUI = <T extends Record<string, any>>({
                         <PencilSquareIcon
                           className="size-5 text-blue-500 hover:text-blue-700 cursor-pointer"
                           onClick={() => {
-                            router.push(`/master-setup/banner/${item.id}/update`);
+                            router.push(`${pathname}/${item.id}/update`);
                           }}
                         />
                       )}

@@ -12,3 +12,11 @@ export type ArticleCreateForm = {
   content: string;
   image: File;
 };
+
+export type ArticleUpdateForm = {
+  title: string;
+  content: string;
+  // is_update_image: number;
+  status: number;
+  image: File;
+};

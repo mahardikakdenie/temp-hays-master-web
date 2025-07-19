@@ -1,16 +1,16 @@
 import type React from 'react';
 import type { UserList } from '@/types/user.types';
-import { Table, TableBody, TableCell, TableHeader, TableRow } from '@/components/ui/table/Table';
+import { Table } from '@/components/ui/table/Table';
 import { useGlobal } from '@/contexts/global.context';
 import SearchIcon from '@/components/icons/Search';
-import PencilSquareIcon from '@/components/icons/PencilSquare';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
-import Badge from '@/components/ui/badge/Badge';
 import Pagination from '@/components/ui/table/Pagination';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
 import { Filter } from '@/types/commons.types';
+import TableDataUI from '@/components/ui/table/TableData';
+import HeaderDataUI from '@/components/ui/table/HeaderData';
 
 type UserTableProps = {
   appliedFilter: Filter;
@@ -26,30 +26,43 @@ const UserTable: React.FC<UserTableProps> = ({ appliedFilter }) => {
     meta: userMeta,
     error,
     search,
-    sort,
     onSearch,
-    onSort,
     onMeta,
     onRetry,
+    onSort,
+    sort,
   } = usePaginatedFetch<UserList>({
     key: 'user',
     endpoint: Routes.USER_LIST,
     extraQuery: appliedFilter,
   });
 
-  const tableStatus =
-    isLoading || (error && isFetching) ? (
-      'Loading...'
-    ) : error ? (
-      <div className="flex items-center gap-2">
-        <span>{error}</span>
-        <button onClick={onRetry} className="text-red-500 underline">
-          Try again
-        </button>
-      </div>
-    ) : user.length === 0 ? (
-      'No users found.'
-    ) : null;
+  const headers = [
+    {
+      key: 'fullname',
+      name: 'Name',
+    },
+    {
+      key: 'access_name',
+      name: 'Access',
+    },
+    {
+      key: 'email',
+      name: 'Email',
+    },
+    {
+      key: 'phone',
+      name: 'Phone',
+    },
+    {
+      key: 'status',
+      name: 'Status',
+    },
+    {
+      key: 'actions',
+      name: 'Actions',
+    },
+  ];
 
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
@@ -75,96 +88,20 @@ const UserTable: React.FC<UserTableProps> = ({ appliedFilter }) => {
       </div>
 
       <Table>
-        <TableHeader>
-          <TableRow>
-            <TableCell
-              isHeader
-              sortable
-              sortKey="fullname"
-              currentSortColumn={sort.column}
-              currentSortOrder={sort.order}
-              className="text-start"
-              onSort={onSort}
-            >
-              Name
-            </TableCell>
-            <TableCell
-              isHeader
-              sortable
-              sortKey="access_name"
-              currentSortColumn={sort.column}
-              currentSortOrder={sort.order}
-              className="text-start"
-              onSort={onSort}
-            >
-              Access
-            </TableCell>
-            <TableCell
-              isHeader
-              sortable
-              sortKey="email"
-              currentSortColumn={sort.column}
-              currentSortOrder={sort.order}
-              className="text-start"
-              onSort={onSort}
-            >
-              Email
-            </TableCell>
-            <TableCell
-              isHeader
-              sortable
-              sortKey="phone"
-              currentSortColumn={sort.column}
-              currentSortOrder={sort.order}
-              className="text-start"
-              onSort={onSort}
-            >
-              Phone
-            </TableCell>
-            <TableCell
-              isHeader
-              sortable
-              sortKey="status"
-              currentSortColumn={sort.column}
-              currentSortOrder={sort.order}
-              className="text-center"
-              onSort={onSort}
-            >
-              Status
-            </TableCell>
-            <TableCell isHeader className="text-center">
-              Action
-            </TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {tableStatus ? (
-            <TableRow>
-              <TableCell colSpan={6} className="text-center text-sm text-white/90">
-                {tableStatus}
-              </TableCell>
-            </TableRow>
-          ) : (
-            user.map((list, index) => (
-              <TableRow key={index}>
-                <TableCell className="text-start">{list.fullname}</TableCell>
-                <TableCell className="text-start">{list.access_name}</TableCell>
-                <TableCell className="text-start">{list.email}</TableCell>
-                <TableCell className="text-start">{list.phone}</TableCell>
-                <TableCell className="text-center">
-                  <Badge variant="light" color={list.status === 1 ? 'success' : 'error'}>
-                    {list.status_text}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-center">
-                  <div className="flex justify-center cursor-pointer">
-                    <PencilSquareIcon className="w-5 h-5 text-primary" />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
+        <HeaderDataUI
+          headers={headers}
+          sort={sort}
+          onSort={onSort}
+          headerWithSorts={['title', 'title', 'sub_title', 'type', 'status']}
+        />
+        <TableDataUI
+          headers={headers}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          data={user}
+          onRetry={onRetry}
+          error={error}
+        />
       </Table>
       <Pagination meta={userMeta} context="users" onPageChange={(page) => onMeta({ page })} />
     </div>
