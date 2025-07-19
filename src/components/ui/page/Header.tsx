@@ -1,6 +1,7 @@
+import PlusIcon from '@/components/icons/Plus';
 import Breadcrumbs from '@/components/ui/breadcrumbs/Breadcrumbs';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
-import Link from 'next/link';
+// import Link from 'next/link';
 
 const PageHeader: React.FC<{
   isShowBtn: boolean;
@@ -13,26 +14,17 @@ const PageHeader: React.FC<{
   }[];
 }> = ({ isShowBtn = true, onClick, titleButton = 'Add New', title, items }) => {
   return (
-    <div className="flex justify-between items-end">
-      <div>
-        <span className="text-xl font-semibold block mb-2">{title}</span>
+    <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-5">
+      <div className="flex-1 min-w-[200px]">
+        <h1 className="text-xl font-semibold block mb-2">{title}</h1>
         <Breadcrumbs items={items} />
       </div>
 
-      <div>
+      <div className="flex-shrink-0">
         {isShowBtn ? (
-          onClick ? (
-            <ButtonPrimary className="w-full" onClick={onClick}>
-              {titleButton}
-            </ButtonPrimary>
-          ) : (
-            <Link
-              href="/master-setup/banner/create"
-              className="bg-primary flex items-center justify-center gap-2 text-sm font-semibold py-2.75 px-3.75 rounded-lg transition-colors"
-            >
-              Add new banner
-            </Link>
-          )
+          <ButtonPrimary icon={<PlusIcon className="w-5 h-5" />} onClick={onClick}>
+            {titleButton}
+          </ButtonPrimary>
         ) : null}
       </div>
     </div>
