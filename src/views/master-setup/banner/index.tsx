@@ -3,7 +3,6 @@
 import type React from 'react';
 import BannerHeader from './components/bannerHeader';
 import BannerTable from './components/bannerTable';
-import ModalAddBanner from './components/modalAddBanner';
 
 const BannerView: React.FC = () => {
   return (
@@ -14,8 +13,6 @@ const BannerView: React.FC = () => {
       <div className="col-span-12">
         <BannerTable />
       </div>
-
-      <ModalAddBanner />
     </div>
   );
 };
