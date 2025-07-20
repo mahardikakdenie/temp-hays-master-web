@@ -94,7 +94,6 @@ const useUpdateCategory = () => {
     form,
     onCancel,
     onSubmit,
-    categoryId,
   };
 };
 
