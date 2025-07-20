@@ -23,6 +23,7 @@ export type TableDataUIProps<T> = {
   headers: Header[];
   onRetry: () => void;
   error: string;
+  onUpdateClick?: (data: T) => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,6 +34,7 @@ const TableDataUI = <T extends Record<string, any>>({
   headers,
   onRetry,
   error,
+  onUpdateClick,
 }: TableDataUIProps<T>) => {
   const stripHtml = (html: string) => {
     const tmp = document.createElement('div');
@@ -79,7 +81,11 @@ const TableDataUI = <T extends Record<string, any>>({
                         <PencilSquareIcon
                           className="size-5 text-blue-500 hover:text-blue-700 cursor-pointer"
                           onClick={() => {
-                            router.push(`${pathname}/${item.id}/update`);
+                            if (onUpdateClick) {
+                              onUpdateClick(item);
+                            } else {
+                              router.push(`${pathname}/${item.id}/update`);
+                            }
                           }}
                         />
                       )}

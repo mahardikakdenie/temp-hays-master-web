@@ -20,7 +20,7 @@ const createContactSchema = yup.object({
   phone: yup
     .string()
     .required('Phone is required')
-    .matches(/^08\d{8,15}$/, 'Phone must start with 08 and have 10–15 digits'),
+    .matches(/^02\d{8,15}$/, 'Phone must start with 08 and have 10–15 digits'),
   wa_phone: yup
     .string()
     .required('Wa Phone is required')

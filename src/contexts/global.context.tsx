@@ -16,23 +16,25 @@ export type FeedbackModal = {
   traceId?: string;
 };
 
-type GlobalContextProps = Nullable<{
+type GlobalContextProps<T> = Nullable<{
   modal: ModalKey;
+  item: T;
   feedbackModal: FeedbackModal;
   device: Device;
-  onOpenModal: (key: ModalKey) => void;
+  onOpenModal: <T>(key: ModalKey, data?: T) => void;
   onCloseModal: () => void;
   onOpenFeedbackModal: (data: Omit<FeedbackModal, 'open'>) => void;
   onCloseFeedbackModal: () => void;
   onCopyClipboard: (data: string) => void;
 }>;
 
-const [GlobalContext, useGlobal] = createSafeContext<GlobalContextProps>('Global');
+const [GlobalContext, useGlobal] = createSafeContext<GlobalContextProps<unknown>>('Global');
 
 const GlobalProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [modal, setModal] = useState<ModalKey>(null);
+  const [item, setItem] = useState<unknown | null>(null);
 
   const [feedbackModal, setFeedbackModal] = useState<FeedbackModal>({
     open: false,
@@ -52,7 +54,8 @@ const GlobalProvider: React.FC<{
     userAgent: '',
   });
 
-  const onOpenModal = useCallback((key: ModalKey) => {
+  const onOpenModal = useCallback(<T,>(key: ModalKey, data?: T) => {
+    setItem(data);
     setModal(key);
   }, []);
 
@@ -95,6 +98,7 @@ const GlobalProvider: React.FC<{
     <GlobalContext.Provider
       value={{
         modal,
+        item,
         feedbackModal,
         device,
         onOpenModal,

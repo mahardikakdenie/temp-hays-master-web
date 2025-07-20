@@ -7,8 +7,10 @@ import useContact from '../contact.hook';
 import Pagination from '@/components/ui/table/Pagination';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
+import { useGlobal } from '@/contexts/global.context';
 
 const ContactTable: React.FC = () => {
+  const { onOpenModal } = useGlobal();
   const {
     isLoading,
     isFetching,
@@ -83,6 +85,9 @@ const ContactTable: React.FC = () => {
           onRetry={onRetry}
           headers={headers}
           error={error}
+          onUpdateClick={(item) => {
+            onOpenModal('detail', item);
+          }}
         />
       </Table>
       <Pagination meta={meta} context="contacts" onPageChange={(page) => onMeta({ page })} />

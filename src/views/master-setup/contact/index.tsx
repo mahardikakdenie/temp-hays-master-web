@@ -4,6 +4,7 @@ import type React from 'react';
 import ContactHeader from './components/ContactHeader';
 import ContactTable from './components/ContactTable';
 import ModalAddContact from './components/ModalAddContact';
+import ModalUpdateContact from './components/ModalUpdateContact';
 
 const ContactViews: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const ContactViews: React.FC = () => {
         <ContactTable />
       </div>
       <ModalAddContact />
+      <ModalUpdateContact />
     </div>
   );
 };
