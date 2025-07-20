@@ -7,3 +7,8 @@ export type CategoryList = {
   updated_at: string;
   created_at: string;
 };
+
+export type CreateCategoryForm = {
+  name: string;
+  desc: string;
+};
