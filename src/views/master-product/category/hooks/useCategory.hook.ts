@@ -38,6 +38,7 @@ const useCategory = () => {
     onChangeEndDate,
     onChangeStatus,
     meta: fetchCategories.meta,
+    sort: fetchCategories.sort,
   };
 };
 
