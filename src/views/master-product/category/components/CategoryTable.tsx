@@ -7,8 +7,10 @@ import React from 'react';
 import Pagination from '@/components/ui/table/Pagination';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
+import { useGlobal } from '@/contexts/global.context';
 
 const CategoryTable: React.FC = () => {
+  const { onOpenModal } = useGlobal();
   const {
     data: categories,
     isLoading,
@@ -75,6 +77,7 @@ const CategoryTable: React.FC = () => {
           isFetching={isFetching}
           error={error}
           onRetry={onRetry}
+          onUpdateClick={(data) => onOpenModal('detail', data)}
         />
       </Table>
       <Pagination meta={meta} context="categories" onPageChange={(page) => onMeta({ page })} />

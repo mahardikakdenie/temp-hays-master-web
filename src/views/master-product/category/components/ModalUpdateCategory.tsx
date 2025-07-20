@@ -1,9 +1,10 @@
 import Modal from '@/components/ui/modal/Modal';
-import useCreateCategory from '../hooks/useCreateCategory.hook';
 import Input from '@/components/ui/form/Input';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Textarea from '@/components/ui/form/Textarea';
+import useUpdateCategory from '../hooks/useUpdateCategory.hook';
+import Select from '@/components/ui/form/Select';
 
 const ButtonActions: React.FC<{
   onCancel: () => void;
@@ -25,7 +26,7 @@ const ButtonActions: React.FC<{
 };
 
 const ModalUpdateCategory: React.FC = () => {
-  const { onCancel, form, onSubmit } = useCreateCategory();
+  const { onCancel, form, onSubmit } = useUpdateCategory();
 
   const {
     formState: { errors, isSubmitting },
@@ -35,7 +36,7 @@ const ModalUpdateCategory: React.FC = () => {
 
   return (
     <Modal
-      name="add"
+      name="detail"
       title="Update Category"
       onClose={onCancel}
       action={<ButtonActions onCancel={onCancel} isSubmitting={isSubmitting} />}
@@ -59,6 +60,23 @@ const ModalUpdateCategory: React.FC = () => {
               {...register('desc')}
               error={errors.desc?.message}
             />
+          </div>
+          <div className="col-span-12">
+            {/* <TextLabel label="Status" /> */}
+            <Select
+              label="Status"
+              value={form.watch('status')}
+              className="bg-black"
+              options={[
+                { id: 1, name: 'Active' },
+                { id: 0, name: 'Non Active' },
+              ]}
+              {...register('status')}
+              onChange={(value) => {
+                form.setValue('status', value as number);
+              }}
+            />
+            <p className="mt-1 text-xs text-gray-400">Choose Status for Banner</p>
           </div>
         </div>
       </form>

@@ -3,6 +3,7 @@
 import CategoryHeader from './components/CategoryHeader';
 import CategoryTable from './components/CategoryTable';
 import ModalCreateCategory from './components/ModalCreateCategory';
+import ModalUpdateCategory from './components/ModalUpdateCategory';
 
 const CategoryViews: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const CategoryViews: React.FC = () => {
         <CategoryTable />
       </div>
       <ModalCreateCategory />
+      <ModalUpdateCategory />
     </div>
   );
 };
