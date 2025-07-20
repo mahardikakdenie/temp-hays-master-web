@@ -266,8 +266,6 @@ const useBannerFormHook = () => {
 
   const onSubmit: SubmitHandler<BannerForm> = async (data) => {
     if (isUpdatePage) {
-      console.log('data : ', data);
-
       const response = await updateBannerMutation.mutateAsync(data);
       if (response.status >= HttpStatus.BAD_REQUEST) {
         Notification({

@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import QuillEditor from '@/components/ui/form/QuillEditor';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Select from '@/components/ui/form/Select';
@@ -102,33 +101,30 @@ const BannerFormViews: React.FC = () => {
           >
             {/* Title */}
             <div>
-              <TextLabel label="Title" />
-              {isUpdatePage ? (
-                title !== '' &&
-                !isDetailLoading && (
-                  <QuillEditor value={title} {...register('title')} onChange={setTitle} />
-                )
-              ) : (
-                <QuillEditor value={title} {...register('title')} onChange={setTitle} />
-              )}
-              <div>
-                <span className="text-sm text-red-300">{errors.title?.message}</span>
-              </div>
+              <Input
+                className="bg-gray-700"
+                value={title}
+                label="Title"
+                placeholder="Enter Banner Title"
+                error={errors.title?.message}
+                {...register('title')}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+              />
             </div>
 
             {/* Subtitle */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Sub Title</label>
-              {isUpdatePage ? (
-                subTitle !== '' && (
-                  <QuillEditor value={subTitle} {...register('sub_title')} onChange={setSubTitle} />
-                )
-              ) : (
-                <QuillEditor value={subTitle} {...register('sub_title')} onChange={setSubTitle} />
-              )}
-              <div>
-                <span className="text-sm text-red-300">{errors.sub_title?.message}</span>
-              </div>
+              <Input
+                className="bg-gray-700"
+                value={subTitle}
+                label="Sub Title"
+                placeholder="Enter Banner Sub Title"
+                error={errors.sub_title?.message}
+                {...register('sub_title')}
+                onChange={(e) => setSubTitle(e.target.value)}
+              />
             </div>
 
             {/* Position Selection */}
