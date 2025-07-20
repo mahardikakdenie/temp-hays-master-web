@@ -1,6 +1,6 @@
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
-import { CategoryList } from '@/types/category.types';
+import { Category } from '@/types/category.types';
 import { useCallback, useState } from 'react';
 
 const useCategory = () => {
@@ -25,7 +25,7 @@ const useCategory = () => {
     setFilters((prev) => ({ ...prev, ...meta }));
   }, []);
 
-  const fetchCategories = usePaginatedFetch<CategoryList>({
+  const fetchCategories = usePaginatedFetch<Category>({
     key: 'categories',
     endpoint: Routes.CATEGORY_LIST,
     extraQuery: filters,
