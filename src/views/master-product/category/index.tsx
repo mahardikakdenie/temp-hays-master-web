@@ -2,6 +2,7 @@
 
 import CategoryHeader from './components/CategoryHeader';
 import CategoryTable from './components/CategoryTable';
+import ModalCreateCategory from './components/ModalCreateCategory';
 
 const CategoryViews: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const CategoryViews: React.FC = () => {
       <div className="col-span-12">
         <CategoryTable />
       </div>
+      <ModalCreateCategory />
     </div>
   );
 };

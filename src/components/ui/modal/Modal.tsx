@@ -37,7 +37,7 @@ const Modal: React.FC<ModalProps> = ({ name, title, children, action, onClose })
           {title && (
             <div className="flex items-center gap-2">
               <InfoCircleIcon className="h-6 w-6 text-primary" />
-              <h1 className="text-md font-semibold">{title}</h1>
+              <span className="text-md font-semibold">{title}</span>
             </div>
           )}
           <button onClick={onClose ?? onCloseModal}>
