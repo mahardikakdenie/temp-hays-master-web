@@ -11,3 +11,8 @@ export type CreateThemeForm = {
   name: string;
   desc: string;
 };
+
+export type UpdateThemeForm = CreateThemeForm & {
+  id: number;
+  status: number;
+};
