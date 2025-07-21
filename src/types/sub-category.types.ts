@@ -8,4 +8,9 @@ interface SubCategory {
   status_text: string;
 }
 
+export type CreateSCategoryForm = {
+  name: string;
+  desc: string;
+};
+
 export type SubCategoryList = SubCategory[];
