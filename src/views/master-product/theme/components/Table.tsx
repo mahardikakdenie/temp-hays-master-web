@@ -5,8 +5,10 @@ import useThemeHook from '../hooks/useTheme.hook';
 import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
+import { useGlobal } from '@/contexts/global.context';
 
 const ThemeTable: React.FC = () => {
+  const { onOpenModal } = useGlobal();
   const { onSearch, onSort, sort, data, isLoading, isFetching, onRetry, error } = useThemeHook();
 
   const headers = [
@@ -73,6 +75,7 @@ const ThemeTable: React.FC = () => {
           isFetching={isFetching}
           onRetry={onRetry}
           error={error}
+          onUpdateClick={(data) => onOpenModal('detail', data)}
         />
       </Table>
     </div>

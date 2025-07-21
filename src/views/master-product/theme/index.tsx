@@ -1,6 +1,7 @@
 'use client';
 import ThemeHeader from './components/Header';
 import ModalCreateTheme from './components/ModalCreateTheme';
+import ModalUpdateTheme from './components/ModalUpdateTheme';
 import ThemeTable from './components/Table';
 const ThemeViews: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const ThemeViews: React.FC = () => {
         <ThemeTable />
       </div>
       <ModalCreateTheme />
+      <ModalUpdateTheme />
     </div>
   );
 };

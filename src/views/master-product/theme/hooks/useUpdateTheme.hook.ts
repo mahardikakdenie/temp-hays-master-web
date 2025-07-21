@@ -1,12 +1,14 @@
+import { updateThemeApi } from '@/actions/theme';
+import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
 import { UpdateThemeForm } from '@/types/theme.types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const updateSchema = yup.object({
@@ -18,6 +20,7 @@ const updateSchema = yup.object({
 const useUpdateTheme = () => {
   const { item, onCloseModal } = useGlobal();
   const internalApi = useInternal();
+  const queryClient = useQueryClient();
   const [themeId, setThemeId] = useState<number>(0);
 
   useEffect(() => {
@@ -50,8 +53,37 @@ const useUpdateTheme = () => {
         desc: data.desc,
         status: data.status,
       });
+      console.log('status : ', data.status);
+
+      form.setValue('status', data.status);
     }
   }, [data, form]);
+
+  const updateMutation = useMutation({
+    mutationFn: async (data: UpdateThemeForm) => updateThemeApi(data),
+  });
+
+  const onSubmit: SubmitHandler<UpdateThemeForm> = async (data: UpdateThemeForm) => {
+    const response = await updateMutation.mutateAsync(data);
+    if (response.status >= HttpStatus.BAD_REQUEST) {
+      Notification({
+        type: 'error',
+        message: 'Failed to add Theme',
+        description: response.message,
+        position: 'bottom-right',
+      });
+      return;
+    }
+
+    Notification({
+      type: 'success',
+      message: 'Success',
+      description: response.message,
+      position: 'bottom-right',
+    });
+    onCancel();
+    queryClient.invalidateQueries({ queryKey: ['theme'] });
+  };
 
   const onCancel = useCallback(() => {
     form.reset();
@@ -61,6 +93,7 @@ const useUpdateTheme = () => {
   return {
     form,
     onCancel,
+    onSubmit,
   };
 };
 
