@@ -6,3 +6,8 @@ export interface Theme {
   created_at: string;
   updated_at: string;
 }
+
+export type CreateThemeForm = {
+  name: string;
+  desc: string;
+};

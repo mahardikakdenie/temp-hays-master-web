@@ -1,5 +1,6 @@
 'use client';
 import ThemeHeader from './components/Header';
+import ModalCreateTheme from './components/ModalCreateTheme';
 import ThemeTable from './components/Table';
 const ThemeViews: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const ThemeViews: React.FC = () => {
       <div className="col-span-12">
         <ThemeTable />
       </div>
+      <ModalCreateTheme />
     </div>
   );
 };

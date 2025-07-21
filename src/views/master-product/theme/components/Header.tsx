@@ -1,15 +1,17 @@
 import PageHeader from '@/components/ui/page/Header';
+import { useGlobal } from '@/contexts/global.context';
 
-const themeHeader: React.FC = () => {
+const ThemeHeader: React.FC = () => {
+  const { onOpenModal } = useGlobal();
   return (
     <div>
       <PageHeader
         title="Theme"
         titleButton="Add new Theme"
-        onClick={() => {}}
+        onClick={() => onOpenModal('add')}
         items={[
           { title: 'Master product', href: '#' },
-          { title: 'Category', href: '/master-setup/category' },
+          { title: 'Theme', href: '/master-setup/theme' },
         ]}
         isShowBtn
       />
@@ -17,4 +19,4 @@ const themeHeader: React.FC = () => {
   );
 };
 
-export default themeHeader;
+export default ThemeHeader;
