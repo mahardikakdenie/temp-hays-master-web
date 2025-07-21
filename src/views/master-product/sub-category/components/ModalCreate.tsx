@@ -5,10 +5,11 @@ import Textarea from '@/components/ui/form/Textarea';
 import ActionModal from '@/components/ui/modal/ActionModal';
 
 const ModalCreateSubCategory: React.FC = () => {
-  const { form, onCancel } = useCreateSubCategory();
+  const { form, onCancel, onSubmit } = useCreateSubCategory();
   const {
     register,
     formState: { errors, isSubmitting },
+    handleSubmit,
   } = form;
   const FORMID = 'Create Sub Category';
   return (
@@ -17,7 +18,7 @@ const ModalCreateSubCategory: React.FC = () => {
       title="Create Sub Category"
       action={<ActionModal onCancel={onCancel} isSubmitting={isSubmitting} formId={FORMID} />}
     >
-      <form id={FORMID}>
+      <form id={FORMID} onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12">
             <Input
