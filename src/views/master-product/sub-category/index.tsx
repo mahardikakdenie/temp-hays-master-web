@@ -1,6 +1,7 @@
 'use client';
 import SubCategoryHeader from './components/Header';
 import ModalCreateSubCategory from './components/ModalCreate';
+import ModalUpdateSubCategory from './components/ModalUpdate';
 import SubCategoryTable from './components/Table';
 
 const SubCategoryViews = () => {
@@ -13,6 +14,7 @@ const SubCategoryViews = () => {
         <SubCategoryTable />
       </div>
       <ModalCreateSubCategory />
+      <ModalUpdateSubCategory />
     </div>
   );
 };

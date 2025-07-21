@@ -36,7 +36,7 @@ const useUpdateSCategoryHook = () => {
   const { data } = useQuery<SubCategory>({
     queryKey: ['sub-category-detail', subCategoryId],
     queryFn: async () => {
-      const res = await internalApi(Routes.SUB_CATEGORY);
+      const res = await internalApi(Routes.SUB_CATEGORY + '/detail/' + subCategoryId);
 
       if (res.status !== HttpStatus.OK) {
         throw new Error('Failed to fetch banner detail');
@@ -53,7 +53,10 @@ const useUpdateSCategoryHook = () => {
   useEffect(() => {
     if (data) {
       form.reset({
-        ...data,
+        id: data?.id,
+        name: data?.name,
+        desc: data?.desc,
+        status: data?.status,
       });
     }
   }, [data, form]);
@@ -82,7 +85,7 @@ const useUpdateSCategoryHook = () => {
       position: 'bottom-right',
     });
     onCancel();
-    queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    queryClient.invalidateQueries({ queryKey: ['subcategories'] });
   };
 
   const onCancel = useCallback(() => {

@@ -6,10 +6,11 @@ import useSubCategory from '../hooks/useSubCategory.hook';
 import React from 'react';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
-import { SubCategoryList } from '@/types/sub-category.types';
 import Pagination from '@/components/ui/table/Pagination';
+import { useGlobal } from '@/contexts/global.context';
 
 const SubCategoryTable: React.FC = () => {
+  const { onOpenModal } = useGlobal();
   const {
     data: subCategories,
     isLoading,
@@ -80,13 +81,16 @@ const SubCategoryTable: React.FC = () => {
           headerWithSorts={['name', 'status']}
         />
 
-        <TableDataUI<SubCategoryList>
+        <TableDataUI
           isLoading={isLoading}
           isFetching={isFetching}
           data={subCategories}
           headers={headers}
           onRetry={onRetry}
           error={error}
+          onUpdateClick={(data) => {
+            onOpenModal('detail', data);
+          }}
         />
       </Table>
 
