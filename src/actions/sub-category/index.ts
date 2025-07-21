@@ -12,3 +12,10 @@ export const createSCategoryApi = async (data: CreateSCategoryForm) => {
     .then((response) => responseServerRoute(response))
     .catch((error) => catchServerComponent(error));
 };
+
+export const updateSCategoryApi = async (data: CreateSCategoryForm) => {
+  return await externalAPI
+    .patch(Routes.SUB_CATEGORY, data)
+    .then((response) => responseServerRoute(response))
+    .catch((error) => catchServerComponent(error));
+};

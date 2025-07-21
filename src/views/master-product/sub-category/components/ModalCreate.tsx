@@ -25,6 +25,7 @@ const ModalCreateSubCategory: React.FC = () => {
               label="Name"
               placeholder="Enter Sub Category Name"
               error={errors?.name?.message}
+              required
               {...register('name')}
             />
           </div>
@@ -32,6 +33,7 @@ const ModalCreateSubCategory: React.FC = () => {
             <Textarea
               label="Description"
               placeholder="Enter Sub Category Description"
+              required
               error={errors?.desc?.message}
               {...register('desc')}
             />
