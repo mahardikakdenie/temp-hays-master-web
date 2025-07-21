@@ -53,8 +53,6 @@ const useUpdateTheme = () => {
         desc: data.desc,
         status: data.status,
       });
-      console.log('status : ', data.status);
-
       form.setValue('status', data.status);
     }
   }, [data, form]);
