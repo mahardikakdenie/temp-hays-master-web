@@ -1,5 +1,7 @@
 import { CreateProductForm } from '@/types/product.types';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -19,11 +21,18 @@ const createSchema = yup.object({
   images: yup.array().required('Product Images is required'),
 });
 const useCreateProduct = () => {
+  const router = useRouter();
   const form = useForm<CreateProductForm>({
     resolver: yupResolver(createSchema),
   });
+
+  const onCancel = useCallback(() => {
+    router.push('/master-product/product');
+  }, [router]);
+
   return {
     form,
+    onCancel,
   };
 };
 
