@@ -1,8 +1,10 @@
+import { createProductApi } from '@/actions/product';
 import { CreateProductForm } from '@/types/product.types';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const createSchema = yup.object({
@@ -30,9 +32,25 @@ const useCreateProduct = () => {
     router.push('/master-product/product');
   }, [router]);
 
+  const createPrductMutation = useMutation({
+    mutationFn: async (data: CreateProductForm) => {
+      const formData = new FormData();
+      formData.append('name', data.name);
+
+      return await createProductApi(formData);
+    },
+  });
+
+  const onSubmit: SubmitHandler<CreateProductForm> = async (data) => {
+    console.log(data);
+    const response = await createPrductMutation.mutateAsync(data);
+    console.log('🚀 ~ constonSubmit:SubmitHandler<CreateProductForm>= ~ response:', response);
+  };
+
   return {
     form,
     onCancel,
+    onSubmit,
   };
 };
 
