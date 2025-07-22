@@ -30,7 +30,7 @@ export type TableDataUIProps<T> = {
 const TableDataUI = <T extends Record<string, any>>({
   isLoading,
   isFetching,
-  data, // ganti nama dari subCategories ke data (lebih umum)
+  data,
   headers,
   onRetry,
   error,
