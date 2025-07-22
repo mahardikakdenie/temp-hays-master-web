@@ -4,6 +4,7 @@ import QuillEditor from '@/components/ui/form/QuillEditor';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import Select from '@/components/ui/form/Select';
 import { STATUS_OPTIONS } from '@/libs/constants/options.const';
+import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 
 const CreateProductViews: React.FC = () => {
   return (
@@ -65,6 +66,62 @@ const CreateProductViews: React.FC = () => {
               />
             </div>
 
+            <div className="col-span-6">
+              <Input
+                label="Product SKU"
+                name="sku"
+                id="sku"
+                type="text"
+                inputMode="numeric"
+                placeholder="Enter Product SKU"
+                className="bg-gray-700 text-white"
+                required
+              />
+            </div>
+
+            <div className="col-span-6">
+              <Input
+                readOnly
+                label="Product Year"
+                name="year"
+                id="sku"
+                type="text"
+                inputMode="numeric"
+                placeholder="Enter Product Year"
+                className="bg-gray-700 text-white cursor-pointer"
+                required
+                onClick={() => {
+                  console.log('Halo');
+                }}
+              />
+            </div>
+
+            <div className="col-span-6">
+              <Input
+                label="Product Width"
+                name="year"
+                id="sku"
+                type="text"
+                inputMode="numeric"
+                placeholder="Enter Product Width"
+                className="bg-gray-700 text-white"
+                required
+              />
+            </div>
+
+            <div className="col-span-6">
+              <Input
+                label="Product Length"
+                name="year"
+                id="sku"
+                type="text"
+                inputMode="numeric"
+                placeholder="Enter Product Width"
+                className="bg-gray-700 text-white"
+                required
+              />
+            </div>
+
             {/* Category */}
             <div className="col-span-6">
               <Select
@@ -114,9 +171,12 @@ const CreateProductViews: React.FC = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="col-span-12 flex justify-end mt-8">
-            <ButtonPrimary type="submit">Create Product</ButtonPrimary>
-          </div>
+        </div>
+        <div className="flex justify-end gap-3 pt-4">
+          <ButtonSecondary type="button">Cancel</ButtonSecondary>
+          <ButtonPrimary type="submit" form="add-banner-form">
+            Save Banner
+          </ButtonPrimary>
         </div>
       </form>
     </div>
