@@ -49,7 +49,7 @@ const ProductTable: React.FC = () => {
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
         <div className="hidden md:block">
-          <span className="text-lg font-semibold">List Data Sub Categories</span>
+          <span className="text-lg font-semibold">List Data Products</span>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-4">
           <div className="w-full sm:min-w-[300px]">
