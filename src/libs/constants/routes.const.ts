@@ -8,6 +8,7 @@ export class Routes {
   static API_BANNER = Routes.API_MASTER + '/banner';
   static API_ARTICLE = Routes.API_MASTER + '/article';
   static API_CONTACT = Routes.API_MASTER + '/contact';
+  static API_ARTIST = Routes.API_MASTER + '/artist';
 
   // AUTH
   static AUTH_LOGIN = Routes.API_AUTH + '/login';
@@ -32,6 +33,10 @@ export class Routes {
   // ARTICLE
   static ARTICLE = Routes.API_ARTICLE;
   static ARTICLE_LIST = Routes.API_ARTICLE + '/list';
+
+  // Artist
+  static ARTIST = Routes.API_ARTIST;
+  static ARTIST_LIST = Routes.API_ARTIST + '/list';
 
   // CONTACT
   static CONTACT = Routes.API_CONTACT;

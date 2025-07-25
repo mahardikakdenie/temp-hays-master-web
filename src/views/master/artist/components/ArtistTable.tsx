@@ -1,55 +1,40 @@
-import React from 'react';
-import { Table } from '@/components/ui/table/Table';
 import SearchIcon from '@/components/icons/Search';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
-import useArticle from '../article.hook';
-import Pagination from '@/components/ui/table/Pagination';
+import useArtistHook from '../hooks/useArtist.hook';
+import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 
-const ArticleTable: React.FC = () => {
-  const {
-    isLoading,
-    isFetching,
-    data: article,
-    error,
-    sort,
-    // sort,
-    meta,
-    // setMeta,
-    onSearch,
-    onSort,
-    onMeta,
-    onRetry,
-  } = useArticle({ key: 'article', extraQuery: {} });
+const ArtistTable: React.FC = () => {
   const headers = [
     {
-      name: 'Title',
-      key: 'title',
+      name: 'Name',
+      key: 'name',
     },
     {
-      name: 'Created At',
-      key: 'created_at',
+      name: 'Email',
+      key: 'email',
     },
     {
-      name: 'Updated At',
-      key: 'updated_at',
+      name: 'Phone',
+      key: 'phone',
     },
     {
       name: 'Status',
-      key: 'status',
+      key: 'status_text',
     },
     {
       name: 'Actions',
       key: 'actions',
     },
   ];
+  const { onSearch, onSort, sort, data, isFetching, isLoading, onRetry, error } = useArtistHook();
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
         <div className="hidden md:block">
-          <span className="text-lg font-semibold">List Data Article</span>
+          <span className="text-lg font-semibold">List Data Artist</span>
         </div>
         <div className="flex flex-col md:flex-row items-center gap-4">
           <div className="w-full sm:min-w-[300px]">
@@ -66,20 +51,24 @@ const ArticleTable: React.FC = () => {
       </div>
 
       <Table>
-        <HeaderDataUI headerWithSorts={['title']} headers={headers} onSort={onSort} sort={sort} />
+        <HeaderDataUI
+          headerWithSorts={['name', 'email', 'phone', 'status']}
+          headers={headers}
+          onSort={onSort}
+          sort={sort}
+        />
 
         <TableDataUI
-          data={article}
           headers={headers}
-          isLoading={isLoading}
+          data={data}
           isFetching={isFetching}
+          isLoading={isLoading}
           onRetry={onRetry}
           error={error}
         />
       </Table>
-      <Pagination meta={meta} context="article" onPageChange={(page) => onMeta({ page })} />
     </div>
   );
 };
 
-export default ArticleTable;
+export default ArtistTable;

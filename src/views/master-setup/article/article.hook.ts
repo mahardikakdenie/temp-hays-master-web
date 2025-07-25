@@ -77,7 +77,7 @@ const useArticle = (props: { key: string; extraQuery?: Record<string, string> })
     ...fetchArticle,
     items: fetchArticle.data,
     meta: fetchArticle.meta,
-    onSearch,
+    onSearch: fetchArticle.onSearch || onSearch,
     ...filters,
     onChangeStartDate,
     onChangeEndDate,

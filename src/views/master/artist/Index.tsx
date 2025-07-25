@@ -1,5 +1,6 @@
 'use client';
 import PageHeader from '@/components/ui/page/Header';
+import ArtistTable from './components/ArtistTable';
 
 const ArtistViews: React.FC = () => {
   return (
@@ -15,7 +16,9 @@ const ArtistViews: React.FC = () => {
           isShowBtn
         />
       </div>
-      <div className="col-span-12"></div>
+      <div className="col-span-12">
+        <ArtistTable />
+      </div>
     </div>
   );
 };
