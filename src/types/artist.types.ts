@@ -13,3 +13,14 @@ export type CreateArtistForm = {
   desc: string;
   image: File;
 };
+
+export type UpdateArtistForm = {
+  id: number;
+  status: number;
+  is_update_image: boolean;
+  name: string;
+  email: string;
+  phone: string;
+  desc: string;
+  image: File | string;
+};

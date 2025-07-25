@@ -24,6 +24,7 @@ const useCreateArtistHook = () => {
     onCloseModal();
     form.reset();
   }, [onCloseModal, form]);
+
   return {
     form,
     onCancel,
