@@ -7,14 +7,18 @@ import { responseServerRoute } from '@/libs/utils/response.utils';
 
 export const createArtistApi = async (data: FormData) => {
   return await externalAPI
-    .post(Routes.API_ARTIST, data)
+    .post(Routes.API_ARTIST, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     .then((response) => responseServerRoute(response))
     .catch((error) => catchServerComponent(error));
 };
 
 export const updateArtistApi = async (data: FormData) => {
   return await externalAPI
-    .post(Routes.API_ARTIST, data)
+    .patch(Routes.API_ARTIST, data)
     .then((response) => responseServerRoute(response))
     .catch((e) => catchServerComponent(e));
 };

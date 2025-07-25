@@ -48,23 +48,30 @@ const ModalCreateArtist: React.FC = () => {
               required
               type="text"
               inputMode="numeric"
-              {...register('email')}
-              error={errors.email?.message}
+              {...register('phone')}
+              error={errors.phone?.message}
             />
           </div>
         </div>
         <div className="my-4">
           <QuillEditor
             label="Decription"
-            value=""
-            onChange={() => {}}
+            value={form.watch('desc')}
+            onChange={(content: string) => {
+              form.setValue('desc', content);
+            }}
             className="bg-[#1b1d20]"
             error={errors.desc?.message}
             required
           />
         </div>
         <div className="my-4">
-          <MediaInput />
+          <MediaInput
+            label="Artist Image"
+            onChange={(file: File | null) => {
+              form.setValue('image', file as File);
+            }}
+          />
         </div>
       </form>
     </Modal>
