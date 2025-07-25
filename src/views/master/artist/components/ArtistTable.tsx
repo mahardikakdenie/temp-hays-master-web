@@ -22,7 +22,7 @@ const ArtistTable: React.FC = () => {
     },
     {
       name: 'Status',
-      key: 'status_text',
+      key: 'status',
     },
     {
       name: 'Actions',
