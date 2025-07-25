@@ -100,7 +100,12 @@ const TableDataUI = <T extends Record<string, any>>({
 
               const value = item[header.key as keyof T];
 
-              if (header.key === 'created_at' || header.key === 'updated_at') {
+              if (
+                header.key === 'created_at' ||
+                header.key === 'updated_at' ||
+                header.key === 'start_date' ||
+                header.key === 'end_date'
+              ) {
                 return (
                   <TableCell key={header.key} className="text-center">
                     {value ? dayjs(value).format('dddd, MMMM DD YYYY, HH:mm') : '-'}

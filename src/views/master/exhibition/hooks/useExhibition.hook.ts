@@ -1,7 +1,7 @@
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
-import { Artist } from '@/types/artist.types';
 import { Meta } from '@/types/commons.types';
+import { EXHIBITION } from '@/types/exhibition.types';
 import debounce from 'lodash.debounce';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -37,9 +37,9 @@ const useExhibitionHook = () => {
     setFilters((prev) => ({ ...prev, status: value }));
   }, []);
 
-  const fetchExhibition = usePaginatedFetch<Artist>({
-    key: 'artist',
-    endpoint: Routes.ARTIST_LIST,
+  const fetchExhibition = usePaginatedFetch<EXHIBITION>({
+    key: 'exhibition',
+    endpoint: Routes.EXHIBITION_LIST,
     extraQuery: filters,
   });
 
