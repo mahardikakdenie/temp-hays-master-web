@@ -1,6 +1,8 @@
+import { useGlobal } from '@/contexts/global.context';
 import { CreateArtistForm } from '@/types/artist.types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { useCallback } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const createSchema = yup.object({
@@ -11,11 +13,21 @@ const createSchema = yup.object({
   image: yup.mixed<File>().required('Image is required'),
 });
 const useCreateArtistHook = () => {
+  const { onCloseModal } = useGlobal();
   const form = useForm<CreateArtistForm>({
     resolver: yupResolver(createSchema),
   });
+
+  const onSubmit: SubmitHandler<CreateArtistForm> = async () => {};
+
+  const onCancel = useCallback(() => {
+    onCloseModal();
+    form.reset();
+  }, [onCloseModal, form]);
   return {
     form,
+    onCancel,
+    onSubmit,
   };
 };
 
