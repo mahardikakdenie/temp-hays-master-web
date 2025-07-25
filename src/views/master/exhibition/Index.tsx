@@ -1,6 +1,7 @@
 'use client';
 import PageHeader from '@/components/ui/page/Header';
 import { useGlobal } from '@/contexts/global.context';
+import ExhibitionTable from './components/ExhibitionTable';
 
 const ExhibitionViews: React.FC = () => {
   const { onOpenModal } = useGlobal();
@@ -19,7 +20,9 @@ const ExhibitionViews: React.FC = () => {
         />
       </div>
 
-      <div className="col-span-12">{/*  */}</div>
+      <div className="col-span-12">
+        <ExhibitionTable />
+      </div>
     </div>
   );
 };
