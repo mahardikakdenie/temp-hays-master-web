@@ -1,7 +1,9 @@
+import ArtistViews from '@/views/master/artist/Index';
+
 const ArtistPages: React.FC = () => {
   return (
     <div>
-      <span>Halo</span>
+      <ArtistViews />
     </div>
   );
 };
