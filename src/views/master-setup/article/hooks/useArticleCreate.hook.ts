@@ -73,7 +73,7 @@ const useArticleCreateHook = () => {
         position: 'bottom-right',
       });
 
-      router.push('/master-setup/article');
+      router.push('/master/article');
     } catch (error) {
       console.error('❌ Upload failed:', error);
     }
