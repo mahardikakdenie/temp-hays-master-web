@@ -44,7 +44,14 @@ const useUpdateCategory = () => {
       const { data } = await res.json();
       return data;
     },
+    enabled: !!categoryId,
   });
+
+  // useEffect(() => {
+  //   if (item && (item as Category)?.id === categoryId) {
+  //     refetch();
+  //   }
+  // }, [item, refetch, categoryId]);
 
   useEffect(() => {
     if (data) {
@@ -67,12 +74,21 @@ const useUpdateCategory = () => {
     if (response.status >= HttpStatus.BAD_REQUEST) {
       Notification({
         type: 'error',
-        message: 'Failed to add user',
+        message: 'Failed to update category',
         description: response.message,
         position: 'bottom-right',
       });
       return;
     }
+
+    // ✅ Update cache langsung
+    queryClient.setQueryData(['category-detail', data.id], (oldData: Category | undefined) => ({
+      ...oldData,
+      ...data,
+    }));
+
+    // ✅ Hanya invalidate list jika perlu
+    queryClient.invalidateQueries({ queryKey: ['categories'] });
 
     Notification({
       type: 'success',
@@ -80,8 +96,8 @@ const useUpdateCategory = () => {
       description: response.message,
       position: 'bottom-right',
     });
+
     onCancel();
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
   };
 
   const onCancel = useCallback(() => {

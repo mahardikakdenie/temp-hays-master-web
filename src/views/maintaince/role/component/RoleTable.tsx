@@ -8,10 +8,6 @@ import HeaderDataUI from '@/components/ui/table/HeaderData';
 import useRole from '../role.hook';
 
 const RoleTable: React.FC = () => {
-  const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Search:', event.target.value);
-  };
-
   const {
     isLoading,
     isFetching,
@@ -22,6 +18,7 @@ const RoleTable: React.FC = () => {
     // onMeta,
     sort,
     onSort,
+    onSearch,
   } = useRole();
 
   const roleHeaders = [

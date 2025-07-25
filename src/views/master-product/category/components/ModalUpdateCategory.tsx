@@ -66,7 +66,7 @@ const ModalUpdateCategory: React.FC = () => {
             <Select
               label="Status"
               value={form.watch('status')}
-              className="bg-black"
+              className="bg-[#1b1d20]"
               options={[
                 { id: 1, name: 'Active' },
                 { id: 0, name: 'Non Active' },
@@ -76,7 +76,7 @@ const ModalUpdateCategory: React.FC = () => {
                 form.setValue('status', value as number);
               }}
             />
-            <p className="mt-1 text-xs text-gray-400">Choose Status for Banner</p>
+            <p className="mt-1 text-xs text-gray-400">Choose Status for Product Category</p>
           </div>
         </div>
       </form>
