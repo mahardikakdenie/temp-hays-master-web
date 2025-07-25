@@ -54,7 +54,14 @@ const ModalCreateArtist: React.FC = () => {
           </div>
         </div>
         <div className="my-4">
-          <QuillEditor value="" onChange={() => {}} className="bg-[#1b1d20]" />
+          <QuillEditor
+            label="Decription"
+            value=""
+            onChange={() => {}}
+            className="bg-[#1b1d20]"
+            error={errors.desc?.message}
+            required
+          />
         </div>
         <div className="my-4">
           <MediaInput />
