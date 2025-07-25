@@ -6,10 +6,11 @@ import QuillEditor from '@/components/ui/form/QuillEditor';
 import MediaInput from '@/components/ui/form/MediaInput';
 
 const ModalCreateArtist: React.FC = () => {
-  const { form, onCancel } = useCreateArtistHook();
+  const { form, onCancel, onSubmit } = useCreateArtistHook();
   const {
     register,
     formState: { errors, isSubmitting },
+    handleSubmit,
   } = form;
   const FORMID = 'create-artist-form';
   return (
@@ -19,7 +20,7 @@ const ModalCreateArtist: React.FC = () => {
       onClose={onCancel}
       action={<ActionModal isSubmitting={isSubmitting} onCancel={onCancel} formId={FORMID} />}
     >
-      <form id={FORMID}>
+      <form id={FORMID} onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12">
             <Input
@@ -53,7 +54,7 @@ const ModalCreateArtist: React.FC = () => {
           </div>
         </div>
         <div className="my-4">
-          <QuillEditor value="" onChange={() => {}} />
+          <QuillEditor value="" onChange={() => {}} className="bg-[#1b1d20]" />
         </div>
         <div className="my-4">
           <MediaInput />

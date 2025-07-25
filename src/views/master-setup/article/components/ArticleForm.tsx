@@ -76,9 +76,11 @@ const ArticleForm: React.FC<{
         }}
       >
         <div>
-          <TextLabel label="Title" />
           <Input
+            label="Article Title"
+            placeholder="Enter Article Title"
             value={title}
+            required
             className="bg-gray-700"
             onChange={(value) => {
               handleTitle(value.target.value);

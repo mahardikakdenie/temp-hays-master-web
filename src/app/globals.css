@@ -186,3 +186,22 @@ h3 {
   background-color: #3b82f6 !important; /* Biru cerah saat aktif */
   border-radius: 6px;
 }
+
+/* globals.css */
+.quill-editor .ql-editor::before {
+  color: #6b7280 !important; /* gray-500 */
+  font-style: italic !important;
+  opacity: 0.7 !important;
+  content: attr(data-placeholder) !important;
+}
+
+.quill-editor .ql-editor {
+  min-height: 150px;
+  color: white;
+}
+
+/* Fokus state placeholder */
+.quill-editor.ql-container:focus-within .ql-editor::before {
+  color: #9ca3af !important;
+  opacity: 0.6;
+}
