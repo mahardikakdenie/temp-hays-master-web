@@ -108,7 +108,7 @@ const TableDataUI = <T extends Record<string, any>>({
               ) {
                 return (
                   <TableCell key={header.key} className="text-center">
-                    {value ? dayjs(value).format('dddd, MMMM DD YYYY, HH:mm') : '-'}
+                    {value ? dayjs(value).format('dddd, MMMM DD YYYY') : '-'}
                   </TableCell>
                 );
               }

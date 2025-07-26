@@ -15,3 +15,14 @@ export const createExhibitionApi = async (data: FormData) => {
     .then((response) => responseServerRoute(response))
     .catch((e) => catchServerComponent(e));
 };
+
+export const updateExhibitionApi = async (data: FormData) => {
+  return await externalAPI
+    .patch(Routes.API_EXHIBITION, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((response) => responseServerRoute(response))
+    .catch((e) => catchServerComponent(e));
+};

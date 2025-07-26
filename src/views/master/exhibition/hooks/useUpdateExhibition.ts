@@ -1,4 +1,7 @@
 // hooks/useUpdateExhibitionHook.ts
+// import { updateExhibitionApi } from '@/actions/exhibition';
+import { updateExhibitionApi } from '@/actions/exhibition';
+import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
@@ -7,7 +10,7 @@ import { Routes } from '@/libs/constants/routes.const';
 import { Artist } from '@/types/artist.types';
 import { EXHIBITION, UpdateExhibitionForm } from '@/types/exhibition.types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -21,7 +24,7 @@ const updateSchema = yup.object({
   desc: yup.string().required('Description is required'),
   start_date: yup.string().required('Start date is required'),
   end_date: yup.string().required('End date is required'),
-  image: yup.mixed<File>().nullable().required('Image is required'),
+  image: yup.mixed<File | string>().required('Image is required'),
   is_update_image: yup.boolean().required('Is update required'),
   status: yup.number().required('Status is required'),
 });
@@ -84,8 +87,8 @@ const useUpdateExhibitionHook = () => {
       desc: data.desc ?? '',
       start_date: dayjs(data.start_date).format('YYYY-MM-DD') ?? '',
       end_date: dayjs(data.end_date).format('YYYY-MM-DD') ?? '',
-      //   image: null, // jangan isi dengan string
-      //   is_update_image: false,
+      image: '',
+      is_update_image: false,
       status: data.status,
     });
 
@@ -111,12 +114,56 @@ const useUpdateExhibitionHook = () => {
     );
   }, [artistData]);
 
-  // --- Submit Handler ---
-  const onSubmit: SubmitHandler<UpdateExhibitionForm> = async (formData) => {
-    console.log('🚀 ~ onSubmit ~ formData:', formData);
-    console.log(queryClient);
+  const updateMutation = useMutation({
+    mutationFn: async (data: UpdateExhibitionForm) => {
+      const formData = new FormData();
+      formData.set('id', data?.id.toString());
+      formData.set('artist_id', data?.artist_id.toString());
+      formData.append('name', data.name);
+      formData.append('desc', data.desc);
+      formData.append('start_date', data?.start_date);
+      formData.append('end_date', data?.end_date);
+      formData.set('status', data?.status.toString());
+      formData.set('is_update_image', data.is_update_image.toString());
+      formData.append('image', data?.image);
 
-    // Diisi di komponen
+      const response = await updateExhibitionApi(formData);
+
+      return response;
+    },
+  });
+
+  // --- Submit Handler ---
+  const onSubmit: SubmitHandler<UpdateExhibitionForm> = async (data) => {
+    const response = await updateMutation.mutateAsync(data);
+
+    if (response.status >= HttpStatus.BAD_REQUEST) {
+      Notification({
+        type: 'error',
+        message: 'Failed to update category',
+        description: response.message,
+        position: 'bottom-right',
+      });
+      return;
+    }
+
+    // ✅ Update cache langsung
+    queryClient.setQueryData(['exhibition-detail', data.id], (oldData: EXHIBITION | undefined) => ({
+      ...oldData,
+      ...data,
+    }));
+
+    // ✅ Hanya invalidate list jika perlu
+    queryClient.invalidateQueries({ queryKey: ['exhibition'] });
+
+    Notification({
+      type: 'success',
+      message: 'Success',
+      description: response.message,
+      position: 'bottom-right',
+    });
+
+    onCancel();
   };
 
   // --- Cancel Handler ---

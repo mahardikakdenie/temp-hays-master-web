@@ -80,6 +80,23 @@ const ModalUpdateExhibition: React.FC = () => {
                 placeholder="Choose End Date"
               />
             </div>
+
+            <div className="col-span-12">
+              <Select
+                label="Status"
+                value={form.watch('status')}
+                className="bg-[#1b1d20]"
+                options={[
+                  { id: 1, name: 'Active' },
+                  { id: 0, name: 'Non Active' },
+                ]}
+                {...register('status')}
+                onChange={(value) => {
+                  form.setValue('status', value as number);
+                }}
+              />
+              <p className="mt-1 text-xs text-gray-400">Choose Status for Exhibition</p>
+            </div>
           </div>
 
           {/* Description */}

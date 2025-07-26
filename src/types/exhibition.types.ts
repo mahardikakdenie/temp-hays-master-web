@@ -28,6 +28,6 @@ export type UpdateExhibitionForm = {
   is_update_image: boolean;
   start_date: string;
   end_date: string;
-  image: File;
+  image: File | string;
   status: number;
 };
