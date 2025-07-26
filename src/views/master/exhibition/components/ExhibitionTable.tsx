@@ -60,7 +60,12 @@ const ExhibitionTable: React.FC = () => {
       </div>
 
       <Table>
-        <HeaderDataUI headers={headers} headerWithSorts={[]} onSort={onSort} sort={sort} />
+        <HeaderDataUI
+          headers={headers}
+          headerWithSorts={['artist_name', 'name', 'desc', 'start_date', 'end_date', 'status']}
+          onSort={onSort}
+          sort={sort}
+        />
         <TableDataUI
           headers={headers}
           data={data}

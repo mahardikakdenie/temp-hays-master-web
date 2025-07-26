@@ -113,7 +113,7 @@ const TableDataUI = <T extends Record<string, any>>({
                 );
               }
 
-              if (header.key === 'title' || header.key === 'sub_title') {
+              if (header.key === 'title' || header.key === 'sub_title' || header.key == 'desc') {
                 return (
                   <TableCell className="text-center" key={header.key}>
                     {stripHtml(item[header.key])}
