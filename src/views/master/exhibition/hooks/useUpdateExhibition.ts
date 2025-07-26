@@ -1,5 +1,7 @@
+import { useGlobal } from '@/contexts/global.context';
 import { UpdateExhibitionForm } from '@/types/exhibition.types';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -16,11 +18,18 @@ const updateSchema = yup.object({
 });
 
 const useUpdateExhibitionHook = () => {
+  const { onCloseModal } = useGlobal();
   const form = useForm<UpdateExhibitionForm>({
     resolver: yupResolver(updateSchema),
   });
+
+  const onCancel = useCallback(() => {
+    form.reset();
+    onCloseModal();
+  }, [form, onCloseModal]);
   return {
     form,
+    onCancel,
   };
 };
 
