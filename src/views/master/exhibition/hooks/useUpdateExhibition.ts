@@ -87,7 +87,7 @@ const useUpdateExhibitionHook = () => {
       desc: data.desc ?? '',
       start_date: dayjs(data.start_date).format('YYYY-MM-DD') ?? '',
       end_date: dayjs(data.end_date).format('YYYY-MM-DD') ?? '',
-      image: '',
+      image: data.image,
       is_update_image: false,
       status: data.status,
     });
@@ -125,7 +125,10 @@ const useUpdateExhibitionHook = () => {
       formData.append('end_date', data?.end_date);
       formData.set('status', data?.status.toString());
       formData.set('is_update_image', data.is_update_image.toString());
-      formData.append('image', data?.image);
+
+      if (data.is_update_image) {
+        formData.append('image', data?.image);
+      }
 
       const response = await updateExhibitionApi(formData);
 
