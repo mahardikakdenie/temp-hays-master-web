@@ -6,6 +6,7 @@ export type EXHIBITION = {
   start_date: string;
   end_date: string;
   status: number;
+  image: File;
   status_text: string;
 };
 
