@@ -14,6 +14,7 @@ const updateSchema = yup.object({
   is_update_image: yup.boolean().required('is update required'),
   status: yup.number().required('status is required'),
 });
+
 const useUpdateExhibitionHook = () => {
   const form = useForm<UpdateExhibitionForm>({
     resolver: yupResolver(updateSchema),
