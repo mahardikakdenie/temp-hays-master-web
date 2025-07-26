@@ -19,6 +19,7 @@ export type CreateExhitionForm = {
 };
 
 export type UpdateExhibitionForm = {
+  artist_id: number;
   id: number;
   name: string;
   desc: string;
@@ -26,4 +27,5 @@ export type UpdateExhibitionForm = {
   start_date: string;
   end_date: string;
   image: File;
+  status: number;
 };
