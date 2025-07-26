@@ -17,3 +17,13 @@ export type CreateExhitionForm = {
   end_date: string;
   image: File;
 };
+
+export type UpdateExhibitionForm = {
+  id: number;
+  name: string;
+  desc: string;
+  is_update_image: boolean;
+  start_date: string;
+  end_date: string;
+  image: File;
+};
