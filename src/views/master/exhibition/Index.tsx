@@ -3,6 +3,7 @@ import PageHeader from '@/components/ui/page/Header';
 import { useGlobal } from '@/contexts/global.context';
 import ExhibitionTable from './components/ExhibitionTable';
 import ModalCreateExhibition from './components/ModalCreateExhibition';
+import ModalUpdateExhibition from './components/ModalUpdateExhibition';
 
 const ExhibitionViews: React.FC = () => {
   const { onOpenModal } = useGlobal();
@@ -25,6 +26,7 @@ const ExhibitionViews: React.FC = () => {
         <ExhibitionTable />
       </div>
       <ModalCreateExhibition />
+      <ModalUpdateExhibition />
     </div>
   );
 };

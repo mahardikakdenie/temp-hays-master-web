@@ -7,6 +7,7 @@ export type EXHIBITION = {
   end_date: string;
   status: number;
   image: File;
+  artist_id: number;
   status_text: string;
 };
 
