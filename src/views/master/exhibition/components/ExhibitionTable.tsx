@@ -5,10 +5,12 @@ import useExhibitionHook from '../hooks/useExhibition.hook';
 import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
+import { useGlobal } from '@/contexts/global.context';
 
 const ExhibitionTable: React.FC = () => {
   const { onSort, sort, data, onRetry, onSearch, isFetching, isLoading, error } =
     useExhibitionHook();
+  const { onOpenModal } = useGlobal();
   const headers = [
     {
       name: 'Name',
@@ -73,6 +75,7 @@ const ExhibitionTable: React.FC = () => {
           isLoading={isLoading}
           error={error}
           onRetry={onRetry}
+          onUpdateClick={(data) => onOpenModal('detail', data)}
         />
       </Table>
     </div>

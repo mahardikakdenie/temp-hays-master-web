@@ -1,4 +1,5 @@
 export type EXHIBITION = {
+  id: number;
   name: string;
   artist_name: string;
   desc: string;
