@@ -2,12 +2,14 @@ import { updateSCategoryApi } from '@/actions/sub-category';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
+import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
+import { Category } from '@/types/category.types';
 import { SubCategory, UpdateSCategoryForm } from '@/types/sub-category.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -34,6 +36,25 @@ const useUpdateSCategoryHook = () => {
     }
   }, [item]);
 
+  // get data category for options
+  const { data: options } = usePaginatedFetch<Category>({
+    key: 'categories',
+    endpoint: Routes.CATEGORY_LIST,
+    extraQuery: {
+      limit: '20',
+    },
+  });
+
+  const categoryOpts = useMemo(() => {
+    return (
+      options &&
+      options.map((opt: Category) => ({
+        id: opt.id,
+        name: opt.name,
+      }))
+    );
+  }, [options]);
+
   const { data } = useQuery<SubCategory>({
     queryKey: ['sub-category-detail', subCategoryId],
     queryFn: async () => {
@@ -54,6 +75,7 @@ const useUpdateSCategoryHook = () => {
         id: data?.id,
         name: data?.name,
         desc: data?.desc,
+        category_id: data?.category_id,
         status: data?.status,
       });
     }
@@ -102,6 +124,7 @@ const useUpdateSCategoryHook = () => {
     form,
     onSubmit,
     onCancel,
+    categoryOpts,
   };
 };
 

@@ -6,6 +6,7 @@ export type SubCategory = {
   updated_at: string;
   status: number;
   status_text: string;
+  category_id: number;
 };
 
 export type CreateSCategoryForm = {

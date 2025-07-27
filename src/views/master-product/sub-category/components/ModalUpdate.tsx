@@ -6,7 +6,7 @@ import useUpdateSCategoryHook from '../hooks/useUpdate.hook';
 import Select from '@/components/ui/form/Select';
 
 const ModalUpdateSubCategory: React.FC = () => {
-  const { form, onCancel, onSubmit } = useUpdateSCategoryHook();
+  const { form, onCancel, onSubmit, categoryOpts } = useUpdateSCategoryHook();
   const {
     register,
     formState: { errors, isSubmitting },
@@ -41,10 +41,24 @@ const ModalUpdateSubCategory: React.FC = () => {
           </div>
           <div className="col-span-12">
             <Select
+              label="Category Name"
+              placeholder="Select Category"
+              className="bg-[#1b1d20]"
+              required
+              value={form.watch('category_id')}
+              options={categoryOpts}
+              error={errors.category_id?.message}
+              onChange={(value) => {
+                form.setValue('category_id', value as number);
+              }}
+            />
+          </div>
+          <div className="col-span-12">
+            <Select
               value={form.watch('status')}
               label="Status"
               placeholder="Enter Sub Category Status"
-              className="bg-black"
+              className="bg-[#1b1d20]"
               required
               options={[
                 { id: 1, name: 'Active' },
