@@ -6,7 +6,7 @@ import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
 import { SubCategory, UpdateSCategoryForm } from '@/types/sub-category.types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -45,9 +45,6 @@ const useUpdateSCategoryHook = () => {
       return data;
     },
     enabled: !!subCategoryId,
-    placeholderData: keepPreviousData,
-    refetchOnMount: true,
-    staleTime: 0,
   });
 
   useEffect(() => {
@@ -86,6 +83,13 @@ const useUpdateSCategoryHook = () => {
     });
     onCancel();
     queryClient.invalidateQueries({ queryKey: ['subcategories'] });
+    queryClient.setQueryData(
+      ['sub-category-detail', data.id],
+      (oldData: SubCategory | undefined) => ({
+        ...oldData,
+        ...data,
+      }),
+    );
   };
 
   const onCancel = useCallback(() => {

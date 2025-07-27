@@ -4,7 +4,6 @@ import Textarea from '@/components/ui/form/Textarea';
 import ActionModal from '@/components/ui/modal/ActionModal';
 import useUpdateSCategoryHook from '../hooks/useUpdate.hook';
 import Select from '@/components/ui/form/Select';
-import { STATUS_OPTIONS } from '@/libs/constants/options.const';
 
 const ModalUpdateSubCategory: React.FC = () => {
   const { form, onCancel, onSubmit } = useUpdateSCategoryHook();
@@ -47,7 +46,10 @@ const ModalUpdateSubCategory: React.FC = () => {
               placeholder="Enter Sub Category Status"
               className="bg-black"
               required
-              options={STATUS_OPTIONS}
+              options={[
+                { id: 1, name: 'Active' },
+                { id: 0, name: 'Non Active' },
+              ]}
               error={errors?.status?.message}
               {...register('status')}
               onChange={(value) => {
