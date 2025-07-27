@@ -216,7 +216,6 @@ const CreateProductViews: React.FC = () => {
                   key={index}
                   className="aspect-video relative group cursor-pointer overflow-hidden rounded-lg border border-gray-700 bg-gray-800"
                 >
-                  {/* Gambar Preview */}
                   <Image
                     src={src}
                     alt={`Preview ${index + 1}`}
@@ -225,7 +224,6 @@ const CreateProductViews: React.FC = () => {
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 group-hover:blur-sm"
                   />
 
-                  {/* Overlay saat hover */}
                   <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
                     <button
                       type="button"
