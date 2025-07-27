@@ -150,14 +150,22 @@ const useUpdateExhibitionHook = () => {
       return;
     }
 
+    queryClient.invalidateQueries({ queryKey: ['exhibition'] });
     // ✅ Update cache langsung
-    queryClient.setQueryData(['exhibition-detail', data.id], (oldData: EXHIBITION | undefined) => ({
-      ...oldData,
-      ...data,
-    }));
+    const newData = queryClient.setQueryData(
+      ['exhibition-detail', data.id],
+      (oldData: EXHIBITION | undefined) => ({
+        ...oldData,
+        ...data,
+      }),
+    );
+
+    if (newData && (newData as EXHIBITION).image instanceof File) {
+      const url = URL.createObjectURL((newData as EXHIBITION).image);
+      setPreviewImg(url);
+    }
 
     // ✅ Hanya invalidate list jika perlu
-    queryClient.invalidateQueries({ queryKey: ['exhibition'] });
 
     Notification({
       type: 'success',
@@ -172,7 +180,7 @@ const useUpdateExhibitionHook = () => {
   // --- Cancel Handler ---
   const onCancel = useCallback(() => {
     form.reset();
-    setPreviewImg('');
+    // setPreviewImg('');
     onCloseModal();
   }, [form, onCloseModal]);
 
