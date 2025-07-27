@@ -2,21 +2,24 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 
 type MediaInputProps = {
   label?: string;
   onChange?: (file: File | null) => void;
   initialPreview?: string | null;
+  type?: 'single' | 'multiple';
 };
 
 const MediaInput: React.FC<MediaInputProps> = ({
   label = 'Upload Image',
   onChange,
   initialPreview = null,
+  type = 'single',
 }) => {
   const [preview, setPreview] = useState<string | null>(initialPreview);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isSingleType = useMemo(() => type === 'single', [type]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -64,7 +67,7 @@ const MediaInput: React.FC<MediaInputProps> = ({
         <p className="text-xs text-gray-500">PNG, JPG up to 5MB</p>
 
         {/* Preview */}
-        {preview && (
+        {preview && isSingleType && (
           <div className="mt-2 w-full">
             <Image
               src={preview}

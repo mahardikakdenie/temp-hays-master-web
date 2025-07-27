@@ -8,8 +8,11 @@ import { STATUS_OPTIONS } from '@/libs/constants/options.const';
 import Modal from '@/components/ui/modal/Modal';
 import YearPicker from '@/components/ui/form/DatePicker/YearPicker';
 import { useGlobal } from '@/contexts/global.context';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import useCreateProduct from './hooks/useCreateProduct.hook';
+import MediaInput from '@/components/ui/form/MediaInput';
+import Image from 'next/image';
+import TrashIcon from '@/components/icons/Trash';
 
 const CreateProductViews: React.FC = () => {
   const { form } = useCreateProduct();
@@ -22,15 +25,44 @@ const CreateProductViews: React.FC = () => {
 
   const { onOpenModal, onCloseModal } = useGlobal();
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [imgPreviews, setImgPreviews] = useState<string[]>([]); // Simpan URL
+  const imageUrlsRef = useRef<string[]>([]); // Untuk cleanup
+
+  // Cleanup URL saat unmount
+  useEffect(() => {
+    return () => {
+      imageUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   // Sinkronkan selectedYear ke form
   const handleYearSelect = (year: number) => {
     setSelectedYear(year);
-    // setValue('year', year); // Update form
-    onCloseModal(); // Tutup modal
+    // setValue('year', year);
+    onCloseModal();
   };
 
   const productYear = watch('year') || selectedYear;
+
+  // Handle file dari MediaInput
+  const handleFileChange = (file: File | null) => {
+    // Bersihkan URL lama
+    imageUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    imageUrlsRef.current = [];
+
+    if (!file) {
+      setImgPreviews([]);
+      return;
+    }
+
+    // Buat URL untuk preview
+    const url = URL.createObjectURL(file);
+    imageUrlsRef.current.push(url);
+    setImgPreviews((prev) => [...prev, url]);
+
+    // Simpan file ke form
+    // setValue('image', file);
+  };
 
   return (
     <div className="mt-6 mx-auto max-w-4xl px-6 py-8 bg-gray-900 rounded-2xl shadow-2xl border border-gray-800">
@@ -163,25 +195,55 @@ const CreateProductViews: React.FC = () => {
             error={errors.theme_id?.message}
             required
           />
+
           <Select
             label="Artist"
             options={STATUS_OPTIONS}
             placeholder="Select Artist"
-            value={watch('theme_id')}
-            onChange={(value) => setValue('theme_id', value as number)}
-            error={errors.theme_id?.message}
+            value={watch('artist_id')}
+            onChange={(value) => setValue('artist_id', value as number)}
+            error={errors.artist_id?.message}
             required
           />
+        </div>
 
-          {/* <Select
-            label="Status"
-            options={STATUS_OPTIONS}
-            placeholder="Active or Draft"
-            value={watch('status')}
-            onChange={(value) => setValue('status', value as number)}
-            error={errors.sub_category_id?.message}
-            required
-          /> */}
+        <div>
+          {/* Preview */}
+          {imgPreviews.length > 0 && (
+            <div className="my-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {imgPreviews.map((src, index) => (
+                <div
+                  key={index}
+                  className="aspect-video relative group cursor-pointer overflow-hidden rounded-lg border border-gray-700 bg-gray-800"
+                >
+                  {/* Gambar Preview */}
+                  <Image
+                    src={src}
+                    alt={`Preview ${index + 1}`}
+                    width={800}
+                    height={160}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 group-hover:blur-sm"
+                  />
+
+                  {/* Overlay saat hover */}
+                  <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
+                    <button
+                      type="button"
+                      className="transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+                      aria-label={`Hapus gambar ${index + 1}`}
+                    >
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-700 bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 hover:bg-red-500 hover:bg-opacity-50 text-white text-sm font-semibold">
+                        <TrashIcon className="w-3 h-3" />
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Upload */}
+          <MediaInput type="multiple" onChange={handleFileChange} label="Upload Product Image" />
         </div>
 
         {/* Submit Buttons */}
