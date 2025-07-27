@@ -257,6 +257,8 @@ const useBannerFormHook = () => {
 
       if (file instanceof File) {
         formData.append('image', file);
+      } else {
+        formData.append('image', '');
       }
 
       const response = await updateBannerApi(formData);

@@ -107,8 +107,10 @@ const useArticleUpdateHook = () => {
         formData.set('is_update_image', isUpdateImage.toString());
       }
 
-      if (data.image instanceof File) {
+      if (data.is_update_image) {
         formData.append('image', data.image);
+      } else {
+        formData.append('image', '');
       }
 
       const res = await updateArticleApi(formData);
