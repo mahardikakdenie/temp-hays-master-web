@@ -1,11 +1,16 @@
 import { createProductApi } from '@/actions/product';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
+import { useInternal } from '@/hooks/useInternal';
+import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
+import { Routes } from '@/libs/constants/routes.const';
+import { ArticleList } from '@/types/article.types';
+import { Options } from '@/types/commons.types';
 import { CreateProductForm } from '@/types/product.types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -26,6 +31,7 @@ const createSchema = yup.object({
 });
 const useCreateProduct = () => {
   const queryClient = useQueryClient();
+  const internalAPI = useInternal();
   const form = useForm<CreateProductForm>({
     resolver: yupResolver(createSchema),
   });
@@ -74,7 +80,60 @@ const useCreateProduct = () => {
     form.setValue('images', images);
   };
 
+  // get data category for options
+  const { data: categoryOpts } = useQuery<Options[] | undefined>({
+    queryKey: ['category-list'],
+    queryFn: async () => {
+      const response = await internalAPI(`${Routes.CATEGORY}/options`);
+      if (response.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch options detail');
+      }
+
+      const { data } = await response.json();
+      return data;
+    },
+  });
+
+  // Get subcategory
+  const categoryId = form.watch('category_id') ?? null;
+  const { data: subCategoryOptions } = useQuery<Options[], Error>({
+    queryKey: ['subcategories', categoryId], // 🔑 queryKey berubah saat categoryId berubah
+    queryFn: async () => {
+      if (!categoryId) throw new Error('No category ID provided');
+
+      const response = await internalAPI(
+        `${Routes.SUB_CATEGORY}/options?category_id=${categoryId}`,
+      );
+
+      if (response.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch subcategory options');
+      }
+
+      const { data } = await response.json();
+      return data;
+    },
+    enabled: !!categoryId, // ❗ hanya jalan jika categoryId truthy
+    staleTime: 1000 * 60, // 1 menit cache
+  });
+
   // get data artist
+  const { data: artOptions } = usePaginatedFetch<ArticleList>({
+    key: 'artist',
+    endpoint: Routes.ARTICLE_LIST,
+    extraQuery: {
+      limit: '20',
+    },
+  });
+
+  const artistOpts = useMemo(
+    () =>
+      artOptions &&
+      artOptions?.map((opt) => ({
+        id: opt?.id,
+        name: opt.title,
+      })),
+    [artOptions],
+  );
 
   const createPrductMutation = useMutation({
     mutationFn: async (data: CreateProductForm) => {
@@ -101,9 +160,6 @@ const useCreateProduct = () => {
   });
 
   const onSubmit: SubmitHandler<CreateProductForm> = async (data) => {
-    console.log(data);
-    console.log('images : ', images);
-
     const response = await createPrductMutation.mutateAsync(data);
 
     if (response.status >= HttpStatus.BAD_REQUEST) {
@@ -133,6 +189,9 @@ const useCreateProduct = () => {
     handleYearSelect,
     productYear,
     handleFileChange,
+    artistOpts,
+    categoryOpts,
+    subCategoryOptions,
   };
 };
 

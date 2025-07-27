@@ -34,6 +34,10 @@ const SubCategoryTable: React.FC = () => {
       key: 'desc',
     },
     {
+      name: 'Category Name',
+      key: 'category_name',
+    },
+    {
       name: 'Created At',
       key: 'created_at',
     },

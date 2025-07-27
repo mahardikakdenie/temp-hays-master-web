@@ -21,6 +21,9 @@ const CreateProductViews: React.FC = () => {
     handleYearSelect,
     productYear,
     handleFileChange,
+    categoryOpts,
+    artistOpts,
+    subCategoryOptions,
   } = useCreateProduct();
   //
   const {
@@ -142,7 +145,7 @@ const CreateProductViews: React.FC = () => {
 
           <Select
             label="Category"
-            options={STATUS_OPTIONS}
+            options={categoryOpts}
             placeholder="Select category"
             value={watch('category_id')}
             onChange={(value) => setValue('category_id', value as number)}
@@ -152,7 +155,8 @@ const CreateProductViews: React.FC = () => {
 
           <Select
             label="Sub Category"
-            options={STATUS_OPTIONS}
+            disabled={!form.watch('category_id')}
+            options={subCategoryOptions}
             placeholder="Select sub-category"
             value={watch('sub_category_id')}
             onChange={(value) => setValue('sub_category_id', value as number)}
@@ -172,7 +176,7 @@ const CreateProductViews: React.FC = () => {
 
           <Select
             label="Artist"
-            options={STATUS_OPTIONS}
+            options={artistOpts}
             placeholder="Select Artist"
             value={watch('artist_id')}
             onChange={(value) => setValue('artist_id', value as number)}
