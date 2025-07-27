@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { Key } from 'react';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Select from '@/components/ui/form/Select';
@@ -219,6 +219,7 @@ const BannerFormViews: React.FC = () => {
                 )
               ) : (
                 <MediaInput
+                  key={file as Key}
                   label="Banner Image"
                   {...register('image')}
                   onChange={handleImageUpload}
