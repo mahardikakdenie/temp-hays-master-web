@@ -151,7 +151,7 @@ const useUpdateExhibitionHook = () => {
     }
 
     queryClient.invalidateQueries({ queryKey: ['exhibition'] });
-    // ✅ Update cache langsung
+    // ✅ Update chance currently
     const newData = queryClient.setQueryData(
       ['exhibition-detail', data.id],
       (oldData: EXHIBITION | undefined) => ({
@@ -165,7 +165,7 @@ const useUpdateExhibitionHook = () => {
       setPreviewImg(url);
     }
 
-    // ✅ Hanya invalidate list jika perlu
+    // Only validate list if needed
 
     Notification({
       type: 'success',
@@ -180,7 +180,6 @@ const useUpdateExhibitionHook = () => {
   // --- Cancel Handler ---
   const onCancel = useCallback(() => {
     form.reset();
-    // setPreviewImg('');
     onCloseModal();
   }, [form, onCloseModal]);
 
