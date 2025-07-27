@@ -38,7 +38,7 @@ const useUpdateArtistHook = () => {
     }
   }, [item]);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['artist-detail', artistId],
     queryFn: async () => {
       const response = await internalApi(Routes.ARTIST + '/detail/' + artistId);
@@ -145,6 +145,7 @@ const useUpdateArtistHook = () => {
     onCancel,
     onSubmit,
     preview,
+    isLoading,
   };
 };
 
