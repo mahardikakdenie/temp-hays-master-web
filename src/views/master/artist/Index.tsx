@@ -4,6 +4,7 @@ import PageHeader from '@/components/ui/page/Header';
 import ArtistTable from './components/ArtistTable';
 import { useGlobal } from '@/contexts/global.context';
 import ModalCreateArtist from './components/ModalCreateArtist';
+import ModalUpdateArtist from './components/ModalUpdateArtist';
 
 const ArtistViews: React.FC = () => {
   const { onOpenModal } = useGlobal();
@@ -25,6 +26,7 @@ const ArtistViews: React.FC = () => {
         <ArtistTable />
       </div>
       <ModalCreateArtist />
+      <ModalUpdateArtist />
     </div>
   );
 };

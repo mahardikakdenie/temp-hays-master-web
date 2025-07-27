@@ -5,6 +5,8 @@ import useArtistHook from '../hooks/useArtist.hook';
 import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
+import { useGlobal } from '@/contexts/global.context';
+import { Artist } from '@/types/artist.types';
 
 const ArtistTable: React.FC = () => {
   const headers = [
@@ -29,6 +31,7 @@ const ArtistTable: React.FC = () => {
       key: 'actions',
     },
   ];
+  const { onOpenModal } = useGlobal();
   const { onSearch, onSort, sort, data, isFetching, isLoading, onRetry, error } = useArtistHook();
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
@@ -65,6 +68,9 @@ const ArtistTable: React.FC = () => {
           isLoading={isLoading}
           onRetry={onRetry}
           error={error}
+          onUpdateClick={(data: Artist) => {
+            onOpenModal('detail', data);
+          }}
         />
       </Table>
     </div>
