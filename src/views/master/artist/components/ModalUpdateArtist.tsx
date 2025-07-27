@@ -5,6 +5,7 @@ import QuillEditor from '@/components/ui/form/QuillEditor';
 import MediaInput from '@/components/ui/form/MediaInput';
 import useUpdateArtistHook from '../hooks/useUpdateArtist.hook';
 import { Key } from 'react';
+import Select from '@/components/ui/form/Select';
 
 const ModalUpdateArtist: React.FC = () => {
   const { form, onCancel, onSubmit, preview } = useUpdateArtistHook();
@@ -53,6 +54,22 @@ const ModalUpdateArtist: React.FC = () => {
               {...register('phone')}
               error={errors.phone?.message}
             />
+          </div>
+          <div className="col-span-12">
+            <Select
+              label="Status"
+              value={form.watch('status')}
+              className="bg-[#1b1d20]"
+              options={[
+                { id: 1, name: 'Active' },
+                { id: 0, name: 'Non Active' },
+              ]}
+              {...register('status')}
+              onChange={(value) => {
+                form.setValue('status', value as number);
+              }}
+            />
+            <p className="mt-1 text-xs text-gray-400">Choose Status for Artist</p>
           </div>
         </div>
         <div className="my-4">

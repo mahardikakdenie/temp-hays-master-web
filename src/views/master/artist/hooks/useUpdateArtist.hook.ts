@@ -54,7 +54,6 @@ const useUpdateArtistHook = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('data : ', data);
       form.reset({
         id: data?.id,
         name: data?.name,
@@ -97,7 +96,6 @@ const useUpdateArtistHook = () => {
   });
 
   const onSubmit: SubmitHandler<UpdateArtistForm> = async (data: UpdateArtistForm) => {
-    console.log(data);
     const response = await updateMutation.mutateAsync(data);
 
     if (response.status >= HttpStatus.BAD_REQUEST) {
