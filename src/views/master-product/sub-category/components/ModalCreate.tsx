@@ -3,9 +3,10 @@ import useCreateSubCategory from '../hooks/useCreate.hook';
 import Input from '@/components/ui/form/Input';
 import Textarea from '@/components/ui/form/Textarea';
 import ActionModal from '@/components/ui/modal/ActionModal';
+import Select from '@/components/ui/form/Select';
 
 const ModalCreateSubCategory: React.FC = () => {
-  const { form, onCancel, onSubmit } = useCreateSubCategory();
+  const { form, onCancel, onSubmit, categoryOpts } = useCreateSubCategory();
   const {
     register,
     formState: { errors, isSubmitting },
@@ -36,6 +37,20 @@ const ModalCreateSubCategory: React.FC = () => {
               required
               error={errors?.desc?.message}
               {...register('desc')}
+            />
+          </div>
+          <div className="col-span-12">
+            <Select
+              label="Category Name"
+              placeholder="Select Category"
+              className="bg-[#1b1d20]"
+              required
+              value={form.watch('category_id')}
+              options={categoryOpts}
+              error={errors.category_id?.message}
+              onChange={(value) => {
+                form.setValue('category_id', value as number);
+              }}
             />
           </div>
         </div>

@@ -16,6 +16,7 @@ const updateSchema = yup.object({
   name: yup.string().required('Name Subcategory is required'),
   desc: yup.string().required('Description Subcategory is required'),
   status: yup.number().required('Status is required'),
+  category_id: yup.number().required('Category is required'),
 });
 
 const useUpdateSCategoryHook = () => {

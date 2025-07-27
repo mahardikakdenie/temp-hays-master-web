@@ -1,17 +1,21 @@
 import { createSCategoryApi } from '@/actions/sub-category';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
+import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
+import { Routes } from '@/libs/constants/routes.const';
+import { Category } from '@/types/category.types';
 import { CreateSCategoryForm } from '@/types/sub-category.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const createSubCategorySchema = yup.object({
   name: yup.string().required('Name Subcategory is required'),
   desc: yup.string().required('Description Subcategory is required'),
+  category_id: yup.number().required('Category is required'),
 });
 
 const useCreateSubCategory = () => {
@@ -24,6 +28,25 @@ const useCreateSubCategory = () => {
   const createMutation = useMutation({
     mutationFn: async (data: CreateSCategoryForm) => createSCategoryApi(data),
   });
+
+  // get data category for options
+  const { data: options } = usePaginatedFetch<Category>({
+    key: 'categories',
+    endpoint: Routes.CATEGORY_LIST,
+    extraQuery: {
+      limit: '20',
+    },
+  });
+
+  const categoryOpts = useMemo(() => {
+    return (
+      options &&
+      options.map((opt: Category) => ({
+        id: opt.id,
+        name: opt.name,
+      }))
+    );
+  }, [options]);
 
   const onSubmit: SubmitHandler<CreateSCategoryForm> = async (data: CreateSCategoryForm) => {
     const response = await createMutation.mutateAsync(data);
@@ -57,6 +80,7 @@ const useCreateSubCategory = () => {
     form,
     onCancel,
     onSubmit,
+    categoryOpts,
   };
 };
 

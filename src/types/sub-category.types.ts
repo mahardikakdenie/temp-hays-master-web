@@ -11,6 +11,7 @@ export type SubCategory = {
 export type CreateSCategoryForm = {
   name: string;
   desc: string;
+  category_id: number;
 };
 
 export type UpdateSCategoryForm = CreateSCategoryForm & {
