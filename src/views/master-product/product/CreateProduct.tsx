@@ -147,6 +147,7 @@ const CreateProductViews: React.FC = () => {
             label="Category"
             options={categoryOpts}
             placeholder="Select category"
+            className="bg-gray-800"
             value={watch('category_id')}
             onChange={(value) => setValue('category_id', value as number)}
             error={errors.category_id?.message}
@@ -157,6 +158,7 @@ const CreateProductViews: React.FC = () => {
             label="Sub Category"
             disabled={!form.watch('category_id')}
             options={subCategoryOptions}
+            className="bg-gray-800"
             placeholder="Select sub-category"
             value={watch('sub_category_id')}
             onChange={(value) => setValue('sub_category_id', value as number)}
@@ -168,6 +170,7 @@ const CreateProductViews: React.FC = () => {
             label="Theme"
             options={STATUS_OPTIONS}
             placeholder="Select theme"
+            className="bg-gray-800"
             value={watch('theme_id')}
             onChange={(value) => setValue('theme_id', value as number)}
             error={errors.theme_id?.message}
@@ -178,6 +181,7 @@ const CreateProductViews: React.FC = () => {
             label="Artist"
             options={artistOpts}
             placeholder="Select Artist"
+            className="bg-gray-800"
             value={watch('artist_id')}
             onChange={(value) => setValue('artist_id', value as number)}
             error={errors.artist_id?.message}
