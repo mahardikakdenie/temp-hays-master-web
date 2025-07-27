@@ -7,7 +7,11 @@ import { responseServerRoute } from '@/libs/utils/response.utils';
 
 export const createProductApi = async (data: FormData) => {
   return await externalAPI
-    .post(Routes.PRODUCT, data)
+    .post(Routes.PRODUCT, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     .then((response) => responseServerRoute(response))
     .catch((error) => catchServerComponent(error));
 };

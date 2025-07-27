@@ -7,63 +7,29 @@ import Select from '@/components/ui/form/Select';
 import { STATUS_OPTIONS } from '@/libs/constants/options.const';
 import Modal from '@/components/ui/modal/Modal';
 import YearPicker from '@/components/ui/form/DatePicker/YearPicker';
-import { useGlobal } from '@/contexts/global.context';
-import { useState, useRef, useEffect } from 'react';
 import useCreateProduct from './hooks/useCreateProduct.hook';
 import MediaInput from '@/components/ui/form/MediaInput';
 import Image from 'next/image';
 import TrashIcon from '@/components/icons/Trash';
 
 const CreateProductViews: React.FC = () => {
-  const { form } = useCreateProduct();
+  const {
+    form,
+    onSubmit,
+    onOpenModal,
+    imgPreviews,
+    handleYearSelect,
+    productYear,
+    handleFileChange,
+  } = useCreateProduct();
+  //
   const {
     register,
     formState: { errors },
     watch,
     setValue,
+    handleSubmit,
   } = form;
-
-  const { onOpenModal, onCloseModal } = useGlobal();
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [imgPreviews, setImgPreviews] = useState<string[]>([]); // Simpan URL
-  const imageUrlsRef = useRef<string[]>([]); // Untuk cleanup
-
-  // Cleanup URL saat unmount
-  useEffect(() => {
-    return () => {
-      imageUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, []);
-
-  // Sinkronkan selectedYear ke form
-  const handleYearSelect = (year: number) => {
-    setSelectedYear(year);
-    // setValue('year', year);
-    onCloseModal();
-  };
-
-  const productYear = watch('year') || selectedYear;
-
-  // Handle file dari MediaInput
-  const handleFileChange = (file: File | null) => {
-    // Bersihkan URL lama
-    imageUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
-    imageUrlsRef.current = [];
-
-    if (!file) {
-      setImgPreviews([]);
-      return;
-    }
-
-    // Buat URL untuk preview
-    const url = URL.createObjectURL(file);
-    imageUrlsRef.current.push(url);
-    setImgPreviews((prev) => [...prev, url]);
-
-    // Simpan file ke form
-    // setValue('image', file);
-  };
-
   return (
     <div className="mt-6 mx-auto max-w-4xl px-6 py-8 bg-gray-900 rounded-2xl shadow-2xl border border-gray-800">
       {/* Header */}
@@ -74,7 +40,14 @@ const CreateProductViews: React.FC = () => {
 
       <hr className="my-8 border-gray-700" />
 
-      <form className="space-y-8">
+      <form
+        className="space-y-8"
+        id="create-product-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(onSubmit)(e);
+        }}
+      >
         {/* Product Name */}
         <div>
           <Input
@@ -164,6 +137,7 @@ const CreateProductViews: React.FC = () => {
             placeholder="e.g. 70"
             className="bg-gray-800 border-gray-700 text-white"
             {...register('length')}
+            error={errors.length?.message}
           />
 
           <Select
@@ -249,7 +223,7 @@ const CreateProductViews: React.FC = () => {
           <ButtonSecondary type="button" onClick={() => window.location.reload()}>
             Cancel
           </ButtonSecondary>
-          <ButtonPrimary type="button" onClick={form.handleSubmit(() => {})}>
+          <ButtonPrimary type="submit" form="create-product-form">
             Save Product
           </ButtonPrimary>
         </div>

@@ -22,5 +22,5 @@ export type CreateProductForm = {
   unit: string;
   price: number;
   desc: string;
-  images: File[] | string[];
+  images: File[];
 };
