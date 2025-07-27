@@ -27,6 +27,7 @@ const useUpdateArtistHook = () => {
   const internalApi = useInternal();
   const [artistId, setArtistId] = useState<number>(0);
   const [preview, setPreview] = useState<File | string>('');
+  const [desc, setDesc] = useState<string>('');
   const queryClient = useQueryClient();
   const form = useForm<UpdateArtistForm>({
     resolver: yupResolver(createSchema),
@@ -69,6 +70,8 @@ const useUpdateArtistHook = () => {
       if (typeof data.image === 'string') {
         setPreview(data.image);
       }
+
+      setDesc(data?.desc);
     }
   }, [data, form]);
 
@@ -146,6 +149,7 @@ const useUpdateArtistHook = () => {
     onSubmit,
     preview,
     isLoading,
+    desc,
   };
 };
 

@@ -9,7 +9,7 @@ import Select from '@/components/ui/form/Select';
 import LoadingIcon from '@/components/icons/Loading';
 
 const ModalUpdateArtist: React.FC = () => {
-  const { form, onCancel, onSubmit, preview, isLoading } = useUpdateArtistHook();
+  const { form, onCancel, onSubmit, preview, isLoading, desc } = useUpdateArtistHook();
   const {
     register,
     formState: { errors, isSubmitting },
@@ -80,9 +80,9 @@ const ModalUpdateArtist: React.FC = () => {
           </div>
           <div className="my-4">
             <QuillEditor
-              key={form.watch('desc')}
+              key={desc}
               label="Decription"
-              value={form.watch('desc')}
+              value={desc}
               onChange={(content: string) => {
                 form.setValue('desc', content);
               }}
