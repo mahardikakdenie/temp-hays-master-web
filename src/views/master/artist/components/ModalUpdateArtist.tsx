@@ -75,6 +75,7 @@ const ModalUpdateArtist: React.FC = () => {
             label="Artist Image"
             onChange={(file: File | null) => {
               form.setValue('image', file as File);
+              form.setValue('is_update_image', true);
             }}
           />
         </div>

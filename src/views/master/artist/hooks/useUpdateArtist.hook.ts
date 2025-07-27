@@ -1,4 +1,4 @@
-import { updateArticleApi } from '@/actions/article';
+import { updateArtistApi } from '@/actions/artist';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
@@ -76,12 +76,21 @@ const useUpdateArtistHook = () => {
   const updateMutation = useMutation({
     mutationFn: async (data: UpdateArtistForm) => {
       const formData = new FormData();
-      formData.append('name', data.name);
-      formData.append('desc', data.desc);
-      formData.append('email', data.email);
+      formData.set('id', data?.id.toString());
+      formData.append('name', data?.name);
+      formData.append('email', data?.email);
+      formData.append('phone', data?.phone);
+      formData.append('desc', data?.desc);
       formData.set('status', data?.status?.toString());
+      formData.set('is_update_image', data?.is_update_image?.toString());
 
-      const response = await updateArticleApi(formData);
+      if (data.is_update_image) {
+        formData.append('image', data?.image);
+      } else {
+        formData.append('image', '');
+      }
+
+      const response = await updateArtistApi(formData);
 
       return response;
     },
@@ -101,7 +110,7 @@ const useUpdateArtistHook = () => {
       return;
     }
 
-    queryClient.invalidateQueries({ queryKey: ['exhibition'] });
+    queryClient.invalidateQueries({ queryKey: ['artist'] });
     // ✅ Update cache langsung
     const newData = queryClient.setQueryData(
       ['artist-detail', data.id],

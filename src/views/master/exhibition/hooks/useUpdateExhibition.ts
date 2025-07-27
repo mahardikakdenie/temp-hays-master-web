@@ -128,6 +128,8 @@ const useUpdateExhibitionHook = () => {
 
       if (data.is_update_image) {
         formData.append('image', data?.image);
+      } else {
+        formData.append('image', '');
       }
 
       const response = await updateExhibitionApi(formData);

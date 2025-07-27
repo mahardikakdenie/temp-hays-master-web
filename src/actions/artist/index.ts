@@ -18,7 +18,11 @@ export const createArtistApi = async (data: FormData) => {
 
 export const updateArtistApi = async (data: FormData) => {
   return await externalAPI
-    .patch(Routes.API_ARTIST, data)
+    .patch(Routes.API_ARTIST, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     .then((response) => responseServerRoute(response))
     .catch((e) => catchServerComponent(e));
 };
