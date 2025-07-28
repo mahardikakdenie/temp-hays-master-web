@@ -7,6 +7,7 @@ import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import { useGlobal } from '@/contexts/global.context';
 import { Artist } from '@/types/artist.types';
+import Pagination from '@/components/ui/table/Pagination';
 
 const ArtistTable: React.FC = () => {
   const headers = [
@@ -32,7 +33,8 @@ const ArtistTable: React.FC = () => {
     },
   ];
   const { onOpenModal } = useGlobal();
-  const { onSearch, onSort, sort, data, isFetching, isLoading, onRetry, error } = useArtistHook();
+  const { onSearch, onSort, sort, data, isFetching, isLoading, onRetry, error, onMeta, meta } =
+    useArtistHook();
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
@@ -73,6 +75,7 @@ const ArtistTable: React.FC = () => {
           }}
         />
       </Table>
+      <Pagination meta={meta} context="artist" onPageChange={(page: number) => onMeta({ page })} />
     </div>
   );
 };
