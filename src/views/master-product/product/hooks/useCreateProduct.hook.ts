@@ -43,7 +43,7 @@ const useCreateProduct = () => {
   const imageUrlsRef = useRef<string[]>([]);
   const items = [
     { title: 'Master Product', href: '#' },
-    { title: 'Create Product Form', href: '/master-setup/banner' },
+    { title: 'List Product', href: '/master-product/product' },
     {
       title: 'Update New Product',
       href: '/master-setup/banner',
