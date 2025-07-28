@@ -42,8 +42,8 @@ const useCreateProduct = () => {
   const [images, setImages] = useState<File[]>([]);
   const imageUrlsRef = useRef<string[]>([]);
   const items = [
-    { title: 'Master Setup', href: '#' },
-    { title: 'Banner', href: '/master-setup/banner' },
+    { title: 'Master Product', href: '#' },
+    { title: 'Create Product Form', href: '/master-setup/banner' },
     {
       title: 'Update New Product',
       href: '/master-setup/banner',
