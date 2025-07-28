@@ -6,9 +6,10 @@ import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import { useGlobal } from '@/contexts/global.context';
+import Pagination from '@/components/ui/table/Pagination';
 
 const ExhibitionTable: React.FC = () => {
-  const { onSort, sort, data, onRetry, onSearch, isFetching, isLoading, error } =
+  const { onSort, sort, data, onRetry, onSearch, isFetching, isLoading, error, meta, onMeta } =
     useExhibitionHook();
   const { onOpenModal } = useGlobal();
   const headers = [
@@ -78,6 +79,12 @@ const ExhibitionTable: React.FC = () => {
           onUpdateClick={(data) => onOpenModal('detail', data)}
         />
       </Table>
+
+      <Pagination
+        meta={meta}
+        context="exhibition"
+        onPageChange={(page: number) => onMeta({ page })}
+      />
     </div>
   );
 };
