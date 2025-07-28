@@ -5,7 +5,7 @@ import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
 import { Options } from '@/types/commons.types';
-import { CreateProductForm } from '@/types/product.types';
+import { CreateProductForm, UpdateProductForm } from '@/types/product.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-const createSchema = yup.object({
+const updateSchema = yup.object({
   name: yup.string().required('Product Name is Required'),
   desc: yup.string().required('Product Description is Required'),
   artist_id: yup.number().required('Product Artist is required'),
@@ -26,14 +26,14 @@ const createSchema = yup.object({
   length: yup.number().required('Product Length is required'),
   unit: yup.string().required('Product unit is required'),
   price: yup.number().required('Product price is required'),
-  images: yup.mixed<File[]>().required('Product Images is required'),
+  status: yup.number().required('status is required'),
 });
 const useUpdateProductHook = () => {
   const queryClient = useQueryClient();
   const internalAPI = useInternal();
   const router = useRouter();
-  const form = useForm<CreateProductForm>({
-    resolver: yupResolver(createSchema),
+  const form = useForm<UpdateProductForm>({
+    resolver: yupResolver(updateSchema),
   });
 
   const { onOpenModal, onCloseModal } = useGlobal();
@@ -82,8 +82,6 @@ const useUpdateProductHook = () => {
 
     // Simpan file ke form
     setImages((prev) => [...prev, file]);
-
-    form.setValue('images', images);
   };
 
   // get data category for options

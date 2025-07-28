@@ -24,3 +24,19 @@ export type CreateProductForm = {
   desc: string;
   images: File[];
 };
+
+export type UpdateProductForm = {
+  artist_id: number;
+  theme_id: number;
+  category_id: number;
+  sub_category_id: number;
+  name: string;
+  sku: string;
+  year: string;
+  width: number;
+  length: number;
+  unit: string;
+  price: number;
+  desc: string;
+  status: number;
+};
