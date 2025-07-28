@@ -4,7 +4,6 @@ import QuillEditor from '@/components/ui/form/QuillEditor';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Select from '@/components/ui/form/Select';
-import { STATUS_OPTIONS } from '@/libs/constants/options.const';
 import Modal from '@/components/ui/modal/Modal';
 import YearPicker from '@/components/ui/form/DatePicker/YearPicker';
 import useCreateProduct from './hooks/useCreateProduct.hook';
@@ -24,6 +23,7 @@ const CreateProductViews: React.FC = () => {
     categoryOpts,
     artistOpts,
     subCategoryOptions,
+    themeOpts,
   } = useCreateProduct();
   //
   const {
@@ -168,7 +168,7 @@ const CreateProductViews: React.FC = () => {
 
           <Select
             label="Theme"
-            options={STATUS_OPTIONS}
+            options={themeOpts}
             placeholder="Select theme"
             className="bg-gray-800"
             value={watch('theme_id')}
