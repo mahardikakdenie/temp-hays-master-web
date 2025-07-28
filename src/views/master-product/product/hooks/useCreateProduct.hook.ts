@@ -40,7 +40,15 @@ const useCreateProduct = () => {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [imgPreviews, setImgPreviews] = useState<string[]>([]);
   const [images, setImages] = useState<File[]>([]);
-  const imageUrlsRef = useRef<string[]>([]); // Untuk cleanup
+  const imageUrlsRef = useRef<string[]>([]);
+  const items = [
+    { title: 'Master Setup', href: '#' },
+    { title: 'Banner', href: '/master-setup/banner' },
+    {
+      title: 'Update New Product',
+      href: '/master-setup/banner',
+    },
+  ];
 
   useEffect(() => {
     return () => {
@@ -212,6 +220,7 @@ const useCreateProduct = () => {
     categoryOpts,
     subCategoryOptions,
     themeOpts,
+    items,
   };
 };
 
