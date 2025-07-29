@@ -1,4 +1,3 @@
-import { createProductApi } from '@/actions/product';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
@@ -161,27 +160,7 @@ const useUpdateProductHook = () => {
 
   const createPrductMutation = useMutation({
     mutationFn: async (data: CreateProductForm) => {
-      const formData = new FormData();
-
-      const safeString = (value: unknown): string => {
-        return value == null ? '' : String(value);
-      };
-
-      formData.append('id', safeString(productId));
-      formData.append('artist_id', safeString(data?.artist_id));
-      formData.append('theme_id', safeString(data?.theme_id));
-      formData.append('category_id', safeString(data?.category_id));
-      formData.append('sub_category_id', safeString(data?.sub_category_id));
-      formData.append('name', safeString(data?.name));
-      formData.append('sku', safeString(data?.sku));
-      formData.append('year', safeString(data?.year));
-      formData.append('width', safeString(data?.width));
-      formData.append('length', safeString(data?.length));
-      formData.append('unit', safeString(data?.unit));
-      formData.append('price', safeString(data?.price));
-      formData.append('desc', safeString(data?.desc));
-
-      return await createProductApi(formData);
+      return await updateProductApi(data);
     },
   });
 
