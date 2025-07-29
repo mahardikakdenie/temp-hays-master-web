@@ -73,6 +73,17 @@ const useUpdateProductHook = () => {
       form.reset({
         name: data?.name,
         desc: data?.desc,
+        artist_id: data?.artist_id,
+        theme_id: data?.theme_id,
+        category_id: data?.category_id,
+        sub_category_id: data?.category_id,
+        status: data?.status,
+        unit: data?.unit,
+        length: data?.length,
+        price: data?.price,
+        sku: data?.sku,
+        width: data?.width,
+        year: data?.year,
       });
     }
   }, [data, form]);

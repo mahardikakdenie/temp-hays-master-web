@@ -67,7 +67,7 @@ const CreateProductViews: React.FC = () => {
               label="Product Name"
               id="name"
               placeholder="e.g. Vintage Oil Painting"
-              className="bg-gray-800 border-gray-700 text-white placeholder-gray-500"
+              className="text-white placeholder-gray-500"
               required
               error={errors.name?.message}
               {...register('name')}
@@ -95,7 +95,7 @@ const CreateProductViews: React.FC = () => {
               id="price"
               type="number"
               placeholder="e.g. 5000000"
-              className="bg-gray-800 border-gray-700 text-white"
+              className="text-white"
               required
               error={errors.price?.message}
               {...register('price')}
@@ -103,7 +103,7 @@ const CreateProductViews: React.FC = () => {
 
             <Select
               value={form.watch('unit')}
-              className="bg-gray-800 border-gray-700 text-white"
+              className="text-white bg-gray-800 border-gray-700"
               label="Unit"
               placeholder="Select Unit"
               options={[
@@ -121,7 +121,7 @@ const CreateProductViews: React.FC = () => {
               label="SKU"
               id="sku"
               placeholder="e.g. ART-2024-001"
-              className="bg-gray-800 border-gray-700 text-white"
+              className="text-white"
               required
               error={errors.sku?.message}
               {...register('sku')}
@@ -133,7 +133,7 @@ const CreateProductViews: React.FC = () => {
                 readOnly
                 placeholder="Select year"
                 value={productYear || ''}
-                className="bg-gray-800 border-gray-700 text-white cursor-pointer"
+                className="text-white cursor-pointer"
                 error={errors.year?.message}
                 onClick={() => onOpenModal('detail')}
                 required
@@ -145,7 +145,7 @@ const CreateProductViews: React.FC = () => {
               id="width"
               type="number"
               placeholder="e.g. 50"
-              className="bg-gray-800 border-gray-700 text-white"
+              className="text-white"
               {...register('width')}
             />
 
@@ -154,7 +154,7 @@ const CreateProductViews: React.FC = () => {
               id="length"
               type="number"
               placeholder="e.g. 70"
-              className="bg-gray-800 border-gray-700 text-white"
+              className="text-white"
               {...register('length')}
               error={errors.length?.message}
             />
@@ -163,7 +163,7 @@ const CreateProductViews: React.FC = () => {
               label="Category"
               options={categoryOpts}
               placeholder="Select category"
-              className="bg-gray-800"
+              className="bg-[#1a1d21]"
               value={watch('category_id')}
               onChange={(value) => setValue('category_id', value as number)}
               error={errors.category_id?.message}
@@ -174,7 +174,7 @@ const CreateProductViews: React.FC = () => {
               label="Sub Category"
               disabled={!form.watch('category_id')}
               options={subCategoryOptions}
-              className="bg-gray-800"
+              className="bg-[#1a1d21]"
               placeholder="Select sub-category"
               value={watch('sub_category_id')}
               onChange={(value) => setValue('sub_category_id', value as number)}
@@ -186,7 +186,7 @@ const CreateProductViews: React.FC = () => {
               label="Theme"
               options={themeOpts}
               placeholder="Select theme"
-              className="bg-gray-800"
+              className="bg-[#1a1d21]"
               value={watch('theme_id')}
               onChange={(value) => setValue('theme_id', value as number)}
               error={errors.theme_id?.message}
@@ -197,7 +197,7 @@ const CreateProductViews: React.FC = () => {
               label="Artist"
               options={artistOpts}
               placeholder="Select Artist"
-              className="bg-gray-800"
+              className="bg-[#1a1d21]"
               value={watch('artist_id')}
               onChange={(value) => setValue('artist_id', value as number)}
               error={errors.artist_id?.message}
@@ -212,7 +212,7 @@ const CreateProductViews: React.FC = () => {
                 {imgPreviews.map((src, index) => (
                   <div
                     key={index}
-                    className="aspect-video relative group cursor-pointer overflow-hidden rounded-lg border border-gray-700 bg-gray-800"
+                    className="aspect-video relative group cursor-pointer overflow-hidden rounded-lg border border-gray-700 bg-[#1a1d21]"
                   >
                     <Image
                       src={src}
@@ -265,7 +265,7 @@ const CreateProductViews: React.FC = () => {
               label="Selected Year"
               value={productYear || ''}
               readOnly
-              className="bg-gray-800 text-white"
+              className="bg-[#1a1d21] text-white"
             />
             <YearPicker currentYear={productYear as number} onSelect={handleYearSelect} />
           </div>
