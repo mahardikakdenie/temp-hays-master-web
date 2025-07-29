@@ -1,10 +1,11 @@
+import { updateProductApi } from '@/actions/product';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
 import { Options } from '@/types/commons.types';
-import { CreateProductForm, UpdateProductForm } from '@/types/product.types';
+import { UpdateProductForm } from '@/types/product.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -159,12 +160,12 @@ const useUpdateProductHook = () => {
   });
 
   const createPrductMutation = useMutation({
-    mutationFn: async (data: CreateProductForm) => {
+    mutationFn: async (data: UpdateProductForm) => {
       return await updateProductApi(data);
     },
   });
 
-  const onSubmit: SubmitHandler<CreateProductForm> = async (data) => {
+  const onSubmit: SubmitHandler<UpdateProductForm> = async (data) => {
     const response = await createPrductMutation.mutateAsync(data);
 
     if (response.status >= HttpStatus.BAD_REQUEST) {
