@@ -8,7 +8,6 @@ import { Options } from '@/types/commons.types';
 import { UpdateProductForm } from '@/types/product.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -33,7 +32,6 @@ const useUpdateProductHook = () => {
   const { item, onCloseModal } = useGlobal();
   const queryClient = useQueryClient();
   const internalAPI = useInternal();
-  const router = useRouter();
   const form = useForm<UpdateProductForm>({
     resolver: yupResolver(updateSchema),
   });
@@ -185,7 +183,7 @@ const useUpdateProductHook = () => {
       position: 'bottom-right',
     });
     queryClient.invalidateQueries({ queryKey: ['product'] });
-    router.push('/master-product/product');
+    onCancel();
   };
 
   const onCancel = useCallback(() => {
