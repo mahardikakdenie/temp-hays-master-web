@@ -134,10 +134,10 @@ const CreateProductViews: React.FC = () => {
                 placeholder="Select year"
                 value={productYear || ''}
                 className="bg-gray-800 border-gray-700 text-white cursor-pointer"
+                error={errors.year?.message}
                 onClick={() => onOpenModal('detail')}
                 required
               />
-              {errors.year && <p className="mt-1 text-sm text-red-400">{errors.year.message}</p>}
             </div>
 
             <Input
