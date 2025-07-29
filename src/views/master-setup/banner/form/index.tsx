@@ -230,7 +230,7 @@ const BannerFormViews: React.FC = () => {
               )}
 
               <div>
-                <span className="text-sm text-red-400">{errors.image?.message}</span>
+                <span className="text-sm text-red-500">{errors.image?.message}</span>
               </div>
             </div>
 

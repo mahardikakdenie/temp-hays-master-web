@@ -31,10 +31,13 @@ const ModalUpdateProduct: React.FC = () => {
           <QuillEditor
             key={form.watch('desc')}
             value={form.watch('desc')}
+            className="bg-[#1b1d20]"
             onChange={(content) => {
               form.setValue('desc', content);
             }}
           />
+
+          <div className="grid grid-cols-12"></div>
         </div>
       </form>
     </Modal>

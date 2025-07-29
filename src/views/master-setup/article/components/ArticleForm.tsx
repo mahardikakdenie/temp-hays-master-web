@@ -115,7 +115,7 @@ const ArticleForm: React.FC<{
             />
           )}
           <div>
-            <span className="text-sm text-red-400">{errors.content?.message}</span>
+            <span className="text-sm text-red-500">{errors.content?.message}</span>
           </div>
         </div>
         {isUpdateForm && (

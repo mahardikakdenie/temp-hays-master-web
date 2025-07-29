@@ -85,7 +85,7 @@ const CreateProductViews: React.FC = () => {
               className="bg-gray-800 border-gray-700"
               placeholder="Describe the product, materials, inspiration, etc."
             />
-            {errors.desc && <p className="mt-1 text-sm text-red-400">{errors.desc.message}</p>}
+            {errors.desc && <p className="mt-1 text-sm text-red-500">{errors.desc.message}</p>}
           </div>
 
           {/* Grid Inputs */}
