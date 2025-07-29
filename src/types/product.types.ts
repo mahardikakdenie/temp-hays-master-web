@@ -26,6 +26,7 @@ export type CreateProductForm = {
 };
 
 export type UpdateProductForm = {
+  id: number;
   artist_id: number;
   theme_id: number;
   category_id: number;

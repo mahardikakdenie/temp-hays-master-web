@@ -1,5 +1,6 @@
 'use client';
 import ProductHeader from './components/Header';
+import ModalUpdateProduct from './components/ModalUpdateProduct';
 import ProductTable from './components/Table';
 
 export const ProductViews: React.FC = () => {
@@ -11,6 +12,7 @@ export const ProductViews: React.FC = () => {
       <div className="col-span-12">
         <ProductTable />
       </div>
+      <ModalUpdateProduct />
     </div>
   );
 };

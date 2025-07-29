@@ -9,11 +9,12 @@ import { CreateProductForm, UpdateProductForm } from '@/types/product.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const updateSchema = yup.object({
+  id: yup.number().required('id is required'),
   name: yup.string().required('Product Name is Required'),
   desc: yup.string().required('Product Description is Required'),
   artist_id: yup.number().required('Product Artist is required'),
@@ -29,18 +30,15 @@ const updateSchema = yup.object({
   status: yup.number().required('status is required'),
 });
 const useUpdateProductHook = () => {
+  const { item, onCloseModal } = useGlobal();
   const queryClient = useQueryClient();
   const internalAPI = useInternal();
   const router = useRouter();
   const form = useForm<UpdateProductForm>({
     resolver: yupResolver(updateSchema),
   });
-
-  const { onOpenModal, onCloseModal } = useGlobal();
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [imgPreviews, setImgPreviews] = useState<string[]>([]);
-  const [images, setImages] = useState<File[]>([]);
-  const imageUrlsRef = useRef<string[]>([]);
+  const [productId, setProductId] = useState<number>(0);
   const items = [
     { title: 'Master Product', href: '#' },
     { title: 'List Product', href: '/master-product/product' },
@@ -51,10 +49,33 @@ const useUpdateProductHook = () => {
   ];
 
   useEffect(() => {
-    return () => {
-      imageUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, []);
+    if (item) {
+      setProductId((item as UpdateProductForm).id);
+    }
+  }, [item]);
+
+  const { data } = useQuery<UpdateProductForm, Error>({
+    queryKey: ['product-detail', productId],
+    queryFn: async () => {
+      const response = await internalAPI(`${Routes.PRODUCT}/detail/${productId}`);
+      if (response.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch options detail');
+      }
+
+      const { data } = await response.json();
+      return data;
+    },
+    enabled: !!productId,
+  });
+
+  useEffect(() => {
+    if (data) {
+      form.reset({
+        name: data?.name,
+        desc: data?.desc,
+      });
+    }
+  }, [data, form]);
 
   // sync selected year to form
   const handleYearSelect = (year: number) => {
@@ -64,25 +85,6 @@ const useUpdateProductHook = () => {
   };
 
   const productYear = form.watch('year') || selectedYear;
-
-  // Handle file dari MediaInput
-  const handleFileChange = (file: File | null) => {
-    // Bersihkan URL lama
-    imageUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
-    imageUrlsRef.current = [];
-
-    if (!file) {
-      return;
-    }
-
-    // Buat URL untuk preview
-    const url = URL.createObjectURL(file);
-    imageUrlsRef.current.push(url);
-    setImgPreviews((prev) => [...prev, url]);
-
-    // Simpan file ke form
-    setImages((prev) => [...prev, file]);
-  };
 
   // get data category for options
   const { data: categoryOpts } = useQuery<Options[] | undefined>({
@@ -154,6 +156,7 @@ const useUpdateProductHook = () => {
         return value == null ? '' : String(value);
       };
 
+      formData.append('id', safeString(productId));
       formData.append('artist_id', safeString(data?.artist_id));
       formData.append('theme_id', safeString(data?.theme_id));
       formData.append('category_id', safeString(data?.category_id));
@@ -166,16 +169,6 @@ const useUpdateProductHook = () => {
       formData.append('unit', safeString(data?.unit));
       formData.append('price', safeString(data?.price));
       formData.append('desc', safeString(data?.desc));
-
-      if (images && images.length > 0) {
-        images.forEach((image) => {
-          if (image instanceof File) {
-            formData.append('images', image);
-          }
-        });
-      } else {
-        console.warn('No images to append');
-      }
 
       return await createProductApi(formData);
     },
@@ -204,19 +197,22 @@ const useUpdateProductHook = () => {
     router.push('/master-product/product');
   };
 
+  const onCancel = useCallback(() => {
+    form.reset();
+    onCloseModal();
+  }, [form, onCloseModal]);
+
   return {
     form,
     onSubmit,
-    onOpenModal,
-    imgPreviews,
     handleYearSelect,
     productYear,
-    handleFileChange,
     artistOpts,
     categoryOpts,
     subCategoryOptions,
     themeOpts,
     items,
+    onCancel,
   };
 };
 

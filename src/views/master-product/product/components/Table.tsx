@@ -6,10 +6,12 @@ import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import Pagination from '@/components/ui/table/Pagination';
+import { useGlobal } from '@/contexts/global.context';
 
 const ProductTable: React.FC = () => {
   const { onSearch, onSort, sort, data, isLoading, isFetching, onRetry, error, meta, onMeta } =
     useProductHook();
+  const { onOpenModal } = useGlobal();
 
   const headers = [
     {
@@ -83,6 +85,7 @@ const ProductTable: React.FC = () => {
           isFetching={isFetching}
           onRetry={onRetry}
           error={error}
+          onUpdateClick={(data) => onOpenModal('detail', data)}
         />
       </Table>
 
