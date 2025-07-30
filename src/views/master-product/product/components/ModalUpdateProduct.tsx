@@ -7,13 +7,22 @@ import Select from '@/components/ui/form/Select';
 import { useGlobal } from '@/contexts/global.context';
 
 const ModalUpdateProduct: React.FC = () => {
-  const { form, onCancel, productYear, categoryOpts, subCategoryOptions, themeOpts, artistOpts } =
-    useUpdateProductHook();
+  const {
+    form,
+    onCancel,
+    productYear,
+    categoryOpts,
+    subCategoryOptions,
+    themeOpts,
+    artistOpts,
+    onSubmit,
+  } = useUpdateProductHook();
   const {
     register,
     watch,
     setValue,
     formState: { isSubmitting, errors },
+    handleSubmit,
   } = form;
   const { onOpenModal } = useGlobal();
 
@@ -24,7 +33,7 @@ const ModalUpdateProduct: React.FC = () => {
       title="Update Product"
       action={<ActionModal isSubmitting={isSubmitting} onCancel={onCancel} formId={FORM_ID} />}
     >
-      <form action="">
+      <form onSubmit={handleSubmit(onSubmit)} id={FORM_ID}>
         <div>
           <Input
             placeholder="Enter Product Name"

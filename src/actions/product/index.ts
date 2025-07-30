@@ -21,5 +21,8 @@ export const updateProductApi = async (data: UpdateProductForm) => {
   return await externalAPI
     .patch(Routes.PRODUCT, data)
     .then((response) => responseServerRoute(response))
-    .catch((error) => catchServerComponent(error));
+    .catch((error) => {
+      console.log('🚀 ~ updateProductApi ~ error:', error);
+      catchServerComponent(error);
+    });
 };
