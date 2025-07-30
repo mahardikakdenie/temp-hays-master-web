@@ -4,7 +4,6 @@ import ActionModal from '@/components/ui/modal/ActionModal';
 import Input from '@/components/ui/form/Input';
 import Textarea from '@/components/ui/form/Textarea';
 import Select from '@/components/ui/form/Select';
-import { STATUS_OPTIONS } from '@/libs/constants/options.const';
 
 const ModalUpdateTheme: React.FC = () => {
   const { form, onCancel, onSubmit } = useUpdateTheme();
@@ -45,8 +44,11 @@ const ModalUpdateTheme: React.FC = () => {
             <Select
               label="Status"
               value={form.watch('status')}
-              className="bg-black"
-              options={STATUS_OPTIONS}
+              className="bg-[#1b1d20]"
+              options={[
+                { id: 1, name: 'Active' },
+                { id: 0, name: 'Non Active' },
+              ]}
               {...register('status')}
               onChange={(value) => {
                 form.setValue('status', value as number);
