@@ -44,7 +44,7 @@ const ModalUpdateProduct: React.FC = () => {
             error={errors.name?.message}
           />
           <QuillEditor
-            key={form.watch('desc')}
+            key={form.watch('id')}
             value={form.watch('desc')}
             className="bg-[#1b1d20]"
             onChange={(content) => {

@@ -1,4 +1,5 @@
 import { updateProductApi } from '@/actions/product';
+import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
@@ -166,24 +167,31 @@ const useUpdateProductHook = () => {
 
   const onSubmit: SubmitHandler<UpdateProductForm> = async (data) => {
     const response = await updatePoductMutation.mutateAsync(data);
-    console.log('🚀 ~ onSubmit ~ response:', response);
+    if (response.status >= HttpStatus.BAD_REQUEST) {
+      Notification({
+        type: 'error',
+        message: 'Failed to add user',
+        description: response.message,
+        position: 'bottom-right',
+      });
+      return;
+    }
 
-    // if (response.status >= HttpStatus.BAD_REQUEST) {
-    //   Notification({
-    //     type: 'error',
-    //     message: 'Failed to add user',
-    //     description: response.message,
-    //     position: 'bottom-right',
-    //   });
-    //   return;
-    // }
+    Notification({
+      type: 'success',
+      message: 'Success',
+      description: response.message,
+      position: 'bottom-right',
+    });
 
-    // Notification({
-    //   type: 'success',
-    //   message: 'Success',
-    //   description: response.message,
-    //   position: 'bottom-right',
-    // });
+    queryClient.setQueryData(
+      ['product-detail', data.id],
+      (oldData: UpdateProductForm | undefined) => ({
+        ...oldData,
+        ...data,
+      }),
+    );
+
     queryClient.invalidateQueries({ queryKey: ['product'] });
     onCancel();
   };
