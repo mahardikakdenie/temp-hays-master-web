@@ -52,7 +52,7 @@ const useUpdateProductHook = () => {
     }
   }, [item]);
 
-  const { data } = useQuery<UpdateProductForm, Error>({
+  const { data, isLoading } = useQuery<UpdateProductForm, Error>({
     queryKey: ['product-detail', productId],
     queryFn: async () => {
       const response = await internalAPI(`${Routes.PRODUCT}/detail/${productId}`);
@@ -212,6 +212,7 @@ const useUpdateProductHook = () => {
     themeOpts,
     items,
     onCancel,
+    isLoading,
   };
 };
 
