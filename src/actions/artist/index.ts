@@ -2,7 +2,7 @@
 
 import { Routes } from '@/libs/constants/routes.const';
 import { externalAPI } from '@/libs/interceptors/api-ext.interceptor';
-import { catchServerComponent } from '@/libs/utils/catch.utils';
+import { catchServerRoute } from '@/libs/utils/catch.utils';
 import { responseServerRoute } from '@/libs/utils/response.utils';
 
 export const createArtistApi = async (data: FormData) => {
@@ -13,7 +13,7 @@ export const createArtistApi = async (data: FormData) => {
       },
     })
     .then((response) => responseServerRoute(response))
-    .catch((error) => catchServerComponent(error));
+    .catch((error) => catchServerRoute(error));
 };
 
 export const updateArtistApi = async (data: FormData) => {
@@ -24,5 +24,5 @@ export const updateArtistApi = async (data: FormData) => {
       },
     })
     .then((response) => responseServerRoute(response))
-    .catch((e) => catchServerComponent(e));
+    .catch((e) => catchServerRoute(e));
 };
