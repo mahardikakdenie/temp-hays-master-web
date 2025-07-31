@@ -10,7 +10,8 @@ import TrashIcon from '@/components/icons/Trash';
 import Select from '@/components/ui/form/Select';
 
 const ModalCreateOrder: React.FC = () => {
-  const { form, fields, append, remove, onSubmit, onCancel } = useCreateOrder();
+  const { form, fields, append, remove, onSubmit, onCancel, prodOptions, Controller } =
+    useCreateOrder();
   const { register, handleSubmit, formState } = form;
   const FORMID = 'create-order';
 
@@ -76,17 +77,23 @@ const ModalCreateOrder: React.FC = () => {
               className="bg-gray-800/50 rounded-xl p-5 space-y-4 border border-gray-600 mb-4"
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Select
-                  value={field.product_id}
-                  label="Product ID"
-                  placeholder="e.g., 123"
-                  className="bg-[#1b1d20]"
-                  required
-                  error={formState.errors.items?.[index]?.product_id?.message}
-                  {...register(`items.${index}.product_id`, { valueAsNumber: true })}
-                  onChange={(value) => {
-                    console.log(value);
-                  }}
+                <Controller
+                  name={`items.${index}.product_id`}
+                  control={form.control}
+                  render={({ field }) => (
+                    <Select
+                      label="Product ID"
+                      placeholder="Select a product"
+                      options={prodOptions}
+                      value={field.value}
+                      onChange={(value) => {
+                        field.onChange(value); // Ini yang akan memperbarui form state
+                      }}
+                      className="bg-[#1b1d20]"
+                      error={formState.errors.items?.[index]?.product_id?.message}
+                      required
+                    />
+                  )}
                 />
                 <Input
                   label="Quantity"
