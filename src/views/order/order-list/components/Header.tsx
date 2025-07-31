@@ -6,7 +6,10 @@ const OrderListHeader: React.FC = () => {
   return (
     <div>
       <PageHeader
-        items={[]}
+        items={[
+          { title: 'Master Order', href: '#' },
+          { title: 'Order', href: '/master-setup/order' },
+        ]}
         onClick={() => onOpenModal('add')}
         title="Order List"
         isShowBtn
