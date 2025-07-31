@@ -6,7 +6,7 @@ import { CreateOrder } from '@/types/orderList.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const createSchema = yup.object({
@@ -38,8 +38,25 @@ const useCreateOrder = () => {
   const { onCloseModal } = useGlobal();
   const form = useForm<CreateOrder>({
     resolver: yupResolver(createSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+      items: [
+        {
+          product_id: 0,
+          quantity: 0,
+          notes: '',
+        },
+      ],
+    },
   });
   const queryClient = useQueryClient();
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'items', // ini harus sama dengan nama di schema
+  });
 
   const createOrderMutation = useMutation({
     mutationFn: async (data: CreateOrder) => createOrderApi(data),
@@ -78,6 +95,10 @@ const useCreateOrder = () => {
     onSubmit,
     onCancel,
     createOrderMutation,
+    fields,
+    append,
+    remove,
+    control: form.control,
   };
 };
 

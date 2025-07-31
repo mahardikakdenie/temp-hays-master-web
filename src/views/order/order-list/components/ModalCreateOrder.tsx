@@ -7,10 +7,11 @@ import ActionModal from '@/components/ui/modal/ActionModal';
 import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import TrashIcon from '@/components/icons/Trash';
+import Select from '@/components/ui/form/Select';
 
 const ModalCreateOrder: React.FC = () => {
-  const { form, onSubmit, onCancel } = useCreateOrder();
-  const { register, handleSubmit } = form;
+  const { form, fields, append, remove, onSubmit, onCancel } = useCreateOrder();
+  const { register, handleSubmit, formState } = form;
   const FORMID = 'create-order';
 
   return (
@@ -18,22 +19,18 @@ const ModalCreateOrder: React.FC = () => {
       name="add"
       title="Create New Order"
       action={
-        <ActionModal
-          isSubmitting={form.formState.isSubmitting}
-          onCancel={onCancel}
-          formId={FORMID}
-        />
+        <ActionModal isSubmitting={formState.isSubmitting} onCancel={onCancel} formId={FORMID} />
       }
     >
       <form id={FORMID} className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
-        {/* Customer Info Section */}
+        {/* Customer Info */}
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-12">
             <Input
               label="Customer Name"
               placeholder="Enter customer's full name"
               required
-              error={form.formState.errors.name?.message?.toString()}
+              error={formState.errors.name?.message}
               {...register('name')}
             />
           </div>
@@ -43,7 +40,7 @@ const ModalCreateOrder: React.FC = () => {
               type="email"
               placeholder="customer@example.com"
               required
-              error={form.formState.errors.email?.message?.toString()}
+              error={formState.errors.email?.message}
               {...register('email')}
             />
           </div>
@@ -52,7 +49,7 @@ const ModalCreateOrder: React.FC = () => {
               label="Phone Number"
               placeholder="(021) 123-4567"
               required
-              error={form.formState.errors.phone?.message?.toString()}
+              error={formState.errors.phone?.message}
               {...register('phone')}
             />
           </div>
@@ -61,60 +58,92 @@ const ModalCreateOrder: React.FC = () => {
               label="Message (Optional)"
               placeholder="Add a note or special request..."
               rows={3}
+              error={formState.errors.message?.message}
               {...register('message')}
             />
           </div>
         </div>
 
-        {/* Product Items Section */}
+        {/* Product Items */}
         <div className="pt-6 border-t border-gray-700">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             🛒 Product Items
           </h3>
 
-          <div className="bg-gray-800/50 rounded-xl p-5 space-y-4">
-            {/* Product Form Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input
-                label="Product Name"
-                placeholder="e.g., Wireless Headphones"
+          {fields.map((field, index) => (
+            <div
+              key={field.id}
+              className="bg-gray-800/50 rounded-xl p-5 space-y-4 border border-gray-600 mb-4"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Select
+                  value={field.product_id}
+                  label="Product ID"
+                  placeholder="e.g., 123"
+                  className="bg-[#1b1d20]"
+                  required
+                  error={formState.errors.items?.[index]?.product_id?.message}
+                  {...register(`items.${index}.product_id`, { valueAsNumber: true })}
+                  onChange={(value) => {
+                    console.log(value);
+                  }}
+                />
+                <Input
+                  label="Quantity"
+                  type="number"
+                  min="1"
+                  placeholder="1"
+                  required
+                  error={formState.errors.items?.[index]?.quantity?.message}
+                  {...register(`items.${index}.quantity`, { valueAsNumber: true })}
+                />
+              </div>
+
+              <Textarea
+                label="Product Notes"
+                placeholder="Color, size, or other details..."
+                rows={2}
                 required
-                {...register('items')}
+                error={formState.errors.items?.[index]?.notes?.message}
+                {...register(`items.${index}.notes`)}
               />
-              <Input
-                label="Quantity"
-                type="number"
-                min="1"
-                placeholder="1"
-                required
-                {...register('items')}
-              />
+
+              <div className="flex justify-end">
+                <ButtonSecondary
+                  type="button"
+                  onClick={() => remove(index)}
+                  className="text-red-600 border border-red-300 bg-red-300 hover:bg-red-200 text-sm px-3 py-1"
+                >
+                  <TrashIcon className="w-4 h-4 inline mr-1" />
+                  Delete
+                </ButtonSecondary>
+              </div>
             </div>
+          ))}
 
-            <Textarea
-              label="Product Notes (Optional)"
-              placeholder="Color, size, or other details..."
-              rows={2}
-              {...register('items')}
-            />
+          {/* Add More Items Button */}
+          <ButtonPrimary
+            type="button"
+            onClick={() =>
+              append({
+                product_id: 0,
+                quantity: 1,
+                notes: '',
+              })
+            }
+            className="flex items-center gap-2 text-sm"
+          >
+            <PlusIcon className="w-5 h-5" />
+            <span>Add Product</span>
+          </ButtonPrimary>
 
-            {/* Add Item Button */}
-            <div className="grid grid-cols-2 gap-3">
-              <ButtonPrimary>
-                <PlusIcon className="w-5 h-5 transition-transform group-hover:scale-110" />
-                <span>Add Product</span>
-              </ButtonPrimary>
-              <ButtonSecondary className="text-red-600 border border-red-300 bg-red-300 hover:bg-red-200">
-                <TrashIcon className="w-5 h-5 text-red-600" /> Delete
-              </ButtonSecondary>
-            </div>
-          </div>
-
-          {/* List of Added Products (Placeholder for future implementation) */}
-          <p className="text-sm text-gray-400 mt-4">
-            Added items will appear below (to be implemented with <code>useFieldArray</code>).
-          </p>
+          {/* Tampilkan error array jika ada */}
+          {formState.errors.items?.message && (
+            <p className="text-red-500 text-sm mt-2">{formState.errors.items.message}</p>
+          )}
         </div>
+
+        {/* Submit dihandle oleh ActionModal */}
       </form>
     </Modal>
   );
