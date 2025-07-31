@@ -1,6 +1,12 @@
+import { createOrderApi } from '@/actions/order';
+import Notification from '@/components/ui/notification/Notification';
+import { useGlobal } from '@/contexts/global.context';
+import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { CreateOrder } from '@/types/orderList.types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const createSchema = yup.object({
@@ -29,11 +35,49 @@ const createSchema = yup.object({
     .min(1, 'At least one item is required'),
 });
 const useCreateOrder = () => {
+  const { onCloseModal } = useGlobal();
   const form = useForm<CreateOrder>({
     resolver: yupResolver(createSchema),
   });
+  const queryClient = useQueryClient();
+
+  const createOrderMutation = useMutation({
+    mutationFn: async (data: CreateOrder) => createOrderApi(data),
+  });
+
+  const onSubmit: SubmitHandler<CreateOrder> = async (data: CreateOrder) => {
+    console.log(data);
+    const response = await createOrderMutation.mutateAsync(data);
+    if (response.status >= HttpStatus.BAD_REQUEST) {
+      Notification({
+        type: 'error',
+        message: 'Failed to add user',
+        description: response.message,
+        position: 'bottom-right',
+      });
+      return;
+    }
+
+    Notification({
+      type: 'success',
+      message: 'Success',
+      description: response.message,
+      position: 'bottom-right',
+    });
+    onCancel();
+    queryClient.invalidateQueries({ queryKey: ['order-list'] });
+  };
+
+  const onCancel = useCallback(() => {
+    onCloseModal();
+    form.reset();
+  }, [onCloseModal, form]);
+
   return {
     form,
+    onSubmit,
+    onCancel,
+    createOrderMutation,
   };
 };
 

@@ -9,8 +9,8 @@ import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import TrashIcon from '@/components/icons/Trash';
 
 const ModalCreateOrder: React.FC = () => {
-  const { form } = useCreateOrder();
-  const { register } = form;
+  const { form, onSubmit, onCancel } = useCreateOrder();
+  const { register, handleSubmit } = form;
   const FORMID = 'create-order';
 
   return (
@@ -20,12 +20,12 @@ const ModalCreateOrder: React.FC = () => {
       action={
         <ActionModal
           isSubmitting={form.formState.isSubmitting}
-          onCancel={() => form.reset()}
+          onCancel={onCancel}
           formId={FORMID}
         />
       }
     >
-      <form id={FORMID} className="space-y-8">
+      <form id={FORMID} className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
         {/* Customer Info Section */}
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-12">
