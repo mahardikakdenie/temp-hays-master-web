@@ -1,5 +1,6 @@
 'use client';
 import OrderListHeader from './components/Header';
+import ModalCreateOrder from './components/ModalCreateOrder';
 import OrderListTable from './components/Table';
 
 const OrderListViews: React.FC = () => {
@@ -11,6 +12,7 @@ const OrderListViews: React.FC = () => {
       <div className="col-span-12">
         <OrderListTable />
       </div>
+      <ModalCreateOrder />
     </div>
   );
 };
