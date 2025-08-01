@@ -42,11 +42,11 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ menus }) => {
       {/* MENU */}
       <div className="flex flex-col overflow-y-auto no-scrollbar">
         <nav>
-          <h2
-            className={`flex my-4 text-sm uppercase ${cn(!isExpanded ? 'lg:justify-center' : 'justify-start')}`}
+          <span
+            className={`flex my-4 text-md font-semibold uppercase ${cn(!isExpanded ? 'lg:justify-center' : 'justify-start')}`}
           >
             {isExpanded || isMobileOpen ? 'Menu' : <EllipsisHorizontalIcon className="h-6 w-6" />}
-          </h2>
+          </span>
           <AppMenu menus={menus} />
         </nav>
       </div>
