@@ -54,7 +54,7 @@ const ModalUpdateTheme: React.FC = () => {
                 form.setValue('status', value as number);
               }}
             />
-            <p className="mt-1 text-xs text-gray-400">Choose Status for Banner</p>
+            <p className="mt-1 text-xs text-gray-400">Choose Status for Theme</p>
           </div>
         </div>
       </form>
