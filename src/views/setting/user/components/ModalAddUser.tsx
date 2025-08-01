@@ -52,6 +52,7 @@ const ModalAddUser: React.FC<ModalAddUserProps> = ({ accessOptions }) => {
                   id="access_id"
                   label="Access"
                   placeholder="Choose Access"
+                  className="bg-[#1a1d21]"
                   value={field.value}
                   onChange={field.onChange}
                   options={accessOptions}
