@@ -31,10 +31,6 @@ const OrderListTable: React.FC = () => {
       key: 'transaction_status_text',
       name: 'Transsaction Status',
     },
-    {
-      key: 'actions',
-      name: 'Actions',
-    },
   ];
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">

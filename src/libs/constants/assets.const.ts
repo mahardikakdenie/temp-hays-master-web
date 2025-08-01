@@ -1,4 +1,4 @@
-import Logo from '../../../public/images/logo.png';
+import Logo from '../../../public/images/logo-app.svg';
 import Error from '../../../public/images/error.svg';
 import Success from '../../../public/images/success.svg';
 import Man from '../../../public/images/man.png';

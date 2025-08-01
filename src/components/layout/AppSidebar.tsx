@@ -30,13 +30,13 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ menus }) => {
     >
       {/* LOGO */}
       <div className={`py-5.5 lg:flex ${cn(!isExpanded ? 'lg:justify-center' : 'justify-start')}`}>
-        <div className="flex text-lg gap-4">
-          <Image src={LogoImage} alt="Logo" width={26} height={26} />
-          {(isExpanded || isMobileOpen) && (
+        <div className="flex text-lg gap-4 justify-center w-full">
+          <Image src={LogoImage} alt="Logo" className="w-full h-10" />
+          {/* {(isExpanded || isMobileOpen) && (
             <p className="text-lg font-semibold whitespace-nowrap overflow-hidden">
               Web Application
             </p>
-          )}
+          )} */}
         </div>
       </div>
       {/* MENU */}
