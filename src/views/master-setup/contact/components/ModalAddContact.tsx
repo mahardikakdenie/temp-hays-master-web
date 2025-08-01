@@ -42,7 +42,7 @@ const ModalAddContact: React.FC = () => {
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12">
             <Input
-              label="name"
+              label="Name"
               placeholder="Enter Contact Name"
               required
               error={errors.name?.message}
