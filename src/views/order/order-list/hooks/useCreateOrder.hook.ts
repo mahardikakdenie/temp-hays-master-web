@@ -59,7 +59,7 @@ const useCreateOrder = () => {
   const queryClient = useQueryClient();
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'items', // ini harus sama dengan nama di schema
+    name: 'items',
   });
 
   // get product Options
