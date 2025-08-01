@@ -76,6 +76,7 @@ const OrderListTable: React.FC = () => {
           isFetching={isFetching}
           onRetry={onRetry}
           error={error}
+          isHideEdit
         />
       </Table>
     </div>

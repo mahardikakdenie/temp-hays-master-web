@@ -81,7 +81,7 @@ const QuillNoSSRWrapper = ({
           )}
         />
       </Field>
-      {error && <span className="mt-1 text-sm text-red-500">{error}</span>}
+      {error && <p className="input-error-text mt-1.5">{error}</p>}
     </div>
   );
 };

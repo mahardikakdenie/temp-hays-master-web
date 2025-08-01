@@ -82,9 +82,6 @@ const useCreateProduct = () => {
 
     // Simpan file ke form
     setImages((prev) => [...prev, file]);
-    console.log('images : ', images);
-    console.log('preview url :', imgPreviews);
-
     form.setValue('images', images);
   };
 
@@ -185,6 +182,10 @@ const useCreateProduct = () => {
     },
   });
 
+  const removeImage = async (index: number) => {
+    setImgPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const onSubmit: SubmitHandler<CreateProductForm> = async (data) => {
     const response = await createPrductMutation.mutateAsync(data);
 
@@ -221,6 +222,7 @@ const useCreateProduct = () => {
     subCategoryOptions,
     themeOpts,
     items,
+    removeImage,
   };
 };
 

@@ -26,6 +26,7 @@ const CreateProductViews: React.FC = () => {
     subCategoryOptions,
     themeOpts,
     items,
+    removeImage,
   } = useCreateProduct();
   //
   const {
@@ -82,10 +83,11 @@ const CreateProductViews: React.FC = () => {
             <QuillEditor
               value={watch('desc') ?? ''}
               onChange={(content) => setValue('desc', content)}
-              className="bg-gray-800 border-gray-700"
+              className="bg-[#1a1d21]"
               placeholder="Describe the product, materials, inspiration, etc."
+              required
+              error={errors.desc?.message}
             />
-            {errors.desc && <p className="mt-1 text-sm text-red-500">{errors.desc.message}</p>}
           </div>
 
           {/* Grid Inputs */}
@@ -103,7 +105,7 @@ const CreateProductViews: React.FC = () => {
 
             <Select
               value={form.watch('unit')}
-              className="text-white bg-gray-800 border-gray-700"
+              className="bg-[#1a1d21]"
               label="Unit"
               placeholder="Select Unit"
               options={[
@@ -146,6 +148,7 @@ const CreateProductViews: React.FC = () => {
               type="number"
               placeholder="e.g. 50"
               className="text-white"
+              error={errors.width?.message}
               {...register('width')}
             />
 
@@ -228,7 +231,10 @@ const CreateProductViews: React.FC = () => {
                         className="transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
                         aria-label={`Hapus gambar ${index + 1}`}
                       >
-                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-700 bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 hover:bg-red-500 hover:bg-opacity-50 text-white text-sm font-semibold">
+                        <div
+                          onClick={() => removeImage(index)}
+                          className="flex items-center justify-center w-10 h-10 rounded-full bg-red-700 bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 hover:bg-red-500 hover:bg-opacity-50 text-white text-sm font-semibold"
+                        >
                           <TrashIcon className="w-3 h-3" />
                         </div>
                       </button>
