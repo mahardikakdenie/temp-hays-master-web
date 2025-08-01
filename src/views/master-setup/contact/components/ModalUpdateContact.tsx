@@ -112,6 +112,7 @@ const ModalUpdateContact: React.FC = () => {
           <div className="col-span-12">
             {/* <TextLabel label="Status" /> */}
             <Select
+              key={form.watch('status')}
               label="Status"
               value={form.watch('status')}
               className="bg-black"
