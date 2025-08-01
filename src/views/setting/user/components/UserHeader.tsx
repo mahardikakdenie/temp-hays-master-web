@@ -11,7 +11,7 @@ const UserHeader: React.FC = () => {
       titleButton="Create new User"
       isShowBtn
       items={[
-        { title: 'Setting', href: '#' },
+        { title: 'Maintaince', href: '#' },
         { title: 'User', href: '#' },
       ]}
       onClick={() => onOpenModal('add')}
