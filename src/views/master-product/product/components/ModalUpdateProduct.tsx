@@ -4,7 +4,6 @@ import ActionModal from '@/components/ui/modal/ActionModal';
 import Input from '@/components/ui/form/Input';
 import QuillEditor from '@/components/ui/form/QuillEditor';
 import Select from '@/components/ui/form/Select';
-import { useGlobal } from '@/contexts/global.context';
 import LoadingIcon from '@/components/icons/Loading';
 
 const ModalUpdateProduct: React.FC = () => {
@@ -26,7 +25,14 @@ const ModalUpdateProduct: React.FC = () => {
     formState: { isSubmitting, errors },
     handleSubmit,
   } = form;
-  const { onOpenModal } = useGlobal();
+
+  const START_YEAR = 1900;
+  const YEAR_COUNT = 130;
+
+  const years = Array.from({ length: YEAR_COUNT }, (_, i) => START_YEAR + i).map((year) => ({
+    id: year.toString(),
+    name: year.toString(),
+  }));
 
   const FORM_ID = 'update-product-form';
   return (
@@ -98,14 +104,16 @@ const ModalUpdateProduct: React.FC = () => {
               />
 
               <div>
-                <Input
+                <Select
                   label="Year"
-                  readOnly
+                  options={years}
                   placeholder="Select year"
                   value={productYear || ''}
-                  className="text-white cursor-pointer"
+                  className="text-white cursor-pointer bg-[#1b1d20]"
                   error={errors.year?.message}
-                  onClick={() => onOpenModal('detail')}
+                  onChange={(value) => {
+                    form.setValue('year', value as string);
+                  }}
                   required
                 />
               </div>

@@ -78,6 +78,8 @@ const Select: React.FC<SelectProps> = ({
                 'w-(--button-width) rounded-lg border border-secondary/[16%] bg-ui-900 p-1 [--anchor-gap:--spacing(1)] focus:outline-none',
                 'transition duration-100 ease-in data-leave:data-closed:opacity-0',
                 'z-50',
+                'max-h-20',
+                'overflow-y-auto',
               )}
             >
               {options && options?.length > 0 ? (
