@@ -87,7 +87,7 @@ const ModalCreateOrder: React.FC = () => {
                       options={prodOptions}
                       value={field.value}
                       onChange={(value) => {
-                        field.onChange(value); // Ini yang akan memperbarui form state
+                        field.onChange(value);
                       }}
                       className="bg-[#1b1d20]"
                       error={formState.errors.items?.[index]?.product_id?.message}
@@ -97,7 +97,7 @@ const ModalCreateOrder: React.FC = () => {
                 />
                 <Input
                   label="Quantity"
-                  type="number"
+                  inputMode="numeric"
                   min="1"
                   placeholder="1"
                   required

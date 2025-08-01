@@ -46,7 +46,7 @@ const ProductForm: React.FC<{
               label="Product Price"
               name="price"
               id="price"
-              type="number"
+              inputMode="numeric"
               placeholder="Enter price"
               className="bg-gray-700 text-white"
               required

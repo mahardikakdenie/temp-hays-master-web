@@ -95,7 +95,7 @@ const CreateProductViews: React.FC = () => {
             <Input
               label="Price (IDR)"
               id="price"
-              type="number"
+              inputMode="numeric"
               placeholder="e.g. 5000000"
               className="text-white bg-gray-700"
               required
@@ -145,7 +145,6 @@ const CreateProductViews: React.FC = () => {
             <Input
               label="Width (cm)"
               id="width"
-              type="number"
               placeholder="e.g. 50"
               className="text-white bg-gray-700"
               error={errors.width?.message}
@@ -155,7 +154,7 @@ const CreateProductViews: React.FC = () => {
             <Input
               label="Length (cm)"
               id="length"
-              type="number"
+              inputMode="numeric"
               placeholder="e.g. 70"
               className="text-white bg-gray-700"
               {...register('length')}

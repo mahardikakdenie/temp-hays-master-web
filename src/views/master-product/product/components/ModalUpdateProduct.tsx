@@ -69,7 +69,7 @@ const ModalUpdateProduct: React.FC = () => {
               <Input
                 label="Price (IDR)"
                 id="price"
-                type="number"
+                inputMode="numeric"
                 placeholder="e.g. 5000000"
                 className="text-white"
                 required
@@ -121,7 +121,6 @@ const ModalUpdateProduct: React.FC = () => {
               <Input
                 label="Width (cm)"
                 id="width"
-                type="number"
                 placeholder="e.g. 50"
                 className="text-white"
                 {...register('width')}
@@ -130,7 +129,7 @@ const ModalUpdateProduct: React.FC = () => {
               <Input
                 label="Length (cm)"
                 id="length"
-                type="number"
+                inputMode="numeric"
                 placeholder="e.g. 70"
                 className="text-white"
                 {...register('length')}
@@ -180,6 +179,22 @@ const ModalUpdateProduct: React.FC = () => {
                 error={errors.artist_id?.message}
                 required
               />
+              <div className="col-span-2">
+                <Select
+                  label="Status"
+                  value={form.watch('status')}
+                  className="bg-[#1b1d20]"
+                  options={[
+                    { id: 1, name: 'Active' },
+                    { id: 0, name: 'Non Active' },
+                  ]}
+                  {...register('status')}
+                  onChange={(value) => {
+                    form.setValue('status', value as number);
+                  }}
+                />
+                <p className="mt-1 text-xs text-gray-400">Choose Status for Artist</p>
+              </div>
             </div>
           </div>
         </form>

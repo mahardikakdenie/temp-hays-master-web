@@ -9,6 +9,7 @@ import { cn } from '@/libs/utils/cn.utils';
 import PreviewContent from './components/PreviewContent';
 import useBannerFormHook from './hooks/useBannerForm.hook';
 import Input from '@/components/ui/form/Input';
+import LoadingIcon from '@/components/icons/Loading';
 
 const BannerFormViews: React.FC = () => {
   const {
@@ -87,8 +88,8 @@ const BannerFormViews: React.FC = () => {
             subTitle={subTitle}
           />
         ) : isDetailLoading || isDetailFetching ? (
-          <div className="flex items-center justify-center bg-gray-900">
-            <div className="w-8 h-8 p-5 border-4 border-t-blue-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+          <div className="flex justify-center py-8">
+            <LoadingIcon className="w-6 h-6 text-white/90 animate-spin" />
           </div>
         ) : (
           <form
@@ -179,7 +180,7 @@ const BannerFormViews: React.FC = () => {
               <Input
                 placeholder="Sort"
                 value={sort || ''}
-                type="number"
+                inputMode="numeric"
                 className="bg-gray-700"
                 min={0}
                 error={errors.sort?.message}
