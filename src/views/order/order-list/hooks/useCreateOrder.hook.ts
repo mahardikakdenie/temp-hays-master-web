@@ -81,7 +81,6 @@ const useCreateOrder = () => {
   });
 
   const onSubmit: SubmitHandler<CreateOrder> = async (data: CreateOrder) => {
-    console.log(data);
     const response = await createOrderMutation.mutateAsync(data);
     if (response.status >= HttpStatus.BAD_REQUEST) {
       Notification({
