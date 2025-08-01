@@ -66,7 +66,7 @@ const useUpdateContractHook = () => {
   });
 
   useEffect(() => {
-    if (data && !isLoading) {
+    if (data) {
       form.reset({
         name: data.name,
         email: data.email,

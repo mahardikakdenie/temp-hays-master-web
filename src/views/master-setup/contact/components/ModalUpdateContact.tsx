@@ -6,7 +6,6 @@ import Modal from '@/components/ui/modal/Modal';
 import Textarea from '@/components/ui/form/Textarea';
 import useUpdateContractHook from '../hooks/useUpdateContract.hook';
 import Select from '@/components/ui/form/Select';
-import { STATUS_OPTIONS } from '@/libs/constants/options.const';
 
 const ButtonActions: React.FC<{
   onCancel: () => void;
@@ -116,7 +115,10 @@ const ModalUpdateContact: React.FC = () => {
               label="Status"
               value={form.watch('status')}
               className="bg-black"
-              options={STATUS_OPTIONS}
+              options={[
+                { id: 1, name: 'Active' },
+                { id: 0, name: 'Non Active' },
+              ]}
               {...register('status')}
               onChange={(value) => {
                 form.setValue('status', value as number);
