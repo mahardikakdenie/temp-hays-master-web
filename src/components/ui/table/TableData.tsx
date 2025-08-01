@@ -23,6 +23,7 @@ export type TableDataUIProps<T> = {
   headers: Header[];
   onRetry: () => void;
   error: string;
+  isHideEdit?: boolean;
   onUpdateClick?: (data: T) => void;
 };
 
@@ -35,6 +36,7 @@ const TableDataUI = <T extends Record<string, any>>({
   onRetry,
   error,
   onUpdateClick,
+  isHideEdit = false,
 }: TableDataUIProps<T>) => {
   const stripHtml = (html: string) => {
     const tmp = document.createElement('div');
@@ -77,7 +79,7 @@ const TableDataUI = <T extends Record<string, any>>({
                 return (
                   <TableCell key="actions" className="text-center">
                     <div className="flex justify-center items-center gap-2">
-                      {hasPermission('update') && (
+                      {hasPermission('update') && !isHideEdit && (
                         <PencilSquareIcon
                           className="size-5 text-blue-500 hover:text-blue-700 cursor-pointer"
                           onClick={() => {
