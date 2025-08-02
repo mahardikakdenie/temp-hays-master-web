@@ -1,3 +1,4 @@
+import { useGlobal } from '@/contexts/global.context';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
 import { Artist } from '@/types/artist.types';
@@ -6,6 +7,7 @@ import debounce from 'lodash.debounce';
 import { useCallback, useMemo, useState } from 'react';
 
 const useArtistHook = () => {
+  const { onOpenModal } = useGlobal();
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
@@ -70,6 +72,7 @@ const useArtistHook = () => {
     onChangeStartDate,
     onChangeStatus,
     debouncedSearch,
+    onOpenModal,
   };
 };
 

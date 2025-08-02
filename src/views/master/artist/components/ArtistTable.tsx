@@ -32,9 +32,19 @@ const ArtistTable: React.FC = () => {
       key: 'actions',
     },
   ];
-  const { onOpenModal } = useGlobal();
-  const { onSearch, onSort, sort, data, isFetching, isLoading, onRetry, error, onMeta, meta } =
-    useArtistHook();
+  const {
+    onSearch,
+    onSort,
+    sort,
+    data,
+    isFetching,
+    isLoading,
+    onRetry,
+    error,
+    onMeta,
+    meta,
+    onOpenModal,
+  } = useArtistHook();
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
       <div className="flex flex-col md:flex-row justify-between md:items-center">
