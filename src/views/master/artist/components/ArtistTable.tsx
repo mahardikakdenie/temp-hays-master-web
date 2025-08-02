@@ -7,6 +7,7 @@ import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import { Artist } from '@/types/artist.types';
 import Pagination from '@/components/ui/table/Pagination';
+import ModalFilter from '@/components/ui/modal/ModalFilter';
 
 const ArtistTable: React.FC = () => {
   const headers = [
@@ -43,6 +44,12 @@ const ArtistTable: React.FC = () => {
     onMeta,
     meta,
     onOpenModal,
+    filters,
+    onSubmitFilter,
+    onResetFilter,
+    onChangeEndDate,
+    onChangeStartDate,
+    onChangeStatus,
   } = useArtistHook();
   return (
     <div className="widget-dark p-6 flex flex-col gap-4">
@@ -60,7 +67,9 @@ const ArtistTable: React.FC = () => {
               onChange={onSearch}
             />
           </div>
-          <ButtonSecondary className="w-full lg:w-40">Filter</ButtonSecondary>
+          <ButtonSecondary onClick={() => onOpenModal('filter')} className="w-full lg:w-40">
+            Filter
+          </ButtonSecondary>
         </div>
       </div>
 
@@ -85,6 +94,16 @@ const ArtistTable: React.FC = () => {
         />
       </Table>
       <Pagination meta={meta} context="artist" onPageChange={(page: number) => onMeta({ page })} />
+
+      <ModalFilter
+        title="Filter Artist"
+        filter={filters}
+        onChangeEndDate={onChangeEndDate}
+        onChangeStartDate={onChangeStartDate}
+        onChangeStatus={onChangeStatus}
+        onSubmitFilter={onSubmitFilter}
+        onResetFilter={onResetFilter}
+      />
     </div>
   );
 };

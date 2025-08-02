@@ -45,7 +45,7 @@ const useArtistHook = () => {
   const fetchArtist = usePaginatedFetch<Artist>({
     key: 'artist',
     endpoint: Routes.ARTIST_LIST,
-    extraQuery: filters,
+    extraQuery: appliedFilter,
   });
 
   const onSubmitFilter = useCallback(() => {
@@ -77,6 +77,7 @@ const useArtistHook = () => {
 
   return {
     ...fetchArtist,
+    filters,
     search: fetchArtist.search || search,
     onSearch: fetchArtist.onSearch || onSearch,
     onMeta: fetchArtist.onMeta || onMeta,
