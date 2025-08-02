@@ -193,7 +193,7 @@ const ModalUpdateProduct: React.FC = () => {
                     form.setValue('status', value as number);
                   }}
                 />
-                <p className="mt-1 text-xs text-gray-400">Choose Status for Artist</p>
+                <p className="mt-1 text-xs text-gray-400">Choose Status for Product</p>
               </div>
             </div>
           </div>
