@@ -7,10 +7,27 @@ import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import Pagination from '@/components/ui/table/Pagination';
 import { useGlobal } from '@/contexts/global.context';
+import ModalFilter from '@/components/ui/modal/ModalFilter';
 
 const ProductTable: React.FC = () => {
-  const { onSearch, onSort, sort, data, isLoading, isFetching, onRetry, error, meta, onMeta } =
-    useProductHook();
+  const {
+    onSearch,
+    onSort,
+    sort,
+    data,
+    isLoading,
+    isFetching,
+    onRetry,
+    error,
+    meta,
+    onMeta,
+    onChangeEndDate,
+    onChangeStartDate,
+    onChangeStatus,
+    onSubmitFilter,
+    onResetFilter,
+    filters,
+  } = useProductHook();
   const { onOpenModal } = useGlobal();
 
   const headers = [
@@ -93,6 +110,16 @@ const ProductTable: React.FC = () => {
         meta={meta}
         context="products"
         onPageChange={(page: number) => onMeta({ page })}
+      />
+
+      <ModalFilter
+        title="Filter Product"
+        filter={filters}
+        onChangeEndDate={onChangeEndDate}
+        onChangeStartDate={onChangeStartDate}
+        onChangeStatus={onChangeStatus}
+        onResetFilter={onResetFilter}
+        onSubmitFilter={onSubmitFilter}
       />
     </div>
   );
