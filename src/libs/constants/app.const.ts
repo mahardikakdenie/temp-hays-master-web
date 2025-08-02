@@ -9,4 +9,10 @@ export class App {
   // SECRET
   static SIGN_SECRET = process.env.SIGN_SECRET || '';
   static SESSION_SECRET = process.env.SESSION_SECRET || '';
+
+  static INITIAL_FILTER = {
+    startDate: '',
+    endDate: '',
+    status: '',
+  };
 }

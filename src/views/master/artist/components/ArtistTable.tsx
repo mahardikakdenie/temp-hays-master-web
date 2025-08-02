@@ -5,7 +5,6 @@ import useArtistHook from '../hooks/useArtist.hook';
 import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
-import { useGlobal } from '@/contexts/global.context';
 import { Artist } from '@/types/artist.types';
 import Pagination from '@/components/ui/table/Pagination';
 
