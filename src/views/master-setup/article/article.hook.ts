@@ -2,12 +2,16 @@ import { useCallback, useMemo, useState } from 'react';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
 import { ArticleList } from '@/types/article.types';
-import { Meta } from '@/types/commons.types';
+import { Filter, Meta } from '@/types/commons.types';
 import debounce from 'lodash.debounce';
+import { App } from '@/libs/constants/app.const';
+import { useGlobal } from '@/contexts/global.context';
 
 // type FetchResponse<T> = { items: T[]; meta: Meta };
 
 const useArticle = (props: { key: string; extraQuery?: Record<string, string> }) => {
+  const { onCloseModal, onOpenModal } = useGlobal();
+  const [appliedFilter, setAppliedFilter] = useState<Filter>(App.INITIAL_FILTER);
   const { key, extraQuery = {} } = props;
   const [filters, setFilters] = useState({
     startDate: '',
@@ -53,7 +57,7 @@ const useArticle = (props: { key: string; extraQuery?: Record<string, string> })
   const fetchArticle = usePaginatedFetch<ArticleList>({
     key: 'articles',
     endpoint: Routes.ARTICLE_LIST,
-    extraQuery: filters,
+    extraQuery: appliedFilter,
   });
 
   const debouncedSetSearch = useMemo(
@@ -73,12 +77,22 @@ const useArticle = (props: { key: string; extraQuery?: Record<string, string> })
     [debouncedSetSearch],
   );
 
+  const onSubmitFilter = useCallback(() => {
+    setAppliedFilter(filters);
+    onCloseModal();
+  }, [filters, onCloseModal]);
+
+  const onResetFilter = useCallback(() => {
+    setFilters(App.INITIAL_FILTER);
+    setAppliedFilter(App.INITIAL_FILTER);
+  }, []);
+
   return {
     ...fetchArticle,
     items: fetchArticle.data,
     meta: fetchArticle.meta,
     onSearch: fetchArticle.onSearch || onSearch,
-    ...filters,
+    filters,
     onChangeStartDate,
     onChangeEndDate,
     onChangeStatus,
@@ -86,6 +100,10 @@ const useArticle = (props: { key: string; extraQuery?: Record<string, string> })
     search,
     queryKey,
     onSort: fetchArticle.onSort,
+    setAppliedFilter,
+    onSubmitFilter,
+    onResetFilter,
+    onOpenModal,
   };
 };
 

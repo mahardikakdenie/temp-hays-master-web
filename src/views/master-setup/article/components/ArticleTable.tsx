@@ -7,6 +7,7 @@ import useArticle from '../article.hook';
 import Pagination from '@/components/ui/table/Pagination';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
+import ModalFilter from '@/components/ui/modal/ModalFilter';
 
 const ArticleTable: React.FC = () => {
   const {
@@ -22,6 +23,13 @@ const ArticleTable: React.FC = () => {
     onSort,
     onMeta,
     onRetry,
+    onResetFilter,
+    onSubmitFilter,
+    filters,
+    onChangeEndDate,
+    onChangeStartDate,
+    onChangeStatus,
+    onOpenModal,
   } = useArticle({ key: 'article', extraQuery: {} });
   const headers = [
     {
@@ -61,7 +69,9 @@ const ArticleTable: React.FC = () => {
               onChange={onSearch}
             />
           </div>
-          <ButtonSecondary className="w-full lg:w-40">Filter</ButtonSecondary>
+          <ButtonSecondary onClick={() => onOpenModal('filter')} className="w-full lg:w-40">
+            Filter
+          </ButtonSecondary>
         </div>
       </div>
 
@@ -78,6 +88,16 @@ const ArticleTable: React.FC = () => {
         />
       </Table>
       <Pagination meta={meta} context="article" onPageChange={(page) => onMeta({ page })} />
+
+      <ModalFilter
+        title="Filter Article"
+        filter={filters}
+        onChangeEndDate={onChangeEndDate}
+        onChangeStartDate={onChangeStartDate}
+        onChangeStatus={onChangeStatus}
+        onSubmitFilter={onSubmitFilter}
+        onResetFilter={onResetFilter}
+      />
     </div>
   );
 };
