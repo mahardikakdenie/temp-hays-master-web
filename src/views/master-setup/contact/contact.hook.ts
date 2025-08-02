@@ -2,14 +2,19 @@ import { useCallback, useState } from 'react';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { Routes } from '@/libs/constants/routes.const';
 import { Contact } from '@/types/contact.types';
-import { Meta } from '@/types/commons.types';
+import { Filter, Meta } from '@/types/commons.types';
+import { useGlobal } from '@/contexts/global.context';
+
+const INITIAL_FILTER = {
+  startDate: '',
+  endDate: '',
+  status: '',
+};
 
 const useContact = () => {
-  const [filters, setFilters] = useState({
-    startDate: '',
-    endDate: '',
-    status: '',
-  });
+  const { onCloseModal, onOpenModal } = useGlobal();
+  const [filters, setFilters] = useState(INITIAL_FILTER);
+  const [appliedFilter, setAppliedFilter] = useState<Filter>(INITIAL_FILTER);
 
   const [meta, setMeta] = useState<Meta>({
     page: 1,
@@ -34,6 +39,16 @@ const useContact = () => {
     setFilters((prev) => ({ ...prev, status: value }));
   }, []);
 
+  const onSubmitFilter = useCallback(() => {
+    setAppliedFilter(filters);
+    onCloseModal();
+  }, [filters, onCloseModal]);
+
+  const onResetFilter = useCallback(() => {
+    setFilters(INITIAL_FILTER);
+    setAppliedFilter(INITIAL_FILTER);
+  }, []);
+
   const fetchContact = usePaginatedFetch<Contact>({
     key: 'contacts',
     endpoint: Routes.CONTACT_LIST,
@@ -44,10 +59,14 @@ const useContact = () => {
     ...fetchContact,
     meta: fetchContact.meta || meta,
     onMeta,
-    ...filters,
+    filters,
     onChangeStartDate,
     onChangeEndDate,
     onChangeStatus,
+    appliedFilter,
+    onSubmitFilter,
+    onResetFilter,
+    onOpenModal,
   };
 };
 

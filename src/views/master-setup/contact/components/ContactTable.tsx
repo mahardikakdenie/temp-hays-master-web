@@ -7,10 +7,9 @@ import useContact from '../contact.hook';
 import Pagination from '@/components/ui/table/Pagination';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
-import { useGlobal } from '@/contexts/global.context';
+import ModalFilter from '@/components/ui/modal/ModalFilter';
 
 const ContactTable: React.FC = () => {
-  const { onOpenModal } = useGlobal();
   const {
     isLoading,
     isFetching,
@@ -23,6 +22,13 @@ const ContactTable: React.FC = () => {
     onSearch,
     onSort,
     onRetry,
+    onChangeEndDate,
+    onChangeStartDate,
+    onChangeStatus,
+    onSubmitFilter,
+    onResetFilter,
+    filters,
+    onOpenModal,
   } = useContact();
 
   const headers = [
@@ -64,7 +70,9 @@ const ContactTable: React.FC = () => {
               onChange={onSearch}
             />
           </div>
-          <ButtonSecondary className="w-full lg:w-40">Filter</ButtonSecondary>
+          <ButtonSecondary onClick={() => onOpenModal('filter')} className="w-full lg:w-40">
+            Filter
+          </ButtonSecondary>
         </div>
       </div>
 
@@ -91,6 +99,16 @@ const ContactTable: React.FC = () => {
         />
       </Table>
       <Pagination meta={meta} context="contacts" onPageChange={(page) => onMeta({ page })} />
+
+      <ModalFilter
+        filter={filters}
+        title="Filter Contact"
+        onChangeEndDate={onChangeEndDate}
+        onChangeStartDate={onChangeStartDate}
+        onChangeStatus={onChangeStatus}
+        onSubmitFilter={onSubmitFilter}
+        onResetFilter={onResetFilter}
+      />
     </div>
   );
 };

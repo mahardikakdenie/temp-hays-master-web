@@ -7,7 +7,8 @@ import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Select from '@/components/ui/form/Select';
 import DatePicker from '@/components/ui/form/DatePicker';
 
-type ModalFilterBannerProps = {
+type ModalFilterProps = {
+  title: string;
   filter: Filter;
   onChangeStartDate: (value: string) => void;
   onChangeEndDate: (value: string) => void;
@@ -16,7 +17,8 @@ type ModalFilterBannerProps = {
   onResetFilter: () => void;
 };
 
-const ModalFilterBanner: React.FC<ModalFilterBannerProps> = ({
+const ModalFilter: React.FC<ModalFilterProps> = ({
+  title,
   filter,
   onChangeStartDate,
   onChangeEndDate,
@@ -27,7 +29,7 @@ const ModalFilterBanner: React.FC<ModalFilterBannerProps> = ({
   return (
     <Modal
       name="filter"
-      title="Filter Banner"
+      title={title}
       action={
         <div className="flex gap-4">
           <ButtonSecondary onClick={onResetFilter}>Reset</ButtonSecondary>
@@ -71,4 +73,4 @@ const ModalFilterBanner: React.FC<ModalFilterBannerProps> = ({
   );
 };
 
-export default ModalFilterBanner;
+export default ModalFilter;
