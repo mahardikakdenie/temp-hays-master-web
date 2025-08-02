@@ -7,7 +7,7 @@ import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Select from '@/components/ui/form/Select';
 import DatePicker from '@/components/ui/form/DatePicker';
 
-type ModalFilterUserProps = {
+type ModalFilterBannerProps = {
   filter: Filter;
   onChangeStartDate: (value: string) => void;
   onChangeEndDate: (value: string) => void;
@@ -16,7 +16,7 @@ type ModalFilterUserProps = {
   onResetFilter: () => void;
 };
 
-const ModalFilterUser: React.FC<ModalFilterUserProps> = ({
+const ModalFilterBanner: React.FC<ModalFilterBannerProps> = ({
   filter,
   onChangeStartDate,
   onChangeEndDate,
@@ -71,4 +71,4 @@ const ModalFilterUser: React.FC<ModalFilterUserProps> = ({
   );
 };
 
-export default ModalFilterUser;
+export default ModalFilterBanner;

@@ -7,6 +7,7 @@ import useBanner from '../banner.hook';
 import Pagination from '@/components/ui/table/Pagination';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
+import ModalFilterBanner from './ModalFilterBanner';
 
 const BannerTable: React.FC = () => {
   const {
@@ -20,6 +21,13 @@ const BannerTable: React.FC = () => {
     onMeta,
     sort,
     onSort,
+    filters,
+    onChangeStartDate,
+    onChangeEndDate,
+    onChangeStatus,
+    onSubmitFilter,
+    onResetFilter,
+    onOpenModal,
   } = useBanner();
 
   const headers = [
@@ -38,6 +46,10 @@ const BannerTable: React.FC = () => {
     {
       name: 'Status',
       key: 'status',
+    },
+    {
+      name: 'Created at',
+      key: 'created_at',
     },
     {
       name: 'Actions',
@@ -60,7 +72,9 @@ const BannerTable: React.FC = () => {
               onChange={onSearch}
             />
           </div>
-          <ButtonSecondary className="w-full lg:w-40">Filter</ButtonSecondary>
+          <ButtonSecondary onClick={() => onOpenModal('filter')} className="w-full lg:w-40">
+            Filter
+          </ButtonSecondary>
         </div>
       </div>
 
@@ -81,6 +95,15 @@ const BannerTable: React.FC = () => {
         />
       </Table>
       <Pagination meta={meta} context="banners" onPageChange={(page) => onMeta({ page })} />
+
+      <ModalFilterBanner
+        filter={filters}
+        onChangeStartDate={onChangeStartDate}
+        onChangeEndDate={onChangeEndDate}
+        onChangeStatus={onChangeStatus}
+        onSubmitFilter={onSubmitFilter}
+        onResetFilter={onResetFilter}
+      />
     </div>
   );
 };

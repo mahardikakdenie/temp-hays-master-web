@@ -1,9 +1,6 @@
 import type React from 'react';
 import type { Metadata } from 'next';
-import type { Options } from '@/types/commons.types';
 import { catchServerComponent } from '@/libs/utils/catch.utils';
-import { externalAPI } from '@/libs/interceptors/api-ext.interceptor';
-import { Routes } from '@/libs/constants/routes.const';
 import UserView from '@/views/setting/user';
 
 export const metadata: Metadata = {
@@ -13,10 +10,7 @@ export const metadata: Metadata = {
 
 const UserPage: React.FC = async () => {
   try {
-    const fetchAccessOptions = await externalAPI.get(Routes.USER_ACCESS_OPTIONS);
-    const dataAccessOptions: Options[] = fetchAccessOptions.data.data;
-
-    return <UserView accessOptions={dataAccessOptions} />;
+    return <UserView />;
   } catch (error) {
     catchServerComponent(error);
   }
