@@ -6,10 +6,28 @@ import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import { Table } from '@/components/ui/table/Table';
 import Pagination from '@/components/ui/table/Pagination';
+import ModalFilter from '@/components/ui/modal/ModalFilter';
 
 const OrderListTable: React.FC = () => {
-  const { onSearch, sort, onSort, data, isFetching, isLoading, onRetry, error, onMeta, meta } =
-    useOrderListHook();
+  const {
+    onSearch,
+    sort,
+    onSort,
+    data,
+    isFetching,
+    isLoading,
+    onRetry,
+    error,
+    onMeta,
+    meta,
+    onSubmitFilter,
+    onResetFilter,
+    onChangeEndDate,
+    onChangeStatus,
+    onChangeStartDate,
+    filters,
+    onOpenModal,
+  } = useOrderListHook();
 
   const headers = [
     {
@@ -52,7 +70,9 @@ const OrderListTable: React.FC = () => {
               />
             </div>
           </div>
-          <ButtonSecondary className="w-full lg:w-40">Filter</ButtonSecondary>
+          <ButtonSecondary onClick={() => onOpenModal('filter')} className="w-full lg:w-40">
+            Filter
+          </ButtonSecondary>
         </div>
       </div>
 
@@ -80,6 +100,16 @@ const OrderListTable: React.FC = () => {
         meta={meta}
         context="order-list"
         onPageChange={(page: number) => onMeta({ page })}
+      />
+
+      <ModalFilter
+        title="Filter Order"
+        filter={filters}
+        onChangeEndDate={onChangeEndDate}
+        onChangeStartDate={onChangeStartDate}
+        onChangeStatus={onChangeStatus}
+        onResetFilter={onResetFilter}
+        onSubmitFilter={onSubmitFilter}
       />
     </div>
   );
