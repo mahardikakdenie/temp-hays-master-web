@@ -5,6 +5,7 @@ import Input from '@/components/ui/form/Input';
 import { useEffect, useMemo, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import Select from '@/components/ui/form/Select';
+import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
 
 const ArticleForm: React.FC<{
   titleValue: string;
@@ -38,7 +39,6 @@ const ArticleForm: React.FC<{
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
   const [image, setImage] = useState<File | string>();
-  const [status, setStatus] = useState<number | string | null>(null);
   const isUpdateForm = useMemo(() => type === 'update', [type]);
 
   const {
@@ -57,12 +57,14 @@ const ArticleForm: React.FC<{
   }, [imageValue]);
   useEffect(() => {
     if (isUpdateForm) {
-      setStatus(statusValue || null);
+      // setStatus(statusValue || null);
     }
   }, [statusValue, isUpdateForm]);
 
   const TextLabel: React.FC<{ label: string }> = ({ label }) => {
-    return <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>;
+    return (
+      <label className="block text-sm font-medium text-gray-300 mb-2 input-label">{label}</label>
+    );
   };
   return (
     <div>
@@ -120,9 +122,10 @@ const ArticleForm: React.FC<{
         </div>
         {isUpdateForm && (
           <div>
-            <TextLabel label="Status" />
             <Select
-              value={status}
+              label="Status"
+              key={form.watch('status')}
+              value={form.watch('status')}
               options={[
                 { id: 1, name: 'Active' },
                 { id: 0, name: 'Non Active' },
@@ -131,10 +134,10 @@ const ArticleForm: React.FC<{
               onChange={(value) => {
                 if (handleStatus) {
                   handleStatus(value as number);
+                  form.setValue('status', value as number);
                 }
               }}
             />
-            <p className="mt-1 text-xs text-gray-400">Choose Status for Banner</p>
           </div>
         )}
         <div>
@@ -164,13 +167,14 @@ const ArticleForm: React.FC<{
           </div>
         </div>
         <div className="flex justify-end">
-          <button
+          <ButtonPrimary
             type="submit"
             disabled={isSubmitting}
+            isLoading={isSubmitting}
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
             Submit
-          </button>
+          </ButtonPrimary>
         </div>
       </form>
     </div>
