@@ -8,6 +8,7 @@ import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import Pagination from '@/components/ui/table/Pagination';
 import { useGlobal } from '@/contexts/global.context';
+import ModalFilter from '@/components/ui/modal/ModalFilter';
 
 const SubCategoryTable: React.FC = () => {
   const { onOpenModal } = useGlobal();
@@ -22,6 +23,12 @@ const SubCategoryTable: React.FC = () => {
     sort,
     onMeta,
     meta,
+    onSubmitFilter,
+    onResetFilter,
+    onChangeEndDate,
+    onChangeStartDate,
+    onChangeStatus,
+    filters,
   } = useSubCategory();
 
   const headers = [
@@ -102,6 +109,16 @@ const SubCategoryTable: React.FC = () => {
         meta={meta}
         context="sub-categories"
         onPageChange={(page: number) => onMeta({ page })}
+      />
+
+      <ModalFilter
+        title="Filter Sub Category"
+        filter={filters}
+        onChangeEndDate={onChangeEndDate}
+        onChangeStartDate={onChangeStartDate}
+        onChangeStatus={onChangeStatus}
+        onResetFilter={onResetFilter}
+        onSubmitFilter={onSubmitFilter}
       />
     </div>
   );
