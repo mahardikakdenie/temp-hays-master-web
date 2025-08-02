@@ -1,17 +1,13 @@
 import { useGlobal } from '@/contexts/global.context';
-import { useInternal } from '@/hooks/useInternal';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { App } from '@/libs/constants/app.const';
-import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
-import { Filter, Meta, Options } from '@/types/commons.types';
+import { Filter, Meta } from '@/types/commons.types';
 import { EXHIBITION } from '@/types/exhibition.types';
-import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash.debounce';
 import { useCallback, useMemo, useState } from 'react';
 
 const useExhibitionHook = () => {
-  const internalApi = useInternal();
   const { onCloseModal, onOpenModal } = useGlobal();
   const [appliedFilter, setAppliedFilter] = useState<Filter>(App.INITIAL_FILTER);
   const [filters, setFilters] = useState({
@@ -44,19 +40,6 @@ const useExhibitionHook = () => {
   const onChangeStatus = useCallback((value: string) => {
     setFilters((prev) => ({ ...prev, status: value }));
   }, []);
-
-  const { data: artistOptions } = useQuery<Options[], Error>({
-    queryKey: ['artist-options'],
-    queryFn: async () => {
-      const response = await internalApi(`${Routes.ARTIST}/options`);
-      if (response.status !== HttpStatus.OK) {
-        throw new Error('Failed to fetch subcategory options');
-      }
-
-      const { data } = await response.json();
-      return data;
-    },
-  });
 
   const fetchExhibition = usePaginatedFetch<EXHIBITION>({
     key: 'exhibition',
@@ -106,7 +89,6 @@ const useExhibitionHook = () => {
     onOpenModal,
     onSubmitFilter,
     onResetFilter,
-    artistOptions,
   };
 };
 
