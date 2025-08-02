@@ -5,9 +5,10 @@ import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import { Table } from '@/components/ui/table/Table';
+import Pagination from '@/components/ui/table/Pagination';
 
 const OrderListTable: React.FC = () => {
-  const { onSearch, sort, onSort, data, isFetching, isLoading, onRetry, error } =
+  const { onSearch, sort, onSort, data, isFetching, isLoading, onRetry, error, onMeta, meta } =
     useOrderListHook();
 
   const headers = [
@@ -75,6 +76,11 @@ const OrderListTable: React.FC = () => {
           isHideEdit
         />
       </Table>
+      <Pagination
+        meta={meta}
+        context="order-list"
+        onPageChange={(page: number) => onMeta({ page })}
+      />
     </div>
   );
 };
