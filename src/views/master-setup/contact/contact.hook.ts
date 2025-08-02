@@ -52,7 +52,7 @@ const useContact = () => {
   const fetchContact = usePaginatedFetch<Contact>({
     key: 'contacts',
     endpoint: Routes.CONTACT_LIST,
-    extraQuery: filters,
+    extraQuery: appliedFilter,
   });
 
   return {

@@ -57,7 +57,7 @@ const useBanner = () => {
   const fetchBanner = usePaginatedFetch<bannerList>({
     key: 'banners',
     endpoint: Routes.BANNER_LIST,
-    extraQuery: filters,
+    extraQuery: appliedFilter,
   });
 
   return {
