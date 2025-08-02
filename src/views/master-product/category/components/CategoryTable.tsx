@@ -8,6 +8,7 @@ import Pagination from '@/components/ui/table/Pagination';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import { useGlobal } from '@/contexts/global.context';
+import ModalFilter from '@/components/ui/modal/ModalFilter';
 
 const CategoryTable: React.FC = () => {
   const { onOpenModal } = useGlobal();
@@ -22,6 +23,12 @@ const CategoryTable: React.FC = () => {
     onSort,
     sort,
     onSearch,
+    onChangeEndDate,
+    onChangeStartDate,
+    onSubmitFilter,
+    onChangeStatus,
+    onResetFilter,
+    filters,
   } = useCategory();
 
   const headers = [
@@ -61,7 +68,9 @@ const CategoryTable: React.FC = () => {
               />
             </div>
           </div>
-          <ButtonSecondary className="w-full lg:w-40">Filter</ButtonSecondary>
+          <ButtonSecondary onClick={() => onOpenModal('filter')} className="w-full lg:w-40">
+            Filter
+          </ButtonSecondary>
         </div>
       </div>
 
@@ -83,6 +92,16 @@ const CategoryTable: React.FC = () => {
         />
       </Table>
       <Pagination meta={meta} context="categories" onPageChange={(page) => onMeta({ page })} />
+
+      <ModalFilter
+        title="Filter Category"
+        onSubmitFilter={onSubmitFilter}
+        onChangeEndDate={onChangeEndDate}
+        onChangeStartDate={onChangeStartDate}
+        onChangeStatus={onChangeStatus}
+        filter={filters}
+        onResetFilter={onResetFilter}
+      />
     </div>
   );
 };
