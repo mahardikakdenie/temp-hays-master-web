@@ -1,7 +1,11 @@
 import { useCallback, useState } from 'react';
 import { useGlobal } from '@/contexts/global.context';
-import type { Filter } from '@/types/commons.types';
+import type { Filter, Options } from '@/types/commons.types';
 import dayjs from 'dayjs';
+import { useQuery } from '@tanstack/react-query';
+import { useInternal } from '@/hooks/useInternal';
+import { Routes } from '@/libs/constants/routes.const';
+import { HttpStatus } from '@/libs/constants/httpStatus.const';
 
 const INITIAL_FILTER = {
   startDate: '',
@@ -11,6 +15,7 @@ const INITIAL_FILTER = {
 
 const useUser = () => {
   const { onCloseModal } = useGlobal();
+  const internalApi = useInternal();
 
   const [filter, setFilter] = useState<Filter>(INITIAL_FILTER);
   const [appliedFilter, setAppliedFilter] = useState<Filter>(INITIAL_FILTER);
@@ -44,6 +49,19 @@ const useUser = () => {
     setAppliedFilter(INITIAL_FILTER);
   }, []);
 
+  const { data: accessOptions } = useQuery<Options[], Error>({
+    queryKey: ['user-access-options'],
+    queryFn: async () => {
+      const response = await internalApi(Routes.USER_ACCESS_OPTION);
+      if (response.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch subcategory options');
+      }
+
+      const { data } = await response.json();
+      return data;
+    },
+  });
+
   return {
     filter,
     appliedFilter,
@@ -52,6 +70,7 @@ const useUser = () => {
     onChangeStatus,
     onSubmitFilter,
     onResetFilter,
+    accessOptions,
   };
 };
 
