@@ -6,10 +6,29 @@ import { Table } from '@/components/ui/table/Table';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import TableDataUI from '@/components/ui/table/TableData';
 import { useGlobal } from '@/contexts/global.context';
+import Pagination from '@/components/ui/table/Pagination';
+import ModalFilter from '@/components/ui/modal/ModalFilter';
 
 const ThemeTable: React.FC = () => {
   const { onOpenModal } = useGlobal();
-  const { onSearch, onSort, sort, data, isLoading, isFetching, onRetry, error } = useThemeHook();
+  const {
+    onSearch,
+    onSort,
+    sort,
+    data,
+    isLoading,
+    isFetching,
+    onRetry,
+    error,
+    meta,
+    onMeta,
+    filters,
+    onChangeEndDate,
+    onChangeStartDate,
+    onChangeStatus,
+    onResetFilter,
+    onSubmitFilter,
+  } = useThemeHook();
 
   const headers = [
     {
@@ -78,6 +97,17 @@ const ThemeTable: React.FC = () => {
           onUpdateClick={(data) => onOpenModal('detail', data)}
         />
       </Table>
+      <Pagination meta={meta} context="theme" onPageChange={(page: number) => onMeta({ page })} />
+
+      <ModalFilter
+        title="Filters Theme"
+        filter={filters}
+        onSubmitFilter={onSubmitFilter}
+        onChangeEndDate={onChangeEndDate}
+        onChangeStartDate={onChangeStartDate}
+        onChangeStatus={onChangeStatus}
+        onResetFilter={onResetFilter}
+      />
     </div>
   );
 };

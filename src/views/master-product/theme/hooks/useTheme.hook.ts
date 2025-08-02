@@ -1,10 +1,14 @@
+import { useGlobal } from '@/contexts/global.context';
 import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
+import { App } from '@/libs/constants/app.const';
 import { Routes } from '@/libs/constants/routes.const';
-import { Meta } from '@/types/commons.types';
+import { Filter, Meta } from '@/types/commons.types';
 import { Theme } from '@/types/theme.types';
 import { useCallback, useState } from 'react';
 
 const useThemeHook = () => {
+  const { onCloseModal, onOpenModal } = useGlobal();
+  const [appliedFilter, setAppliedFilter] = useState<Filter>(App.INITIAL_FILTER);
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
@@ -37,8 +41,18 @@ const useThemeHook = () => {
   const fetchTheme = usePaginatedFetch<Theme>({
     key: 'theme',
     endpoint: Routes.THEME_LIST,
-    extraQuery: filters,
+    extraQuery: appliedFilter,
   });
+
+  const onSubmitFilter = useCallback(() => {
+    setAppliedFilter(filters);
+    onCloseModal();
+  }, [filters, onCloseModal]);
+
+  const onResetFilter = useCallback(() => {
+    setFilters(App.INITIAL_FILTER);
+    setAppliedFilter(App.INITIAL_FILTER);
+  }, []);
 
   return {
     ...fetchTheme,
@@ -48,6 +62,10 @@ const useThemeHook = () => {
     onChangeStartDate,
     onChangeStatus,
     onMeta,
+    onCloseModal,
+    onResetFilter,
+    onSubmitFilter,
+    onOpenModal,
   };
 };
 
