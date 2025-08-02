@@ -52,6 +52,10 @@ const BannerTable: React.FC = () => {
       key: 'created_at',
     },
     {
+      name: 'Updated at',
+      key: 'updated_at',
+    },
+    {
       name: 'Actions',
       key: 'actions',
     },

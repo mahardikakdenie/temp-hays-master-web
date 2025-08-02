@@ -50,6 +50,14 @@ const ContactTable: React.FC = () => {
       key: 'status',
     },
     {
+      name: 'Created at',
+      key: 'created_at',
+    },
+    {
+      name: 'Updated at',
+      key: 'updated_at',
+    },
+    {
       name: 'Actions',
       key: 'actions',
     },
