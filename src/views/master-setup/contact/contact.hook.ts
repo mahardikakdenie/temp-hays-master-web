@@ -17,9 +17,6 @@ const useContact = () => {
     totalData: 0,
     totalPage: 0,
   });
-  // const [search, setSearch] = useState('');
-  // const [debouncedSearch, setDebouncedSearch] = useState('');
-  // const [sort, setSort] = useState<Sort>({ column: '', order: '' });
 
   const onMeta = (meta: Partial<{ page: number }>) => {
     setMeta((prev) => ({ ...prev, ...meta }));
