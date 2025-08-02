@@ -83,7 +83,9 @@ const ProductTable: React.FC = () => {
               />
             </div>
           </div>
-          <ButtonSecondary className="w-full lg:w-40">Filter</ButtonSecondary>
+          <ButtonSecondary onClick={() => onOpenModal('filter')} className="w-full lg:w-40">
+            Filter
+          </ButtonSecondary>
         </div>
       </div>
 
