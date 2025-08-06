@@ -69,11 +69,6 @@ const useUpdateProductHook = () => {
     enabled: !!productId,
   });
 
-  const removeImage = async (index: number) => {
-    setSelectedImage((prev) => [...prev, data?.images[index]?.id as number]);
-    setImages((prev: string[]) => prev.filter((_, i) => i !== index));
-  };
-
   useEffect(() => {
     if (data) {
       console.log('data?.images : ', data?.images);
@@ -209,22 +204,55 @@ const useUpdateProductHook = () => {
       const safeString = (value: unknown): string => {
         return value == null ? '' : String(value);
       };
-      console.log(data);
       const formData = new FormData();
       formData.append('product_id', safeString(data.product_id));
       if (data.image_ids && data.image_ids?.length > 0) {
         formData.append('image_ids', JSON.stringify(data.image_ids));
+      } else {
+        formData.append('image_ids', '');
       }
 
       if (data.images && data.images?.length > 0) {
         data.images.forEach((image) => {
           formData.append('images', image);
         });
+      } else {
+        formData.append('images', '');
       }
 
       return await updateProductImages(formData);
     },
   });
+
+  const removeImage = async (index: number) => {
+    setSelectedImage((prev) => [...prev, data?.images[index]?.id as number]);
+    setImages((prev: string[]) => prev.filter((_, i) => i !== index));
+
+    const response = await handleImageMutation.mutateAsync({
+      product_id: data?.id as number,
+      image_ids: [data?.images[index]?.id as number],
+      images: [],
+    });
+
+    if (response.status >= HttpStatus.BAD_REQUEST) {
+      console.log(response);
+
+      Notification({
+        type: 'error',
+        message: 'Failed to add product images',
+        description: response.message,
+        position: 'bottom-right',
+      });
+      return;
+    }
+
+    Notification({
+      type: 'success',
+      message: 'Success',
+      description: response.message,
+      position: 'bottom-right',
+    });
+  };
 
   const handleFileChange = async (file: File | null) => {
     if (!file) return;
@@ -247,9 +275,8 @@ const useUpdateProductHook = () => {
       images: [file],
     });
 
+    console.log(response);
     if (response.status >= HttpStatus.BAD_REQUEST) {
-      console.log(response);
-
       Notification({
         type: 'error',
         message: 'Failed to add product images',
