@@ -23,3 +23,14 @@ export const updateProductApi = async (data: UpdateProductForm) => {
     .then((response) => responseServerRoute(response))
     .catch((error) => catchServerRoute(error));
 };
+
+export const updateProductImages = async (data: FormData) => {
+  return await externalAPI
+    .patch(`${Routes.PRODUCT}/image`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then((response) => responseServerRoute(response))
+    .catch((error) => catchServerRoute(error));
+};

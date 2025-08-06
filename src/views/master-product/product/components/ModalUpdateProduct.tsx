@@ -5,6 +5,9 @@ import Input from '@/components/ui/form/Input';
 import QuillEditor from '@/components/ui/form/QuillEditor';
 import Select from '@/components/ui/form/Select';
 import LoadingIcon from '@/components/icons/Loading';
+import Image from 'next/image';
+import TrashIcon from '@/components/icons/Trash';
+import MediaInput from '@/components/ui/form/MediaInput';
 
 const ModalUpdateProduct: React.FC = () => {
   const {
@@ -17,6 +20,9 @@ const ModalUpdateProduct: React.FC = () => {
     artistOpts,
     isLoading,
     onSubmit,
+    images,
+    removeImage,
+    handleFileChange,
   } = useUpdateProductHook();
   const {
     register,
@@ -194,6 +200,46 @@ const ModalUpdateProduct: React.FC = () => {
                   }}
                 />
                 <p className="mt-1 text-xs text-gray-400">Choose Status for Product</p>
+              </div>
+              <div className="col-span-2">
+                <div className="grid grid-cols-4 gap-2">
+                  {images.map((img, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="aspect-video relative group cursor-pointer overflow-hidden rounded-lg border border-gray-700 bg-[#1a1d21]"
+                      >
+                        <Image
+                          src={img as string}
+                          alt={`Preview ${index + 1}`}
+                          width={800}
+                          height={160}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 group-hover:blur-sm"
+                        />
+
+                        <div className="absolute inset-0  bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
+                          <button
+                            type="button"
+                            className="transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+                            aria-label={`Hapus gambar ${index + 1}`}
+                          >
+                            <div
+                              onClick={() => removeImage(index)}
+                              className="flex items-center justify-center w-10 h-10 rounded-full bg-red-700 bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 hover:bg-red-500 hover:bg-opacity-50 text-white text-sm font-semibold"
+                            >
+                              <TrashIcon className="w-3 h-3" />
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <MediaInput
+                  type="multiple"
+                  onChange={handleFileChange}
+                  label="Upload Product Image"
+                />
               </div>
             </div>
           </div>

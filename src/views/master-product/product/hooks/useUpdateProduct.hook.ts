@@ -1,11 +1,11 @@
-import { updateProductApi } from '@/actions/product';
+import { updateProductApi, updateProductImages } from '@/actions/product';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
 import { Options } from '@/types/commons.types';
-import { UpdateProductForm } from '@/types/product.types';
+import { ProductDetail, UpdateProductForm } from '@/types/product.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
@@ -36,6 +36,9 @@ const useUpdateProductHook = () => {
     resolver: yupResolver(updateSchema),
   });
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [images, setImages] = useState<string[]>([]);
+  const [selectedImage, setSelectedImage] = useState<number[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [productId, setProductId] = useState<number>(0);
   const items = [
     { title: 'Master Product', href: '#' },
@@ -52,7 +55,7 @@ const useUpdateProductHook = () => {
     }
   }, [item]);
 
-  const { data, isLoading } = useQuery<UpdateProductForm, Error>({
+  const { data, isLoading } = useQuery<ProductDetail, Error>({
     queryKey: ['product-detail', productId],
     queryFn: async () => {
       const response = await internalAPI(`${Routes.PRODUCT}/detail/${productId}`);
@@ -66,8 +69,16 @@ const useUpdateProductHook = () => {
     enabled: !!productId,
   });
 
+  const removeImage = async (index: number) => {
+    setSelectedImage((prev) => [...prev, data?.images[index]?.id as number]);
+    setImages((prev: string[]) => prev.filter((_, i) => i !== index));
+  };
+
   useEffect(() => {
     if (data) {
+      console.log('data?.images : ', data?.images);
+
+      setImages(data?.images?.map((img) => img?.image as string) ?? []);
       form.reset({
         id: data?.id,
         name: data?.name,
@@ -159,10 +170,7 @@ const useUpdateProductHook = () => {
   });
 
   const updatePoductMutation = useMutation({
-    mutationFn: async (data: UpdateProductForm) => {
-      console.log('🚀 ~ useUpdateProductHook ~ data:', data);
-      return await updateProductApi(data);
-    },
+    mutationFn: async (data: UpdateProductForm) => await updateProductApi(data),
   });
 
   const onSubmit: SubmitHandler<UpdateProductForm> = async (data) => {
@@ -196,10 +204,76 @@ const useUpdateProductHook = () => {
     onCancel();
   };
 
+  const handleImageMutation = useMutation({
+    mutationFn: async (data: { product_id: number; image_ids: number[]; images: File[] }) => {
+      const safeString = (value: unknown): string => {
+        return value == null ? '' : String(value);
+      };
+      console.log(data);
+      const formData = new FormData();
+      formData.append('product_id', safeString(data.product_id));
+      if (data.image_ids && data.image_ids?.length > 0) {
+        formData.append('image_ids', JSON.stringify(data.image_ids));
+      }
+
+      if (data.images && data.images?.length > 0) {
+        data.images.forEach((image) => {
+          formData.append('images', image);
+        });
+      }
+
+      return await updateProductImages(formData);
+    },
+  });
+
+  const handleFileChange = async (file: File | null) => {
+    if (!file) return;
+
+    const productId = data?.id;
+
+    const isDuplicate = files.some(
+      (f) => f.name === file.name && f.size === file.size && f.lastModified === file.lastModified,
+    );
+    if (isDuplicate) return;
+
+    const url = URL.createObjectURL(file);
+
+    setImages((prev) => [...prev, url]);
+    setFiles((prev) => [...prev, file]);
+
+    const response = await handleImageMutation.mutateAsync({
+      product_id: productId as number,
+      image_ids: selectedImage,
+      images: [file],
+    });
+
+    if (response.status >= HttpStatus.BAD_REQUEST) {
+      console.log(response);
+
+      Notification({
+        type: 'error',
+        message: 'Failed to add product images',
+        description: response.message,
+        position: 'bottom-right',
+      });
+      return;
+    }
+
+    Notification({
+      type: 'success',
+      message: 'Success',
+      description: response.message,
+      position: 'bottom-right',
+    });
+  };
+
   const onCancel = useCallback(() => {
     form.reset();
+    if (data?.images && data.images.length > 0) {
+      setImages(data?.images?.map((img) => img.image));
+    }
     onCloseModal();
-  }, [form, onCloseModal]);
+  }, [form, onCloseModal, data]);
 
   return {
     form,
@@ -213,6 +287,11 @@ const useUpdateProductHook = () => {
     items,
     onCancel,
     isLoading,
+    images,
+    removeImage,
+    handleFileChange,
+    handleImageMutation,
+    files,
   };
 };
 

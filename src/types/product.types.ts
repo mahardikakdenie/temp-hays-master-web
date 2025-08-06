@@ -41,3 +41,10 @@ export type UpdateProductForm = {
   desc: string;
   status: number;
 };
+
+export type ProductDetail = UpdateProductForm & {
+  images: {
+    image: string;
+    id: number;
+  }[];
+};
