@@ -38,7 +38,7 @@ const useUpdateProductHook = () => {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [images, setImages] = useState<string[]>([]);
   const [imgs, setImgs] = useState<{ id: number; image: string }[]>([]);
-  const [selectedImage, setSelectedImage] = useState<number[]>([]);
+  // const [selectedImage, setSelectedImage] = useState<number[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [productId, setProductId] = useState<number>(0);
   const items = [
@@ -206,7 +206,12 @@ const useUpdateProductHook = () => {
       };
       const formData = new FormData();
       formData.append('product_id', safeString(data.product_id));
-      if (data.image_ids && data.image_ids?.length > 0) {
+
+      if (
+        data.image_ids &&
+        data.image_ids?.length > 0 &&
+        data.image_ids.some((img) => img !== null && img !== undefined)
+      ) {
         formData.append('image_ids', JSON.stringify(data.image_ids));
       } else {
         formData.append('image_ids', '');
@@ -224,36 +229,48 @@ const useUpdateProductHook = () => {
     },
   });
 
-  const removeImage = async (index: number) => {
-    setSelectedImage((prev) => [...prev, data?.images[index]?.id as number]);
-    setImages((prev: string[]) => prev.filter((_, i) => i !== index));
+  const removeImage = async (image: string) => {
+    setImages((prev) => prev.filter((img) => img !== image));
 
-    const response = await handleImageMutation.mutateAsync({
-      product_id: data?.id as number,
-      image_ids: [imgs?.[index].id as number],
-      images: [],
-    });
+    try {
+      const response = await handleImageMutation.mutateAsync({
+        product_id: data?.id as number,
+        image_ids: [imgs[imgs.findIndex((img) => img.image === image)]?.id],
+        images: [],
+      });
 
-    if (response.status >= HttpStatus.BAD_REQUEST) {
-      console.log(response);
+      setImgs((prev) => prev.filter((data) => data.image !== image));
+      if (response.status >= HttpStatus.BAD_REQUEST) {
+        Notification({
+          type: 'error',
+          message: 'Failed to remove image',
+          description: response.message,
+          position: 'bottom-right',
+        });
+        return;
+      }
 
       Notification({
-        type: 'error',
-        message: 'Failed to add product images',
+        type: 'success',
+        message: 'Image removed successfully',
         description: response.message,
         position: 'bottom-right',
       });
-      return;
+    } catch (error) {
+      console.log(error);
+
+      Notification({
+        type: 'error',
+        message: 'Error',
+        description: 'Failed to remove image ',
+        position: 'bottom-right',
+      });
+
+      // Jika ingin rollback saat error
+      // setImages((prev) => [...prev, data.images[index].image]);
+      // setImgs((prev) => [...prev, data.images[index]]);
     }
-
-    Notification({
-      type: 'success',
-      message: 'Success',
-      description: response.message,
-      position: 'bottom-right',
-    });
   };
-
   const handleFileChange = async (file: File | null) => {
     if (!file) return;
 
@@ -271,18 +288,17 @@ const useUpdateProductHook = () => {
 
     const response = await handleImageMutation.mutateAsync({
       product_id: productId as number,
-      image_ids: selectedImage,
+      image_ids: [],
       images: [file],
     });
 
-    console.log(response?.data?.data);
-    data?.images.push({
-      id: response.data.data?.data?.[0]?.id,
-      image: response.data.data?.data?.[0]?.image,
-    });
-    console.log('images : ', data?.images);
-    setImgs(data?.images ?? []);
-
+    if (response.data?.data) {
+      data?.images.push({
+        id: response.data.data?.data?.[0]?.id ?? '',
+        image: response.data.data?.data?.[0]?.image ?? '',
+      });
+      setImgs(data?.images ?? []);
+    }
     if (response.status >= HttpStatus.BAD_REQUEST) {
       Notification({
         type: 'error',
@@ -326,6 +342,7 @@ const useUpdateProductHook = () => {
     handleFileChange,
     handleImageMutation,
     files,
+    imgs,
   };
 };
 

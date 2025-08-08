@@ -45,7 +45,14 @@ const ModalUpdateProduct: React.FC = () => {
     <Modal
       name="detail"
       title="Update Product"
-      action={<ActionModal isSubmitting={isSubmitting} onCancel={onCancel} formId={FORM_ID} />}
+      action={
+        <ActionModal
+          isSubmitting={isSubmitting}
+          images={images}
+          onCancel={onCancel}
+          formId={FORM_ID}
+        />
+      }
     >
       {isLoading ? (
         <div className="flex justify-center py-8">
@@ -224,7 +231,7 @@ const ModalUpdateProduct: React.FC = () => {
                             aria-label={`Hapus gambar ${index + 1}`}
                           >
                             <div
-                              onClick={() => removeImage(index)}
+                              onClick={() => removeImage(img)}
                               className="flex items-center justify-center w-10 h-10 rounded-full bg-red-700 bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 hover:bg-red-500 hover:bg-opacity-50 text-white text-sm font-semibold"
                             >
                               <TrashIcon className="w-3 h-3" />
