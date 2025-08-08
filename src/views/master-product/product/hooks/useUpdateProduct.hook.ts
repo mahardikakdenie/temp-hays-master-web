@@ -37,6 +37,7 @@ const useUpdateProductHook = () => {
   });
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [images, setImages] = useState<string[]>([]);
+  const [imgs, setImgs] = useState<{ id: number; image: string }[]>([]);
   const [selectedImage, setSelectedImage] = useState<number[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [productId, setProductId] = useState<number>(0);
@@ -71,9 +72,8 @@ const useUpdateProductHook = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('data?.images : ', data?.images);
-
       setImages(data?.images?.map((img) => img?.image as string) ?? []);
+      setImgs(data?.images);
       form.reset({
         id: data?.id,
         name: data?.name,
@@ -230,7 +230,7 @@ const useUpdateProductHook = () => {
 
     const response = await handleImageMutation.mutateAsync({
       product_id: data?.id as number,
-      image_ids: [data?.images[index]?.id as number],
+      image_ids: [imgs?.[index].id as number],
       images: [],
     });
 
@@ -275,7 +275,14 @@ const useUpdateProductHook = () => {
       images: [file],
     });
 
-    console.log(response);
+    console.log(response?.data?.data);
+    data?.images.push({
+      id: response.data.data?.data?.[0]?.id,
+      image: response.data.data?.data?.[0]?.image,
+    });
+    console.log('images : ', data?.images);
+    setImgs(data?.images ?? []);
+
     if (response.status >= HttpStatus.BAD_REQUEST) {
       Notification({
         type: 'error',
