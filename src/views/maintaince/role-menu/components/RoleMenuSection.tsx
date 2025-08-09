@@ -2,6 +2,7 @@ import PencilSquareIcon from '@/components/icons/PencilSquare';
 import { cn } from '@/libs/utils/cn.utils';
 import { Button } from '@headlessui/react';
 import { useState } from 'react';
+import useRoleMenuHook from '../hooks/useRoleMenu.hook';
 
 const RoleMenuSection: React.FC = () => {
   const headerList = [
@@ -16,6 +17,7 @@ const RoleMenuSection: React.FC = () => {
   ];
 
   const [selectedType, setSelectedType] = useState<string>('cms');
+  const { data } = useRoleMenuHook();
   return (
     <div className="mt-6 mx-auto px-10 py-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
       <div className="mb-4">
@@ -44,18 +46,24 @@ const RoleMenuSection: React.FC = () => {
 
       <div className="mt-4">
         <div className="border border-ui-600 px-4 rounded-xl py-7">
-          <div className="grid grid-col-12">
-            <div className="col-span-12 sm:col-span-2 p-4 border border-ui-600 rounded-xl">
-              <div className="border border-ui-600 rounded-xl bg-gray-700 flex justify-between">
-                <div className="py-3 px-2">
-                  <span>Menu</span>
-                </div>
-                <div className="py-3 px-2">
-                  <PencilSquareIcon className="w-6 h-6" />
-                </div>
-              </div>
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-12 sm:col-span-4 p-4 border border-ui-600 rounded-xl">
+              {data?.map((item) => {
+                return (
+                  <div key={item.id} className="rounded-xl bg-gray-700 flex justify-between mb-4">
+                    <div className="py-3 px-2">
+                      <span>{item.name}</span>
+                    </div>
+                    <div className="py-3 px-2">
+                      <PencilSquareIcon className="w-6 h-6 cursor-pointer" />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="col-span-8"></div>
+            <div className="col-span-12 sm:col-span-8 p-4 border border-ui-600 rounded-xl">
+              halo
+            </div>
           </div>
         </div>
       </div>
