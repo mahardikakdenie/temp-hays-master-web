@@ -1,6 +1,6 @@
 import type React from 'react';
 import PageHeader from '@/components/ui/page/Header';
-import { useGlobal } from '@/contexts/global.context';
+import { useRouter } from 'next/navigation';
 
 const UserHeader: React.FC = () => {
   const itemBreadcrumbs = [
@@ -8,7 +8,7 @@ const UserHeader: React.FC = () => {
     { title: 'Role', href: '/maintaince/role' },
   ];
 
-  const { onOpenModal } = useGlobal();
+  const router = useRouter();
 
   return (
     <PageHeader
@@ -16,7 +16,7 @@ const UserHeader: React.FC = () => {
       title="Role"
       titleButton="Create new role"
       isShowBtn
-      onClick={() => onOpenModal('add')}
+      onClick={() => router.push('/maintaince/role/create')}
     />
   );
 };

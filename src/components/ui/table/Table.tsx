@@ -16,6 +16,7 @@ type TableHeaderProps = {
 type TableRowProps = {
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 };
 
 type TableBodyProps = {
@@ -47,8 +48,12 @@ const TableHeader: React.FC<TableHeaderProps> = ({ children, className }) => {
   return <thead className={cn('text-xs uppercase bg-ui-800', className)}>{children}</thead>;
 };
 
-const TableRow: React.FC<TableRowProps> = ({ children, className }) => {
-  return <tr className={className}>{children}</tr>;
+const TableRow: React.FC<TableRowProps> = ({ children, className, onClick }) => {
+  return (
+    <tr onClick={onClick} className={className}>
+      {children}
+    </tr>
+  );
 };
 
 const TableBody: React.FC<TableBodyProps> = ({ children, className }) => {

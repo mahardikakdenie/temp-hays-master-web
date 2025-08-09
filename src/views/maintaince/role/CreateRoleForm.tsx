@@ -1,5 +1,10 @@
 'use client';
+import ButtonPrimary from '@/components/ui/button/ButtonPrimary';
+import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
+import Input from '@/components/ui/form/Input';
+import Textarea from '@/components/ui/form/Textarea';
 import PageHeader from '@/components/ui/page/Header';
+import PermissionTable from './component/rolePermission';
 
 const items = [
   { title: 'Master Setup', href: '#' },
@@ -21,7 +26,33 @@ const CreateRoleFormViews: React.FC = () => {
           </div>
         </div>
         <hr className="my-4 border border-gray-600" />
-        <form></form>
+        <form>
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-12">
+              <Input
+                label="Name Role"
+                placeholder="Contoh : Superadmin"
+                className="bg-gray-700"
+                required
+              />
+            </div>
+            <div className="col-span-12">
+              <Textarea
+                label="Name Role"
+                placeholder="Contoh : User ini biasanya digunakan untuk page admin atau page landing page"
+                className="bg-gray-700"
+                required
+              />
+            </div>
+            <div className="col-span-12 p-3">
+              <PermissionTable />
+            </div>
+          </div>
+          <div className="flex justify-end gap-4 mt-5">
+            <ButtonSecondary>Back</ButtonSecondary>
+            <ButtonPrimary>Create Role</ButtonPrimary>
+          </div>
+        </form>
       </div>
     </div>
   );
