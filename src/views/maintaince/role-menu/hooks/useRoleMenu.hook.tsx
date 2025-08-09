@@ -3,11 +3,26 @@ import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
 import { Menu } from '@/types/commons.types';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const useRoleMenuHook = () => {
   const internalAPI = useInternal();
   const [selectedMenu, setSelectedMenu] = useState<Menu>();
+  // const []
+
+  const headerList = [
+    {
+      key: 'cms',
+      name: 'CMS',
+    },
+    // {
+    //   key: 'landing-page',
+    //   name: 'Landing page',
+    // },
+  ];
+
+  const [selectedType, setSelectedType] = useState<string>('cms');
+
   const { data } = useQuery<Menu[], Error>({
     queryKey: ['role-menu'],
     queryFn: async () => {
@@ -22,6 +37,12 @@ const useRoleMenuHook = () => {
     },
   });
 
+  useEffect(() => {
+    if (data) {
+      setSelectedMenu(data[0]);
+    }
+  }, [data]);
+
   const handlingSelectMenu = useCallback((selected: Menu) => {
     setSelectedMenu(selected);
   }, []);
@@ -29,6 +50,9 @@ const useRoleMenuHook = () => {
     data,
     selectedMenu,
     handlingSelectMenu,
+    headerList,
+    selectedType,
+    setSelectedType,
   };
 };
 

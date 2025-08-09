@@ -1,23 +1,11 @@
 import PencilSquareIcon from '@/components/icons/PencilSquare';
 import { cn } from '@/libs/utils/cn.utils';
 import { Button } from '@headlessui/react';
-import { useState } from 'react';
 import useRoleMenuHook from '../hooks/useRoleMenu.hook';
 
 const RoleMenuSection: React.FC = () => {
-  const headerList = [
-    {
-      key: 'cms',
-      name: 'CMS',
-    },
-    {
-      key: 'landing-page',
-      name: 'Landing page',
-    },
-  ];
-
-  const [selectedType, setSelectedType] = useState<string>('cms');
-  const { data } = useRoleMenuHook();
+  const { data, selectedMenu, handlingSelectMenu, selectedType, setSelectedType, headerList } =
+    useRoleMenuHook();
   return (
     <div className="mt-6 mx-auto px-10 py-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
       <div className="mb-4">
@@ -50,19 +38,50 @@ const RoleMenuSection: React.FC = () => {
             <div className="col-span-12 sm:col-span-4 p-4 border border-ui-600 rounded-xl">
               {data?.map((item) => {
                 return (
-                  <div key={item.id} className="rounded-xl bg-gray-700 flex justify-between mb-4">
-                    <div className="py-3 px-2">
-                      <span>{item.name}</span>
+                  <div
+                    onClick={() => handlingSelectMenu(item)}
+                    key={item.id}
+                    className={cn(
+                      'rounded-xl flex justify-between mb-4 cursor-pointer hover:bg-gray-700',
+                      selectedMenu?.id === item.id && 'bg-gray-700 ',
+                    )}
+                  >
+                    <div className="py-3 px-5">
+                      <span className="text-sm">{item.name}</span>
                     </div>
-                    <div className="py-3 px-2">
-                      <PencilSquareIcon className="w-6 h-6 cursor-pointer" />
+                    <div className="py-4 px-2 flex justify-center items-center">
+                      <button className="">
+                        <PencilSquareIcon className="w-4 h-4 cursor-pointer" />
+                      </button>
                     </div>
                   </div>
                 );
               })}
             </div>
             <div className="col-span-12 sm:col-span-8 p-4 border border-ui-600 rounded-xl">
-              halo
+              {selectedMenu && selectedMenu.child.length > 0 ? (
+                selectedMenu?.child.map((child) => {
+                  return (
+                    <div
+                      key={child.id}
+                      className={cn('rounded-xl flex justify-between mb-4', 'bg-gray-700 ')}
+                    >
+                      <div className="py-3 px-5">
+                        <span className="text-sm">{child.name}</span>
+                      </div>
+                      <div className="py-4 px-2 flex justify-center items-center">
+                        <button className="">
+                          <PencilSquareIcon className="w-4 h-4 cursor-pointer" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="flex justify-center p-7">
+                  <div className="">Tidak Ada Sub Menu</div>
+                </div>
+              )}
             </div>
           </div>
         </div>
