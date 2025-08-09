@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import RoleMenuViews from '@/views/maintaince/role-menu';
 
 export const metadata: Metadata = {
-  title: 'Access - Web Application',
-  description: 'Access page of Web Application',
+  title: 'Access - Hays Gallery',
+  description: 'Access page of Hays Gallery',
 };
 
 const RoleMenuPage: React.FC = () => {

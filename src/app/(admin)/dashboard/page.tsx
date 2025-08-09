@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import DashboardView from '@/views/dashboard';
 
 export const metadata: Metadata = {
-  title: 'Dashboard - Web Application',
-  description: 'Dashboard page of Web Application',
+  title: 'Dashboard - Hays Gallery',
+  description: 'Dashboard page of Hays Gallery',
 };
 
 const DashboardPage: React.FC = () => {

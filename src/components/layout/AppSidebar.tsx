@@ -34,7 +34,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ menus }) => {
           <Image src={LogoImage} alt="Logo" className="w-full h-10" />
           {/* {(isExpanded || isMobileOpen) && (
             <p className="text-lg font-semibold whitespace-nowrap overflow-hidden">
-              Web Application
+              Hays Gallery
             </p>
           )} */}
         </div>

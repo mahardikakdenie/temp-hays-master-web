@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import AccessView from '@/views/setting/access';
 
 export const metadata: Metadata = {
-  title: 'Setup Access - Web Application',
-  description: 'Setup Access page of Web Application',
+  title: 'Setup Access - Hays Gallery',
+  description: 'Setup Access page of Hays Gallery',
 };
 
 const AccessPage: React.FC = () => {

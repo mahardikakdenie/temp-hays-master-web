@@ -4,8 +4,8 @@ import { catchServerComponent } from '@/libs/utils/catch.utils';
 import UserView from '@/views/setting/user';
 
 export const metadata: Metadata = {
-  title: 'Setup User - Web Application',
-  description: 'Setup User page of Web Application',
+  title: 'Setup User - Hays Gallery',
+  description: 'Setup User page of Hays Gallery',
 };
 
 const UserPage: React.FC = async () => {

@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import UserView from '@/views/setting/user';
 
 export const metadata: Metadata = {
-  title: 'User - Web Application',
-  description: 'User page of Web Application',
+  title: 'User - Hays Gallery',
+  description: 'User page of Hays Gallery',
 };
 
 const UserPage: React.FC = () => {

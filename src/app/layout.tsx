@@ -19,8 +19,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Web Application',
-  description: 'Page of Web Application',
+  title: 'Hays Gallery',
+  description: 'Page of Hays Gallery',
 };
 
 const RootLayout = ({

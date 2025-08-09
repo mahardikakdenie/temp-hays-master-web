@@ -24,7 +24,7 @@ const LoginView: React.FC = () => {
     <div className="flex flex-col flex-1 w-full">
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div className="flex flex-col items-center gap-2 mb-5 sm:mb-8">
-          <h1 className="text-2xl text-center font-bold mb-1">Welcome Back to Web Application!</h1>
+          <h1 className="text-2xl text-center font-bold mb-1">Welcome Back to Hays Gallery!</h1>
           <span className="text-sm text-gray-400">
             Enter your credentials to access your account.
           </span>
@@ -88,7 +88,7 @@ const LoginView: React.FC = () => {
 
             <div>
               <p className="text-center text-sm text-gray-400">
-                &copy; 2025 Web Application. All Right Reserved
+                &copy; 2025 Hays Gallery. All Right Reserved
               </p>
             </div>
           </div>
