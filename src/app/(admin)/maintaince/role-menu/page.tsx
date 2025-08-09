@@ -1,5 +1,6 @@
 import type React from 'react';
 import type { Metadata } from 'next';
+import RoleMenuViews from '@/views/maintaince/role-menu';
 
 export const metadata: Metadata = {
   title: 'Access - Web Application',
@@ -7,7 +8,11 @@ export const metadata: Metadata = {
 };
 
 const RoleMenuPage: React.FC = () => {
-  return <></>;
+  return (
+    <div>
+      <RoleMenuViews />
+    </div>
+  );
 };
 
 export default RoleMenuPage;
