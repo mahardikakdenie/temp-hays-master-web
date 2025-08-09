@@ -1,3 +1,4 @@
+import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
@@ -8,7 +9,7 @@ import { useCallback, useEffect, useState } from 'react';
 const useRoleMenuHook = () => {
   const internalAPI = useInternal();
   const [selectedMenu, setSelectedMenu] = useState<Menu>();
-  // const []
+  const { onOpenModal } = useGlobal();
 
   const headerList = [
     {
@@ -53,6 +54,7 @@ const useRoleMenuHook = () => {
     headerList,
     selectedType,
     setSelectedType,
+    onOpenModal,
   };
 };
 

@@ -1,6 +1,7 @@
 'use client';
 import PageHeader from '@/components/ui/page/Header';
 import RoleMenuSection from './components/RoleMenuSection';
+import ModalUpdateRoleMenu from './components/ModalUpdateRoleMenu';
 
 const RoleMenuViews: React.FC = () => {
   const items = [
@@ -15,6 +16,7 @@ const RoleMenuViews: React.FC = () => {
       <div className="col-span-12">
         <RoleMenuSection />
       </div>
+      <ModalUpdateRoleMenu />
     </div>
   );
 };

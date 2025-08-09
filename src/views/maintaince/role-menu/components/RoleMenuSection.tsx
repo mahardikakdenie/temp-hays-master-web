@@ -4,8 +4,15 @@ import { Button } from '@headlessui/react';
 import useRoleMenuHook from '../hooks/useRoleMenu.hook';
 
 const RoleMenuSection: React.FC = () => {
-  const { data, selectedMenu, handlingSelectMenu, selectedType, setSelectedType, headerList } =
-    useRoleMenuHook();
+  const {
+    data,
+    selectedMenu,
+    handlingSelectMenu,
+    selectedType,
+    setSelectedType,
+    headerList,
+    onOpenModal,
+  } = useRoleMenuHook();
   return (
     <div className="mt-6 mx-auto px-10 py-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
       <div className="mb-4">
@@ -50,7 +57,7 @@ const RoleMenuSection: React.FC = () => {
                       <span className="text-sm">{item.name}</span>
                     </div>
                     <div className="py-4 px-2 flex justify-center items-center">
-                      <button className="">
+                      <button onClick={() => onOpenModal('detail', item)}>
                         <PencilSquareIcon className="w-4 h-4 cursor-pointer" />
                       </button>
                     </div>
