@@ -103,7 +103,6 @@ const useRolePermissionHook = () => {
       }
 
       const { data } = await response.json();
-      console.log('data : ', data);
 
       return data;
     },
@@ -124,8 +123,6 @@ const useRolePermissionHook = () => {
           }),
         };
       });
-
-      console.log('menus : ', menus);
 
       setData(menus);
     }
