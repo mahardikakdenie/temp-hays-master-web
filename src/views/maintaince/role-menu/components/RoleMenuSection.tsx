@@ -20,7 +20,7 @@ const RoleMenuSection: React.FC = () => {
           <span>List Menu</span>
         </div>
       </div>
-      <hr className="border border-slate-500 mb-5" />
+      <hr className="border border-slate-700 mb-5" />
 
       <div className="flex gap-2 justify-start">
         {headerList.map((item, index) => {
@@ -77,7 +77,7 @@ const RoleMenuSection: React.FC = () => {
                         <span className="text-sm">{child.name}</span>
                       </div>
                       <div className="py-4 px-2 flex justify-center items-center">
-                        <button className="">
+                        <button onClick={() => onOpenModal('detail', child)}>
                           <PencilSquareIcon className="w-4 h-4 cursor-pointer" />
                         </button>
                       </div>

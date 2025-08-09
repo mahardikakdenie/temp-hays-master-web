@@ -10,6 +10,8 @@ interface Permission {
   fullAccess: boolean;
   read: boolean;
   create: boolean;
+  update: boolean;
+  delete: boolean;
 }
 
 interface ChildItem {
@@ -32,12 +34,12 @@ const initialData: ParentItem[] = [
       {
         id: 21,
         name: 'Dashboard',
-        permissions: { fullAccess: true, read: true, create: true },
+        permissions: { fullAccess: true, read: true, create: true, update: true, delete: true },
       },
       {
         id: 22,
         name: 'Role',
-        permissions: { fullAccess: true, read: true, create: true },
+        permissions: { fullAccess: true, read: true, create: true, update: true, delete: true },
       },
     ],
   },
@@ -48,12 +50,12 @@ const initialData: ParentItem[] = [
       {
         id: 21,
         name: 'User page',
-        permissions: { fullAccess: true, read: true, create: true },
+        permissions: { fullAccess: true, read: true, create: true, update: true, delete: true },
       },
       {
         id: 22,
         name: 'Role',
-        permissions: { fullAccess: true, read: true, create: true },
+        permissions: { fullAccess: true, read: true, create: true, update: true, delete: true },
       },
     ],
   },
@@ -87,10 +89,17 @@ const useRolePermissionHook = () => {
       name: 'Read',
       key: 'read',
     },
-    ,
     {
       name: 'Create',
       key: 'create',
+    },
+    {
+      name: 'Update',
+      key: 'update',
+    },
+    {
+      name: 'Delete',
+      key: 'delete',
     },
   ];
 
@@ -118,7 +127,13 @@ const useRolePermissionHook = () => {
             return {
               id: child.id,
               name: child.name,
-              permissions: { fullAccess: false, read: false, create: false },
+              permissions: {
+                fullAccess: false,
+                read: false,
+                create: false,
+                update: false,
+                delete: false,
+              },
             };
           }),
         };

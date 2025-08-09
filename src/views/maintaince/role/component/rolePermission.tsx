@@ -36,7 +36,7 @@ const PermissionTable = () => {
                   </span>
                   <span>{item.name}</span>
                 </TableCell>
-                <td colSpan={4}></td>
+                <td colSpan={6}></td>
               </TableRow>
 
               {/* Child Rows (Collapsible) */}
@@ -51,8 +51,8 @@ const PermissionTable = () => {
                               key={child.id}
                               className="hover:bg-gray-800 transition-colors duration-100 border-b border-gray-800"
                             >
-                              <TableCell className="px-20 py-3 text-sm font-medium whitespace-nowrap text-ellipsis w-10 text-gray-200">
-                                <span className="w-100 block overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-200">
+                              <TableCell className="px-16 py-3 text-sm font-medium whitespace-nowrap text-ellipsis w-10 text-gray-200">
+                                <span className="w-16 sm:w-70 block overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-200">
                                   {child.name}
                                 </span>
                               </TableCell>
@@ -82,6 +82,20 @@ const PermissionTable = () => {
                                 <input
                                   type="checkbox"
                                   defaultChecked={child.permissions.create}
+                                  className="w-4 h-4 text-blue-500 bg-gray-700 border-gray-500 rounded focus:ring-blue-600"
+                                />
+                              </TableCell>
+                              <TableCell className="text-center mr-10">
+                                <input
+                                  type="checkbox"
+                                  defaultChecked={child.permissions.update}
+                                  className="w-4 h-4 text-blue-500 bg-gray-700 border-gray-500 rounded focus:ring-blue-600"
+                                />
+                              </TableCell>
+                              <TableCell className="text-center mr-10">
+                                <input
+                                  type="checkbox"
+                                  defaultChecked={child.permissions.delete}
                                   className="w-4 h-4 text-blue-500 bg-gray-700 border-gray-500 rounded focus:ring-blue-600"
                                 />
                               </TableCell>
