@@ -46,7 +46,7 @@ const PermissionTable: React.FC<PermissionProps> = ({ onSelectedPermission }) =>
                 )}
               >
                 {/* Nama Parent */}
-                <td className="px-3 py-3 text-sm font-medium text-gray-200">
+                <td className="px-3 py-5 text-sm font-medium text-gray-200">
                   <div className="flex items-center gap-2">
                     {item.is_group &&
                       selected.some((s) =>
@@ -116,7 +116,7 @@ const PermissionTable: React.FC<PermissionProps> = ({ onSelectedPermission }) =>
                                 className="hover:bg-gray-800 transition-colors duration-100 border-b border-gray-800 last:border-b-0"
                               >
                                 {/* Nama Child */}
-                                <td className="px-3 py-2 text-sm font-medium text-gray-200 truncate max-w-[59px] sm:max-w-[36px] md:max-w-[34.7px] lg:max-w-[33px] xl:max-w-[35.6px]">
+                                <td className="px-3 py-5 text-sm font-medium text-gray-200 truncate max-w-[59px] sm:max-w-[36px] md:max-w-[34.7px] lg:max-w-[33px] xl:max-w-[35.6px]">
                                   <span title={child.name}>{child.name}</span>
                                 </td>
 
