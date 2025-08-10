@@ -8,10 +8,10 @@ import PermissionTable from './component/rolePermission';
 import useCreateRole from './hooks/useCreateRole';
 
 const items = [
-  { title: 'Master Setup', href: '#' },
-  { title: 'Articles', href: '/master-setup/article' },
+  { title: 'Maintaince', href: '#' },
+  { title: 'Role', href: '/maintaince/role' },
   {
-    title: 'Create Article Form',
+    title: 'Create Role Form',
     href: '/master-setup/banner',
   },
 ];
