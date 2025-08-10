@@ -16,7 +16,7 @@ const HeaderDataUI: React.FC<{
             <TableCell
               key={header.key}
               isHeader
-              className="text-center font-semibold capitalize bg-slate-700"
+              className="text-center font-semibold capitalize"
               sortable={isSortable}
               sortKey={isSortable ? header.key : undefined} // opsional
               onSort={isSortable ? onSort : undefined}

@@ -1,6 +1,9 @@
 export type CreateRoleForm = {
   name: string;
   desc: string;
+  actions: {
+    privilege_id: number;
+  }[];
 };
 
 export type RoleMenu = {

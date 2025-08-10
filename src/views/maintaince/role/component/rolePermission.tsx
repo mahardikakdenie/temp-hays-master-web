@@ -12,14 +12,17 @@ const PermissionTable: React.FC<PermissionProps> = ({ onSelectedPermission }) =>
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse table-fixed" style={{ tableLayout: 'fixed' }}>
+      <table
+        className="min-w-full border-collapse table-fixed rounded-2xl"
+        style={{ tableLayout: 'fixed' }}
+      >
         {/* Table Header */}
         <thead>
           <tr>
             {headers.map((header) => (
               <th
                 key={header.key}
-                className="bg-gray-800 text-gray-200 text-center text-sm font-semibold uppercase tracking-wide px-3 py-3 w-1/6"
+                className="bg-gray-500 text-gray-200 text-center text-sm font-semibold uppercase tracking-wide px-3 py-3 w-1/6"
               >
                 {header.name}
               </th>
@@ -28,7 +31,7 @@ const PermissionTable: React.FC<PermissionProps> = ({ onSelectedPermission }) =>
         </thead>
 
         {/* Table Body */}
-        <tbody className="bg-gray-900 text-gray-300">
+        <tbody className="bg-gray-900 text-gray-300 rounded-2xl">
           {data.map((item) => (
             <React.Fragment key={item.id}>
               {/* Parent Row */}

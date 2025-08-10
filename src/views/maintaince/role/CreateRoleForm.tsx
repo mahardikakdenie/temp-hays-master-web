@@ -5,6 +5,7 @@ import Input from '@/components/ui/form/Input';
 import Textarea from '@/components/ui/form/Textarea';
 import PageHeader from '@/components/ui/page/Header';
 import PermissionTable from './component/rolePermission';
+import useCreateRole from './hooks/useCreateRole';
 
 const items = [
   { title: 'Master Setup', href: '#' },
@@ -14,7 +15,15 @@ const items = [
     href: '/master-setup/banner',
   },
 ];
+
 const CreateRoleFormViews: React.FC = () => {
+  const FORM_ID = 'create-role';
+  const { form, submit } = useCreateRole();
+  const {
+    register,
+    formState: { isSubmitting, isLoading, errors },
+    handleSubmit,
+  } = form;
   return (
     <div>
       <PageHeader items={items} title="Create Role" isShowBtn={false} titleButton="" />
@@ -26,7 +35,7 @@ const CreateRoleFormViews: React.FC = () => {
           </div>
         </div>
         <hr className="my-4 border border-gray-600" />
-        <form>
+        <form id={FORM_ID} onSubmit={handleSubmit(submit)}>
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-12">
               <Input
@@ -34,6 +43,8 @@ const CreateRoleFormViews: React.FC = () => {
                 placeholder="Contoh : Superadmin"
                 className="bg-gray-700"
                 required
+                error={errors.name?.message}
+                {...register('name')}
               />
             </div>
             <div className="col-span-12">
@@ -42,19 +53,27 @@ const CreateRoleFormViews: React.FC = () => {
                 placeholder="Contoh : User ini biasanya digunakan untuk page admin atau page landing page"
                 className="bg-gray-700"
                 required
+                error={errors.desc?.message}
+                {...register('desc')}
               />
             </div>
             <div className="col-span-12 p-3">
               <PermissionTable
                 onSelectedPermission={(permission) => {
                   console.log('permission parent : ', permission);
+                  form.setValue('actions', permission);
                 }}
               />
+              <div>
+                <span className="text-red-500 text-sm">{errors.actions?.message}</span>
+              </div>
             </div>
           </div>
           <div className="flex justify-end gap-4 mt-5">
             <ButtonSecondary>Back</ButtonSecondary>
-            <ButtonPrimary type="submit">Create Role</ButtonPrimary>
+            <ButtonPrimary id={FORM_ID} type="submit" isLoading={isLoading} disabled={isSubmitting}>
+              Create Role
+            </ButtonPrimary>
           </div>
         </form>
       </div>
