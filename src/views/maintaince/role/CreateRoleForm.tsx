@@ -45,12 +45,16 @@ const CreateRoleFormViews: React.FC = () => {
               />
             </div>
             <div className="col-span-12 p-3">
-              <PermissionTable />
+              <PermissionTable
+                onSelectedPermission={(permission) => {
+                  console.log('permission parent : ', permission);
+                }}
+              />
             </div>
           </div>
           <div className="flex justify-end gap-4 mt-5">
             <ButtonSecondary>Back</ButtonSecondary>
-            <ButtonPrimary>Create Role</ButtonPrimary>
+            <ButtonPrimary type="submit">Create Role</ButtonPrimary>
           </div>
         </form>
       </div>

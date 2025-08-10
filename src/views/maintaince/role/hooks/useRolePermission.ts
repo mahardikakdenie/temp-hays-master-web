@@ -56,7 +56,9 @@ const initialData: ParentItem[] = [
   },
 ];
 
-const useRolePermissionHook = () => {
+const useRolePermissionHook = (
+  onSelectedPermission: (selected: { privilege_id: number }[]) => void,
+) => {
   const internalAPI = useInternal();
   const [expanded, setExpanded] = useState<string | false>(false);
   const [selected, setSelected] = useState<{ privilege_id: number }[]>([]);
@@ -149,14 +151,21 @@ const useRolePermissionHook = () => {
   }, [menuList]);
 
   const handlePermissionChange = (permission: Permission) => {
-    setSelected((prev) => {
-      const exists = prev?.some((item) => item.privilege_id === permission.privilege_id);
+    setSelected((prev = []) => {
+      const exists = prev.some((item) => item.privilege_id === permission.privilege_id);
+
+      let updated;
 
       if (exists) {
-        return prev?.filter((item) => item.privilege_id !== permission.privilege_id);
+        updated = prev.filter((item) => item.privilege_id !== permission.privilege_id);
       } else {
-        return [...prev, { privilege_id: permission.privilege_id }];
+        updated = [...prev, { privilege_id: permission.privilege_id }];
       }
+
+      // Kirim ke parent
+      onSelectedPermission(updated);
+
+      return updated;
     });
   };
 

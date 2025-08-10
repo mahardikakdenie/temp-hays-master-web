@@ -1,39 +1,38 @@
-// import HeaderDataUI from '@/components/ui/table/HeaderData';
-import { Table, TableCell, TableRow, TableBody, TableHeader } from '@/components/ui/table/Table';
 import React from 'react';
 import useRolePermissionHook from '../hooks/useRolePermission';
 import { cn } from '@/libs/utils/cn.utils';
 
-const PermissionTable = () => {
-  const { headers, data, expanded, handleExpandClick, handlePermissionChange, selected } =
-    useRolePermissionHook();
+type PermissionProps = {
+  onSelectedPermission: (selected: { privilege_id: number }[]) => void;
+};
 
-  // Hitung jumlah total kolom
-  // const totalColumns = headers.length;
+const PermissionTable: React.FC<PermissionProps> = ({ onSelectedPermission }) => {
+  const { headers, data, expanded, handleExpandClick, handlePermissionChange, selected } =
+    useRolePermissionHook(onSelectedPermission);
 
   return (
     <div className="overflow-x-auto">
-      <Table className="border-collapse">
+      <table className="min-w-full border-collapse table-fixed" style={{ tableLayout: 'fixed' }}>
         {/* Table Header */}
-        <TableHeader>
-          <TableRow>
+        <thead>
+          <tr>
             {headers.map((header) => (
-              <TableCell
+              <th
                 key={header.key}
-                className="bg-gray-800 text-gray-200 text-left text-sm font-semibold uppercase tracking-wide"
+                className="bg-gray-800 text-gray-200 text-center text-sm font-semibold uppercase tracking-wide px-3 py-3 w-1/6"
               >
                 {header.name}
-              </TableCell>
+              </th>
             ))}
-          </TableRow>
-        </TableHeader>
+          </tr>
+        </thead>
 
         {/* Table Body */}
-        <TableBody className="bg-gray-900 text-gray-300">
+        <tbody className="bg-gray-900 text-gray-300">
           {data.map((item) => (
             <React.Fragment key={item.id}>
               {/* Parent Row */}
-              <TableRow
+              <tr
                 onClick={() => handleExpandClick(`panel${item.id}`)}
                 className={cn(
                   'hover:bg-gray-800 transition-colors duration-150',
@@ -46,8 +45,8 @@ const PermissionTable = () => {
                     'cursor-pointer',
                 )}
               >
-                {/* Kolom 1: Nama Parent */}
-                <TableCell className="py-3 px-4 text-sm font-medium text-gray-200">
+                {/* Nama Parent */}
+                <td className="px-3 py-3 text-sm font-medium text-gray-200">
                   <div className="flex items-center gap-2">
                     {item.is_group &&
                       selected.some((s) =>
@@ -64,30 +63,36 @@ const PermissionTable = () => {
                           ▼
                         </span>
                       )}
-                    <span className="block max-w-[180px] truncate sm:max-w-xs" title={item.name}>
+                    <span
+                      className="block truncate max-w-[120px] sm:max-w-[150px] md:max-w-xs"
+                      title={item.name}
+                    >
                       {item.name}
                     </span>
                   </div>
-                </TableCell>
+                </td>
 
-                {/* Kolom 2+: Permissions (harus sesuai jumlah header - 1) */}
+                {/* Permissions - Parent */}
                 {headers.slice(1).map((header) => {
                   const permission = item.permissions.find((p) => p.action === header.key);
                   return (
-                    <TableCell key={header.key} className="py-3">
+                    <td key={header.key} className="px-3 py-3 text-center">
                       {permission && (
-                        <input
-                          type="checkbox"
-                          value={permission.privilege_id}
-                          defaultChecked={false}
-                          onChange={() => handlePermissionChange(permission)}
-                          className="w-4 h-4 bg-gray-700 text-gray-600 border-gray-500 rounded focus:ring-blue-600"
-                        />
+                        <div className="flex items-center justify-center h-6">
+                          <input
+                            type="checkbox"
+                            checked={selected.some(
+                              (s) => s.privilege_id === permission.privilege_id,
+                            )}
+                            onChange={() => handlePermissionChange(permission)}
+                            className="w-4 h-4 text-blue-500 bg-gray-700 border-gray-500 rounded focus:ring-blue-600"
+                          />
+                        </div>
                       )}
-                    </TableCell>
+                    </td>
                   );
                 })}
-              </TableRow>
+              </tr>
 
               {/* Child Rows (Collapsible Panel) */}
               {expanded === `panel${item.id}` &&
@@ -95,23 +100,25 @@ const PermissionTable = () => {
                 selected.some((s) =>
                   item.permissions.some((permission) => permission.privilege_id === s.privilege_id),
                 ) && (
-                  <TableRow className="w-full">
-                    <TableCell colSpan={5} className="p-0 border-none bg-transparent">
-                      <div className="mt-1 mb-2 pl-8 w-full">
+                  <tr>
+                    <td colSpan={headers.length} className="p-0 border-none bg-transparent">
+                      <div className="mt-1 mb-2 pl-8">
+                        {' '}
                         {/* Indentasi child */}
-                        <Table className=" border-collapse">
-                          <TableBody className="">
+                        <table
+                          className="min-w-full border-collapse table-fixed"
+                          style={{ tableLayout: 'fixed' }}
+                        >
+                          <tbody>
                             {item.children.map((child) => (
-                              <TableRow
+                              <tr
                                 key={child.id}
                                 className="hover:bg-gray-800 transition-colors duration-100 border-b border-gray-800 last:border-b-0"
                               >
                                 {/* Nama Child */}
-                                <TableCell className="px-4 w-sm">
-                                  <span className="block truncate" title={child.name}>
-                                    {child.name}
-                                  </span>
-                                </TableCell>
+                                <td className="px-3 py-2 text-sm font-medium text-gray-200 truncate max-w-[59px] sm:max-w-[36px] md:max-w-[34.7px] lg:max-w-[33px] xl:max-w-[35.6px]">
+                                  <span title={child.name}>{child.name}</span>
+                                </td>
 
                                 {/* Permissions - Child */}
                                 {headers.slice(1).map((header) => {
@@ -119,34 +126,34 @@ const PermissionTable = () => {
                                     (p) => p.action === header.key,
                                   );
                                   return (
-                                    <TableCell
-                                      key={header.key}
-                                      className="text-left py-2 px-2 sm:px-3 md:px-4"
-                                    >
+                                    <td key={header.key} className="px-3 py-2 text-center">
                                       {permission && (
-                                        <div className="flex">
+                                        <div className="flex items-center justify-center h-6">
                                           <input
                                             type="checkbox"
+                                            checked={selected.some(
+                                              (s) => s.privilege_id === permission.privilege_id,
+                                            )}
                                             onChange={() => handlePermissionChange(permission)}
                                             className="w-4 h-4 text-blue-500 bg-gray-700 border-gray-500 rounded focus:ring-blue-600"
                                           />
                                         </div>
                                       )}
-                                    </TableCell>
+                                    </td>
                                   );
                                 })}
-                              </TableRow>
+                              </tr>
                             ))}
-                          </TableBody>
-                        </Table>
+                          </tbody>
+                        </table>
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 )}
             </React.Fragment>
           ))}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
     </div>
   );
 };
