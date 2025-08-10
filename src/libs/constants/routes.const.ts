@@ -10,6 +10,7 @@ export class Routes {
   static API_CONTACT = Routes.API_MASTER + '/contact';
   static API_ARTIST = Routes.API_MASTER + '/artist';
   static API_EXHIBITION = Routes.API_MASTER + '/exhibition';
+  static API_MENU = Routes.API_MASTER + '/menu';
 
   // AUTH
   static AUTH_LOGIN = Routes.API_AUTH + '/login';

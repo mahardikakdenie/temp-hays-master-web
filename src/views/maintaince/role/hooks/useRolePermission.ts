@@ -1,28 +1,27 @@
 import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
-import { Menu } from '@/types/commons.types';
+import { RoleMenu } from '@/types/role.types';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 // Tipe data untuk permissions
 interface Permission {
-  fullAccess: boolean;
-  read: boolean;
-  create: boolean;
-  update: boolean;
-  delete: boolean;
+  action: string;
+  privilege_id: number;
 }
 
 interface ChildItem {
   id: number;
   name: string;
-  permissions: Permission;
+  permissions: Permission[];
 }
 
 interface ParentItem {
   id: number;
   name: string;
+  is_group: boolean;
+  permissions: Permission[];
   children: ChildItem[];
 }
 
@@ -30,45 +29,37 @@ const initialData: ParentItem[] = [
   {
     id: 1,
     name: 'Maintenance',
+    is_group: true,
+    permissions: [],
     children: [
       {
         id: 21,
         name: 'Dashboard',
-        permissions: { fullAccess: true, read: true, create: true, update: true, delete: true },
+        permissions: [
+          {
+            action: 'views',
+            privilege_id: 1,
+          },
+        ],
       },
       {
         id: 22,
         name: 'Role',
-        permissions: { fullAccess: true, read: true, create: true, update: true, delete: true },
+        permissions: [
+          {
+            action: 'views',
+            privilege_id: 2,
+          },
+        ],
       },
     ],
-  },
-  {
-    id: 2,
-    name: 'Master Setup',
-    children: [
-      {
-        id: 21,
-        name: 'User page',
-        permissions: { fullAccess: true, read: true, create: true, update: true, delete: true },
-      },
-      {
-        id: 22,
-        name: 'Role',
-        permissions: { fullAccess: true, read: true, create: true, update: true, delete: true },
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: 'Approval',
-    children: [],
   },
 ];
 
 const useRolePermissionHook = () => {
   const internalAPI = useInternal();
   const [expanded, setExpanded] = useState<string | false>(false);
+  const [selected, setSelected] = useState<{ privilege_id: number }[]>([]);
 
   const [data, setData] = useState<ParentItem[]>(initialData);
 
@@ -82,13 +73,13 @@ const useRolePermissionHook = () => {
       key: 'Configuration',
     },
     {
-      name: 'Fullacess',
-      key: 'fullacess',
+      name: 'Views',
+      key: 'view',
     },
-    {
-      name: 'Read',
-      key: 'read',
-    },
+    // {
+    //   name: 'Read',
+    //   key: 'read',
+    // },
     {
       name: 'Create',
       key: 'create',
@@ -103,37 +94,51 @@ const useRolePermissionHook = () => {
     },
   ];
 
-  const { data: menuList } = useQuery<Menu[], Error>({
-    queryKey: ['menu-query'],
+  // const { data: menuList } = useQuery<Menu[], Error>({
+  //   queryKey: ['menu-query'],
+  //   queryFn: async () => {
+  //     const response = await internalAPI(Routes.AUTH_MENU);
+  //     if (response.status !== HttpStatus.OK) {
+  //       throw new Error('Failed to fetch subcategory options');
+  //     }
+
+  //     const { data } = await response.json();
+
+  //     return data;
+  //   },
+  // });
+
+  const { data: menuList } = useQuery<RoleMenu[], Error>({
+    queryKey: ['role-menu-query'],
     queryFn: async () => {
-      const response = await internalAPI(Routes.AUTH_MENU);
+      const response = await internalAPI(Routes.API_MENU);
       if (response.status !== HttpStatus.OK) {
-        throw new Error('Failed to fetch subcategory options');
+        throw new Error('Failed to fetch Menu Data');
       }
 
       const { data } = await response.json();
-
       return data;
     },
   });
 
   useEffect(() => {
     if (menuList) {
+      console.log('Menu List : ', menuList);
+
       const menus: ParentItem[] = menuList.map((menu) => {
         return {
           id: menu.id,
           name: menu.name,
-          children: menu.child.map((child) => {
+          is_group: !!menu.is_group,
+          permissions: menu.actions,
+          children: menu?.child.map((child) => {
             return {
               id: child.id,
               name: child.name,
-              permissions: {
-                fullAccess: false,
-                read: false,
-                create: false,
-                update: false,
-                delete: false,
-              },
+              permissions: child.actions.map((action) => ({
+                action: action.action,
+                privilege_id: action.privilege_id,
+              })),
             };
           }),
         };
@@ -143,34 +148,16 @@ const useRolePermissionHook = () => {
     }
   }, [menuList]);
 
-  const handlePermissionChange = (
-    parentId: number,
-    childId: number,
-    permission: keyof Permission,
-    value: boolean,
-  ) => {
-    setData((prevData) =>
-      prevData.map((item) => {
-        if (item.id === parentId) {
-          return {
-            ...item,
-            children: item.children.map((child) => {
-              if (child.id === childId) {
-                return {
-                  ...child,
-                  permissions: {
-                    ...child.permissions,
-                    [permission]: value,
-                  },
-                };
-              }
-              return child;
-            }),
-          };
-        }
-        return item;
-      }),
-    );
+  const handlePermissionChange = (permission: Permission) => {
+    setSelected((prev) => {
+      const exists = prev?.some((item) => item.privilege_id === permission.privilege_id);
+
+      if (exists) {
+        return prev?.filter((item) => item.privilege_id !== permission.privilege_id);
+      } else {
+        return [...prev, { privilege_id: permission.privilege_id }];
+      }
+    });
   };
 
   return {
@@ -179,6 +166,7 @@ const useRolePermissionHook = () => {
     handlePermissionChange,
     data,
     headers,
+    selected,
   };
 };
 
