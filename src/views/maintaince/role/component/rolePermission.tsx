@@ -4,11 +4,27 @@ import { cn } from '@/libs/utils/cn.utils';
 
 type PermissionProps = {
   onSelectedPermission: (selected: { privilege_id: number }[]) => void;
+  initialSelected?: { privilege_id: number }[];
+  isLoading?: boolean;
 };
 
-const PermissionTable: React.FC<PermissionProps> = ({ onSelectedPermission }) => {
+const PermissionTable: React.FC<PermissionProps> = ({
+  onSelectedPermission,
+  initialSelected,
+  isLoading = false,
+}) => {
   const { headers, data, expanded, handleExpandClick, handlePermissionChange, selected } =
-    useRolePermissionHook(onSelectedPermission);
+    useRolePermissionHook(onSelectedPermission, initialSelected, isLoading);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-8">
+        {/* Ganti dengan ikon loading kamu, misalnya */}
+        <div className="w-6 h-6 border-2 border-t-transparent border-white/90 rounded-full animate-spin"></div>
+        <span className="ml-2 text-gray-400">Loading permissions...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-x-auto">

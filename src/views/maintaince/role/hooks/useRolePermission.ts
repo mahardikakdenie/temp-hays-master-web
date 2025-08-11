@@ -58,6 +58,8 @@ const initialData: ParentItem[] = [
 
 const useRolePermissionHook = (
   onSelectedPermission: (selected: { privilege_id: number }[]) => void,
+  initialSelected: { privilege_id: number }[] = [],
+  isLoading: boolean = false,
 ) => {
   const internalAPI = useInternal();
   const [expanded, setExpanded] = useState<string | false>(false);
@@ -124,9 +126,10 @@ const useRolePermissionHook = (
   });
 
   useEffect(() => {
+    if (initialSelected && !isLoading) {
+      setSelected(initialSelected);
+    }
     if (menuList) {
-      console.log('Menu List : ', menuList);
-
       const menus: ParentItem[] = menuList.map((menu) => {
         return {
           id: menu.id,
@@ -148,7 +151,7 @@ const useRolePermissionHook = (
 
       setData(menus);
     }
-  }, [menuList]);
+  }, [menuList, selected, initialSelected, isLoading]);
 
   const handlePermissionChange = (permission: Permission) => {
     setSelected((prev = []) => {

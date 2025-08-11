@@ -6,8 +6,10 @@ import Input from '@/components/ui/form/Input';
 import TableDataUI from '@/components/ui/table/TableData';
 import HeaderDataUI from '@/components/ui/table/HeaderData';
 import useRole from '../role.hook';
+import { useRouter } from 'next/navigation';
 
 const RoleTable: React.FC = () => {
+  const router = useRouter();
   const {
     isLoading,
     isFetching,
@@ -62,6 +64,7 @@ const RoleTable: React.FC = () => {
           error={error}
           isFetching={isFetching}
           isLoading={isLoading}
+          onUpdateClick={(data) => router.push(`/maintaince/role/${data.id}/update`)}
         />
       </Table>
     </div>

@@ -5,7 +5,7 @@ import { catchServerRoute } from '@/libs/utils/catch.utils';
 import { Routes } from '@/libs/constants/routes.const';
 import { externalAPI } from '@/libs/interceptors/api-ext.interceptor';
 import type { CreateUserForm } from '@/types/user.types';
-import { CreateRoleForm } from '@/types/role.types';
+import { CreateRoleForm, UpdateRoleMenu } from '@/types/role.types';
 
 export const CreateUserApi = async (data: CreateUserForm) => {
   return await externalAPI
@@ -17,6 +17,13 @@ export const CreateUserApi = async (data: CreateUserForm) => {
 export const CreateUserAccessApi = async (data: CreateRoleForm) => {
   return await externalAPI
     .post(Routes.USER_ACCESS, data)
+    .then((response) => responseServerRoute(response))
+    .catch((e) => catchServerRoute(e));
+};
+
+export const UpdateUserAccessApi = async (data: UpdateRoleMenu) => {
+  return await externalAPI
+    .patch(Routes.USER_ACCESS, data)
     .then((response) => responseServerRoute(response))
     .catch((e) => catchServerRoute(e));
 };

@@ -19,3 +19,21 @@ export type RoleMenu = {
   }[];
   child: RoleMenu[];
 };
+
+export type UpdateRoleMenu = {
+  id: number;
+  status: number;
+  name: string;
+  desc: string;
+  actions: {
+    privilege_id: number;
+  }[];
+};
+
+export type RoleDetailMenu = {
+  id: number;
+  name: string;
+  desc: string;
+  status: number;
+  menu: RoleMenu[];
+};
