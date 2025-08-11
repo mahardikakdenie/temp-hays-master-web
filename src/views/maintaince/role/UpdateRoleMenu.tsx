@@ -6,6 +6,7 @@ import Textarea from '@/components/ui/form/Textarea';
 import PageHeader from '@/components/ui/page/Header';
 import PermissionTable from './component/rolePermission';
 import useUpdateRole from './hooks/useUpdateRole.hook';
+import Select from '@/components/ui/form/Select';
 
 const items = [
   { title: 'Maintaince', href: '#' },
@@ -21,7 +22,7 @@ const UpdateRoleFormViews: React.FC = () => {
   const { form, isLoading: dataLoading, setSelected, selected, submit } = useUpdateRole();
   const {
     register,
-    formState: { isSubmitting, isLoading, errors },
+    formState: { isSubmitting, errors },
     handleSubmit,
   } = form;
 
@@ -58,6 +59,21 @@ const UpdateRoleFormViews: React.FC = () => {
                 {...register('desc')}
               />
             </div>
+            <div className="col-span-12">
+              <Select
+                label="Status"
+                key={form.watch('status')}
+                value={form.watch('status')}
+                options={[
+                  { id: 1, name: 'Active' },
+                  { id: 0, name: 'Non Active' },
+                ]}
+                {...register('status')}
+                onChange={(value) => {
+                  form.setValue('status', value as number);
+                }}
+              />
+            </div>
             <div className="col-span-12 p-3">
               <PermissionTable
                 initialSelected={selected}
@@ -75,7 +91,12 @@ const UpdateRoleFormViews: React.FC = () => {
           </div>
           <div className="flex justify-end gap-4 mt-5">
             <ButtonSecondary>Back</ButtonSecondary>
-            <ButtonPrimary id={FORM_ID} type="submit" isLoading={isLoading} disabled={isSubmitting}>
+            <ButtonPrimary
+              id={FORM_ID}
+              type="submit"
+              isLoading={isSubmitting}
+              disabled={isSubmitting}
+            >
               Create Role
             </ButtonPrimary>
           </div>
