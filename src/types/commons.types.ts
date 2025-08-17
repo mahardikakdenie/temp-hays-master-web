@@ -49,6 +49,13 @@ export type Menu = {
   child: Menu[];
 };
 
+export type MenuDetail = {
+  id: number;
+  name: string;
+  sort: number;
+  status: number;
+};
+
 export type Options = {
   id: string | number;
   name: string;

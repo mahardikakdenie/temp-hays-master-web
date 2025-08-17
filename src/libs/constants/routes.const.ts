@@ -23,6 +23,9 @@ export class Routes {
   static USER_ACCESS_LIST = Routes.API_USER + '/access/list';
   static USER_ACCESS_OPTION = Routes.API_USER + '/access/options';
 
+  // MENU
+  static MENU_DETAIL = Routes.API_MASTER + '/detail';
+
   // BANNER
   static BANNER = Routes.API_BANNER;
   static BANNER_LIST = Routes.API_BANNER + '/list';
