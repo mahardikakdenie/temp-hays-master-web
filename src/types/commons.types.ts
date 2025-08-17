@@ -45,6 +45,7 @@ export type Menu = {
   name: string;
   path: string;
   icon: string;
+  status?: number;
   level: number;
   child: Menu[];
 };

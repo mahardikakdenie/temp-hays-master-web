@@ -27,7 +27,7 @@ const useRoleMenuHook = () => {
   const { data } = useQuery<Menu[], Error>({
     queryKey: ['role-menu'],
     queryFn: async () => {
-      const response = await internalAPI(Routes.AUTH_MENU);
+      const response = await internalAPI(Routes.API_MENU);
       if (response.status !== HttpStatus.OK) {
         throw new Error('Failed to fetch subcategory options');
       }

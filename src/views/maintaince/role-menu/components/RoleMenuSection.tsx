@@ -54,7 +54,16 @@ const RoleMenuSection: React.FC = () => {
                     )}
                   >
                     <div className="py-3 px-5">
-                      <span className="text-sm">{item.name}</span>
+                      <span
+                        className={cn(
+                          'text-sm',
+                          item.status && item.status !== 1
+                            ? 'text-red-100 line-through opacity-60'
+                            : '',
+                        )}
+                      >
+                        {item.name} {item.status && item.status !== 1 && '(Nonaktif)'}
+                      </span>
                     </div>
                     <div className="py-4 px-2 flex justify-center items-center">
                       <button onClick={() => onOpenModal('detail', item)}>
@@ -71,10 +80,18 @@ const RoleMenuSection: React.FC = () => {
                   return (
                     <div
                       key={child.id}
-                      className={cn('rounded-xl flex justify-between mb-4', 'bg-gray-700 ')}
+                      className={cn(
+                        'rounded-xl flex justify-between mb-4',
+                        child.status && child.status !== 1
+                          ? 'text-red-100 line-through opacity-60'
+                          : 'text-white',
+                        'bg-gray-700 ',
+                      )}
                     >
                       <div className="py-3 px-5">
-                        <span className="text-sm">{child.name}</span>
+                        <span className="text-sm">
+                          {child.name} {child.status && child.status !== 1 && '(Nonaktif)'}
+                        </span>
                       </div>
                       <div className="py-4 px-2 flex justify-center items-center">
                         <button onClick={() => onOpenModal('detail', child)}>

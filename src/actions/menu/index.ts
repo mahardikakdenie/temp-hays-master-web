@@ -8,7 +8,7 @@ import { UpdateMenu } from '@/types/menu.types';
 
 export const updateMenuApi = async (data: UpdateMenu) => {
   return await externalAPI
-    .patch(Routes.AUTH_MENU, data)
+    .patch(Routes.API_MENU, data)
     .then((response) => responseServerRoute(response))
     .catch((e) => catchServerRoute(e));
 };
