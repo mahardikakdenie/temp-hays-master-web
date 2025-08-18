@@ -4,15 +4,14 @@ import { updateExhibitionApi } from '@/actions/exhibition';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
-import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
-import { Artist } from '@/types/artist.types';
+import { Options } from '@/types/commons.types';
 import { EXHIBITION, UpdateExhibitionForm } from '@/types/exhibition.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -98,21 +97,19 @@ const useUpdateExhibitionHook = () => {
     }
   }, [data, form]);
 
-  // --- Ambil Daftar Artist ---
-  const { data: artistData } = usePaginatedFetch<Artist>({
-    key: 'artist',
-    endpoint: Routes.ARTIST_LIST,
-    extraQuery: { limit: '20' },
-  });
+  const { data: artistOptions } = useQuery<Options[], Error>({
+    queryKey: ['artist-key'],
+    queryFn: async () => {
+      const response = await internalAPI(`${Routes.ARTIST}/options`);
 
-  const artistOptions = useMemo(() => {
-    return (
-      (artistData as Artist[])?.map((art) => ({
-        id: art.id,
-        name: art.name,
-      })) || []
-    );
-  }, [artistData]);
+      if (response.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch options detail');
+      }
+
+      const { data } = await response.json();
+      return data;
+    },
+  });
 
   const updateMutation = useMutation({
     mutationFn: async (data: UpdateExhibitionForm) => {

@@ -1,14 +1,14 @@
 import { createExhibitionApi } from '@/actions/exhibition';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
-import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
+import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
-import { Artist } from '@/types/artist.types';
+import { Options } from '@/types/commons.types';
 import { CreateExhitionForm } from '@/types/exhibition.types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -21,6 +21,7 @@ const createSchema = yup.object({
   image: yup.mixed<File>().required('Image is required'),
 });
 const useCreateExhibitionHook = () => {
+  const internalAPI = useInternal();
   const { onCloseModal } = useGlobal();
   const queryClient = useQueryClient();
   const form = useForm<CreateExhitionForm>({
@@ -33,21 +34,19 @@ const useCreateExhibitionHook = () => {
     },
   });
 
-  // get data artist
-  const { data } = usePaginatedFetch<Artist>({
-    key: 'artist',
-    endpoint: Routes.ARTIST_LIST,
-    extraQuery: {
-      limit: '20',
+  const { data: artistOptions } = useQuery<Options[], Error>({
+    queryKey: ['artist-key'],
+    queryFn: async () => {
+      const response = await internalAPI(`${Routes.ARTIST}/options`);
+
+      if (response.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch options detail');
+      }
+
+      const { data } = await response.json();
+      return data;
     },
   });
-
-  const artistOptions = useMemo(() => {
-    return (data as Artist[]).map((art) => ({
-      id: art.id,
-      name: art.name,
-    }));
-  }, [data]);
 
   const createMutation = useMutation({
     mutationFn: async (data: CreateExhitionForm) => {
