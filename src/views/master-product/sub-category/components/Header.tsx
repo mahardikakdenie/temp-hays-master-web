@@ -12,7 +12,7 @@ const SubCategoryHeader: React.FC = () => {
       isShowBtn
       items={items}
       title="Sub Category"
-      titleButton="Add new subcategory"
+      titleButton="Add new Sub Category"
       onClick={() => onOpenModal('add')}
     />
   );

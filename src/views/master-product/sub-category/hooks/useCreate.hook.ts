@@ -1,14 +1,14 @@
 import { createSCategoryApi } from '@/actions/sub-category';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
-import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
+import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
-import { Category } from '@/types/category.types';
+import { Options } from '@/types/commons.types';
 import { CreateSCategoryForm } from '@/types/sub-category.types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -19,6 +19,7 @@ const createSubCategorySchema = yup.object({
 });
 
 const useCreateSubCategory = () => {
+  const internalAPI = useInternal();
   const { onCloseModal } = useGlobal();
   const queryClient = useQueryClient();
   const form = useForm<CreateSCategoryForm>({
@@ -29,24 +30,19 @@ const useCreateSubCategory = () => {
     mutationFn: async (data: CreateSCategoryForm) => createSCategoryApi(data),
   });
 
-  // get data category for options
-  const { data: options } = usePaginatedFetch<Category>({
-    key: 'categories',
-    endpoint: Routes.CATEGORY_LIST,
-    extraQuery: {
-      limit: '20',
+  const { data: categoryOpts } = useQuery<Options[], Error>({
+    queryKey: ['category-options'],
+    queryFn: async () => {
+      const response = await internalAPI(`${Routes.CATEGORY}/options`);
+
+      if (response.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch options detail');
+      }
+
+      const { data } = await response.json();
+      return data;
     },
   });
-
-  const categoryOpts = useMemo(() => {
-    return (
-      options &&
-      options.map((opt: Category) => ({
-        id: opt.id,
-        name: opt.name,
-      }))
-    );
-  }, [options]);
 
   const onSubmit: SubmitHandler<CreateSCategoryForm> = async (data: CreateSCategoryForm) => {
     const response = await createMutation.mutateAsync(data);

@@ -2,14 +2,13 @@ import { updateSCategoryApi } from '@/actions/sub-category';
 import Notification from '@/components/ui/notification/Notification';
 import { useGlobal } from '@/contexts/global.context';
 import { useInternal } from '@/hooks/useInternal';
-import { usePaginatedFetch } from '@/hooks/usePaginateFetch';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
-import { Category } from '@/types/category.types';
+import { Options } from '@/types/commons.types';
 import { SubCategory, UpdateSCategoryForm } from '@/types/sub-category.types';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -22,6 +21,7 @@ const updateSchema = yup.object({
 });
 
 const useUpdateSCategoryHook = () => {
+  const internalAPI = useInternal();
   const { onCloseModal, item } = useGlobal();
   const internalApi = useInternal();
   const queryClient = useQueryClient();
@@ -36,24 +36,19 @@ const useUpdateSCategoryHook = () => {
     }
   }, [item]);
 
-  // get data category for options
-  const { data: options } = usePaginatedFetch<Category>({
-    key: 'categories',
-    endpoint: Routes.CATEGORY_LIST,
-    extraQuery: {
-      limit: '20',
+  const { data: categoryOpts } = useQuery<Options[], Error>({
+    queryKey: ['category-options'],
+    queryFn: async () => {
+      const response = await internalAPI(`${Routes.CATEGORY}/options`);
+
+      if (response.status !== HttpStatus.OK) {
+        throw new Error('Failed to fetch options detail');
+      }
+
+      const { data } = await response.json();
+      return data;
     },
   });
-
-  const categoryOpts = useMemo(() => {
-    return (
-      options &&
-      options.map((opt: Category) => ({
-        id: opt.id,
-        name: opt.name,
-      }))
-    );
-  }, [options]);
 
   const { data } = useQuery<SubCategory>({
     queryKey: ['sub-category-detail', subCategoryId],
