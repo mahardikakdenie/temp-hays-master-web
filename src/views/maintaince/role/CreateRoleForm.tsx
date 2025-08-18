@@ -4,8 +4,8 @@ import ButtonSecondary from '@/components/ui/button/ButtonSecondary';
 import Input from '@/components/ui/form/Input';
 import Textarea from '@/components/ui/form/Textarea';
 import PageHeader from '@/components/ui/page/Header';
-import PermissionTable from './component/rolePermission';
 import useCreateRole from './hooks/useCreateRole';
+import PermissionTable from './component/rolePermission';
 
 const items = [
   { title: 'Maintaince', href: '#' },
@@ -24,6 +24,7 @@ const CreateRoleFormViews: React.FC = () => {
     formState: { isSubmitting, isLoading, errors },
     handleSubmit,
   } = form;
+
   return (
     <div>
       <PageHeader items={items} title="Create Role" isShowBtn={false} titleButton="" />
@@ -60,7 +61,6 @@ const CreateRoleFormViews: React.FC = () => {
             <div className="col-span-12 p-3">
               <PermissionTable
                 onSelectedPermission={(permission) => {
-                  console.log('permission parent : ', permission);
                   form.setValue('actions', permission);
                 }}
               />

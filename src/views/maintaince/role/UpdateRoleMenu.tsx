@@ -12,14 +12,14 @@ const items = [
   { title: 'Maintaince', href: '#' },
   { title: 'Role', href: '/maintaince/role' },
   {
-    title: 'Create Role Form',
+    title: 'Update Role Form',
     href: '/master-setup/banner',
   },
 ];
 
 const UpdateRoleFormViews: React.FC = () => {
-  const FORM_ID = 'create-role';
-  const { form, isLoading: dataLoading, setSelected, selected, submit } = useUpdateRole();
+  const FORM_ID = 'update-role';
+  const { form, isLoading: dataLoading, selected, submit } = useUpdateRole();
   const {
     register,
     formState: { isSubmitting, errors },
@@ -33,7 +33,7 @@ const UpdateRoleFormViews: React.FC = () => {
       <div className="mt-6 mx-auto px-10 py-6 bg-gray-800 rounded-lg shadow-lg border border-gray-700">
         <div className="mb-4">
           <div>
-            <span>Create Role</span>
+            <span>Update Role</span>
           </div>
         </div>
         <hr className="my-4 border border-gray-600" />
@@ -79,7 +79,7 @@ const UpdateRoleFormViews: React.FC = () => {
                 initialSelected={selected}
                 isLoading={dataLoading}
                 onSelectedPermission={(permission) => {
-                  setSelected((prev) => [...prev, ...permission]);
+                  // setSelected((prev) => [...prev, ...permission]);
 
                   form.setValue('actions', permission);
                 }}
@@ -97,7 +97,7 @@ const UpdateRoleFormViews: React.FC = () => {
               isLoading={isSubmitting}
               disabled={isSubmitting}
             >
-              Create Role
+              Update Role
             </ButtonPrimary>
           </div>
         </form>

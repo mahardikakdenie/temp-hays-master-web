@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import useRolePermissionHook from '../hooks/useRolePermission';
 import { cn } from '@/libs/utils/cn.utils';
@@ -19,7 +20,6 @@ const PermissionTable: React.FC<PermissionProps> = ({
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
-        {/* Ganti dengan ikon loading kamu, misalnya */}
         <div className="w-6 h-6 border-2 border-t-transparent border-white/90 rounded-full animate-spin"></div>
         <span className="ml-2 text-gray-400">Loading permissions...</span>
       </div>

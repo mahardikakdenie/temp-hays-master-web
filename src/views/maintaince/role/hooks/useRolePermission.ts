@@ -1,3 +1,5 @@
+'use client';
+
 import { useInternal } from '@/hooks/useInternal';
 import { HttpStatus } from '@/libs/constants/httpStatus.const';
 import { Routes } from '@/libs/constants/routes.const';
@@ -5,7 +7,7 @@ import { RoleMenu } from '@/types/role.types';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-// Tipe data untuk permissions
+// Tipe data
 interface Permission {
   action: string;
   privilege_id: number;
@@ -35,22 +37,12 @@ const initialData: ParentItem[] = [
       {
         id: 21,
         name: 'Dashboard',
-        permissions: [
-          {
-            action: 'views',
-            privilege_id: 1,
-          },
-        ],
+        permissions: [{ action: 'views', privilege_id: 1 }],
       },
       {
         id: 22,
         name: 'Role',
-        permissions: [
-          {
-            action: 'views',
-            privilege_id: 2,
-          },
-        ],
+        permissions: [{ action: 'views', privilege_id: 2 }],
       },
     ],
   },
@@ -59,115 +51,80 @@ const initialData: ParentItem[] = [
 const useRolePermissionHook = (
   onSelectedPermission: (selected: { privilege_id: number }[]) => void,
   initialSelected: { privilege_id: number }[] = [],
-  isLoading: boolean = false,
+  isLoadingProp: boolean = false,
 ) => {
   const internalAPI = useInternal();
   const [expanded, setExpanded] = useState<string | false>(false);
   const [selected, setSelected] = useState<{ privilege_id: number }[]>([]);
-
   const [data, setData] = useState<ParentItem[]>(initialData);
+
+  // Sinkronisasi initialSelected saat pertama kali mount
+  useEffect(() => {
+    if (initialSelected && initialSelected.length > 0 && !isLoadingProp) {
+      setSelected(initialSelected);
+    }
+  }, [initialSelected, isLoadingProp]);
 
   const handleExpandClick = (panel: string) => {
     setExpanded(expanded === panel ? false : panel);
   };
 
   const headers = [
-    {
-      name: 'Configuration',
-      key: 'Configuration',
-    },
-    {
-      name: 'Views',
-      key: 'view',
-    },
-    // {
-    //   name: 'Read',
-    //   key: 'read',
-    // },
-    {
-      name: 'Create',
-      key: 'create',
-    },
-    {
-      name: 'Update',
-      key: 'update',
-    },
-    {
-      name: 'Delete',
-      key: 'delete',
-    },
+    { name: 'Configuration', key: 'Configuration' },
+    { name: 'Views', key: 'view' },
+    { name: 'Create', key: 'create' },
+    { name: 'Update', key: 'update' },
+    { name: 'Delete', key: 'delete' },
   ];
 
-  // const { data: menuList } = useQuery<Menu[], Error>({
-  //   queryKey: ['menu-query'],
-  //   queryFn: async () => {
-  //     const response = await internalAPI(Routes.AUTH_MENU);
-  //     if (response.status !== HttpStatus.OK) {
-  //       throw new Error('Failed to fetch subcategory options');
-  //     }
-
-  //     const { data } = await response.json();
-
-  //     return data;
-  //   },
-  // });
-
-  const { data: menuList } = useQuery<RoleMenu[], Error>({
+  const {
+    data: menuList,
+    isLoading,
+    isError,
+  } = useQuery<RoleMenu[], Error>({
     queryKey: ['role-menu-query'],
     queryFn: async () => {
       const response = await internalAPI(Routes.API_MENU);
       if (response.status !== HttpStatus.OK) {
         throw new Error('Failed to fetch Menu Data');
       }
-
       const { data } = await response.json();
       return data;
     },
+    // Optional: tambahkan cacheTime, staleTime, dll sesuai kebutuhan
   });
 
+  // Proses data dari API
   useEffect(() => {
-    if (initialSelected && !isLoading) {
-      setSelected(initialSelected);
-    }
     if (menuList) {
-      const menus: ParentItem[] = menuList.map((menu) => {
-        return {
-          id: menu.id,
-          name: menu.name,
-          is_group: !!menu.is_group,
-          permissions: menu.actions,
-          children: menu?.child.map((child) => {
-            return {
-              id: child.id,
-              name: child.name,
-              permissions: child.actions.map((action) => ({
-                action: action.action,
-                privilege_id: action.privilege_id,
-              })),
-            };
-          }),
-        };
-      });
-
-      setData(menus);
+      const transformedData: ParentItem[] = menuList.map((menu) => ({
+        id: menu.id,
+        name: menu.name,
+        is_group: !!menu.is_group,
+        permissions: menu.actions || [],
+        children: (menu.child || []).map((child) => ({
+          id: child.id,
+          name: child.name,
+          permissions: (child.actions || []).map((action) => ({
+            action: action.action,
+            privilege_id: action.privilege_id,
+          })),
+        })),
+      }));
+      setData(transformedData);
     }
-  }, [menuList, selected, initialSelected, isLoading]);
+  }, [menuList]);
 
+  // Handler untuk perubahan permission
   const handlePermissionChange = (permission: Permission) => {
-    setSelected((prev = []) => {
+    setSelected((prev) => {
       const exists = prev.some((item) => item.privilege_id === permission.privilege_id);
+      const updated = exists
+        ? prev.filter((item) => item.privilege_id !== permission.privilege_id)
+        : [...prev, { privilege_id: permission.privilege_id }];
 
-      let updated;
-
-      if (exists) {
-        updated = prev.filter((item) => item.privilege_id !== permission.privilege_id);
-      } else {
-        updated = [...prev, { privilege_id: permission.privilege_id }];
-      }
-
-      // Kirim ke parent
+      // Panggil callback di luar updater untuk menghindari side-effect dalam state updater
       onSelectedPermission(updated);
-
       return updated;
     });
   };
@@ -179,6 +136,8 @@ const useRolePermissionHook = (
     data,
     headers,
     selected,
+    isLoading: isLoading || isLoadingProp,
+    isError,
   };
 };
 
