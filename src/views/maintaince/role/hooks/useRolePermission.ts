@@ -58,7 +58,7 @@ const useRolePermissionHook = (
   const [selected, setSelected] = useState<{ privilege_id: number }[]>([]);
   const [data, setData] = useState<ParentItem[]>(initialData);
 
-  // Sinkronisasi initialSelected saat pertama kali mount
+  // sync intiial selected while first time mounted
   useEffect(() => {
     if (initialSelected && initialSelected.length > 0 && !isLoadingProp) {
       setSelected(initialSelected);
@@ -91,10 +91,9 @@ const useRolePermissionHook = (
       const { data } = await response.json();
       return data;
     },
-    // Optional: tambahkan cacheTime, staleTime, dll sesuai kebutuhan
   });
 
-  // Proses data dari API
+  // process data from api
   useEffect(() => {
     if (menuList) {
       const transformedData: ParentItem[] = menuList.map((menu) => ({
@@ -115,7 +114,7 @@ const useRolePermissionHook = (
     }
   }, [menuList]);
 
-  // Handler untuk perubahan permission
+  // handle for permission change
   const handlePermissionChange = (permission: Permission) => {
     setSelected((prev) => {
       const exists = prev.some((item) => item.privilege_id === permission.privilege_id);
@@ -123,7 +122,7 @@ const useRolePermissionHook = (
         ? prev.filter((item) => item.privilege_id !== permission.privilege_id)
         : [...prev, { privilege_id: permission.privilege_id }];
 
-      // Panggil callback di luar updater untuk menghindari side-effect dalam state updater
+      // call callback in outside updater for preventif side side-efect in state updater
       onSelectedPermission(updated);
       return updated;
     });
