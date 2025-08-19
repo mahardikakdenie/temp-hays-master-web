@@ -45,7 +45,7 @@ const useCreateProduct = () => {
     { title: 'Master Product', href: '#' },
     { title: 'List Product', href: '/master-product/product' },
     {
-      title: 'Update New Product',
+      title: 'Create New Product',
       href: '/master-setup/banner',
     },
   ];
