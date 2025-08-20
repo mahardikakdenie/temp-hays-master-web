@@ -49,7 +49,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE ${APP_PORT}
 
 # Start the application
 CMD ["node", "server.js"]

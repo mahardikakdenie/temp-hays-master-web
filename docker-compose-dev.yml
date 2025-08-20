@@ -1,0 +1,24 @@
+services:
+  gallery-cms-dev:
+    container_name: gallery-cms-dev
+    image: gallery-cms-dev:1.0.0
+    build:
+      context: .
+      args:
+        - APP_PORT=${APP_PORT}
+    ports:
+      - 127.0.0.1:${APP_PORT}:${APP_PORT}
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: ${APP_PORT}
+      TZ: Asia/Jakarta
+    restart: always
+    networks:
+      - gallery
+
+networks:
+  gallery:
+    name: gallery
+    external: true
