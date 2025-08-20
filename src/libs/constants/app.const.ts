@@ -3,8 +3,8 @@ export class App {
   static APP_BASE_URL = process.env.APP_BASE_URL || '';
 
   // NAME
-  static SESSION_NAME = '_SID_Project';
-  static REDIRECT_NAME = '_R83jfN';
+  static SESSION_NAME = '_SID_HaysGallery';
+  static REDIRECT_NAME = '_C03PfQ';
 
   // SECRET
   static SIGN_SECRET = process.env.SIGN_SECRET || '';
