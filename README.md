@@ -23,9 +23,9 @@
   </a>
 </p>
 
-## Master Web
+## Gallery CMS
 
-Master Web – This project serves as the master web, built using [Next.js](https://nextjs.org/), a React framework for production-level applications.
+Gallery CMS – This project serves as the gellery cms, built using [Next.js](https://nextjs.org/), a React framework for production-level applications.
 
 ---
 
@@ -80,11 +80,14 @@ Ensure .env contains the following:
 
 ```bash
 # APP CONFIG
+APP_PORT=3000
+# eg: http://localhost:3000 (local dev) or http://domain.com (server)
 APP_BASE_URL=http://localhost:3000
+# eg: http://localhost:8080 (local dev) or http://container-api:port (server)
 API_BASE_URL=http://localhost:8080
 
 # SECRET CONFIG
-# openssl rand --base64 24
+# generate secret using: openssl rand -base64 24
 SIGN_SECRET='secret'
 SESSION_SECRET='secret'
 ```
@@ -119,12 +122,26 @@ npm run dev
 
 ### Deployment Branches
 
+- `dev`
+- `stag`
 - `main`
+
+### Deploy to Development
+
+```bash
+make deploy-dev
+```
+
+### Deploy to Staging
+
+```bash
+make deploy-stag
+```
 
 ### Deploy to Production
 
 ```bash
-make deploy
+make deploy-prod
 ```
 
 You can now open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
